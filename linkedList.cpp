@@ -223,7 +223,6 @@ int main() {
 	a.createNode(4);
 	a.createNode(5);			
 
-	cout << a.nodeOnPosition(a.getHead(), 11);
 
 	//List::displayRecursion(a.getHead());
 	//List::nThNode(13);

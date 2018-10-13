@@ -48,17 +48,98 @@ class List {
 
 int main() {
 	
+	int choice, node, position, x, flag; 
 	List a;
 	a.listInit();
-	a.createNode(1);
-	a.createNode(2);
-	a.createNode(3);
-	a.createNode(4);
-	a.createNode(5);			
-
-	List::displayRecursion(a.getHead());
 	
-	return 0;
+	while(1) {
+		cout << "-------------------------------------" << endl;
+		cout << "Single link lit operations" << endl;
+		cout << "-------------------------------------" << endl;
+		cout << "1. Insert node at begining." << endl;
+		cout << "2. Insert node at the end." << endl;
+		cout << "3. Insert node after specific node." << endl;
+		cout << "4. Delete first node." << endl;
+		cout << "5. Delete last node." << endl;
+		cout << "6. Delete node with specific data." << endl;
+		cout << "7. Show list lenght." << endl;
+		cout << "8. Show position of node with specific data." << endl;
+		cout << "9. Concatenate two lists." << endl;
+		cout << "10. Display" << endl;
+		cout << "0. exit" << endl;
+		cin >> choice ;
+		
+		switch(choice) {
+			case 1:
+				cout << "Insering node at begining: " << endl;
+				cin >> x;
+				a.createFirstNode(x);
+				cout << endl;
+				break;
+				
+			case 2:
+				cout << "Inserting node at the end: " << endl;
+				cin >> x;
+				a.createLastNode(x);
+				cout << endl;
+				break;
+				
+			case 3:
+				cout << "Inserting node after specific node: " << endl;
+				cout << "Insert data for new node" << endl;
+				cin >> node;
+				cout << endl;
+				cout << "Enter limit, after which node new node will fall into: " << endl;
+				cin >> flag;
+				cout << endl;
+				a.createAfter(node, flag);
+				break;
+				
+			case 4:
+				cout << "Deleting firstnode: " << endl;
+				a.deleteNode(a.getHead());
+				break;
+				
+			case 5:
+				cout << "Deleting last node: " << endl;
+				a.deleteLastNode();
+				break;
+				
+			case 6:
+				cout << "Delete specific node: " << endl;
+				cout << "Enter specific value that you wanna delete" << endl;
+				cin >> node;
+				a.deleteNodeWithData(node) ;
+				break;
+			
+			case 7:
+				cout << "List lenght: " << endl;
+				cout << "List got" << a.listLenght(a.getHead()) << " elements" << endl;
+				break;
+			
+			case 8:
+				cout << "Specific node postiion:" << endl;
+				cin >> position;
+				cout << "Node is on position: " << a.nodeOnPosition(a.getHead(), position) << endl;
+				break;
+				
+			case 9:
+				cout << "Concatenate two lists: " << endl;
+				break;
+			
+			case 10: 
+				cout << "Display: " << endl;
+				a.displayRecursion(a.getHead());
+				break;
+				
+			case 0:
+				exit(1);
+				break;
+				
+			default:
+				cout << "Wrong choice" << endl;		
+		}
+	}
 }
 void List::listInit() {
 	head = NULL;

@@ -44,6 +44,8 @@ class List {
 		static int listLenght(Node* head);
 		
 		static int nodeOnPosition(Node* head, int position);
+		
+		void update(int data, int flag);
 };
 
 int main() {
@@ -51,7 +53,16 @@ int main() {
 	int choice, node, position, x, flag; 
 	List a;
 	a.listInit();
+	a.createNode(5);
+	a.createNode(6);
+	a.createNode(7);
+	a.createNode(8);
+	a.createNode(9);
+
+
+	a.displayRecursion(a.getHead());
 	
+	/*
 	while(1) {
 		cout << "-------------------------------------" << endl;
 		cout << "Single link lit operations" << endl;
@@ -139,7 +150,7 @@ int main() {
 			default:
 				cout << "Wrong choice" << endl;		
 		}
-	}
+	}*/
 }
 void List::listInit() {
 	head = NULL;
@@ -330,6 +341,22 @@ int List::nodeOnPosition(Node* head, int position){
 		temp = temp->next;
 	}
 	return 0;
+}
+
+//update existing node
+void List::update(int data, int flag){
+			
+	Node* temp = new Node;
+	temp = head->next;
+	
+	while(temp != NULL){
+		if(temp->data == flag){
+			temp->data = data;
+			cout << "Succesfully updated" << endl;
+			return;
+		}
+		temp = temp->next;
+	}		
 }	
 
 

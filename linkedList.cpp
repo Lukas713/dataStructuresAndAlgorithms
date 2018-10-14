@@ -61,11 +61,11 @@ int main() {
 	a.createNode(8);
 	a.createNode(9);
 
-
+/*
 	a.reverse();
 	a.displayRecursion(a.getHead());
+*/	
 	
-	/*
 	while(1) {
 		cout << "-------------------------------------" << endl;
 		cout << "Single link lit operations" << endl;
@@ -80,6 +80,8 @@ int main() {
 		cout << "8. Show position of node with specific data." << endl;
 		cout << "9. Concatenate two lists." << endl;
 		cout << "10. Display" << endl;
+		cout << "11. Update element" << endl;
+		cout << "12. Reverse list order" << endl;
 		cout << "0. exit" << endl;
 		cin >> choice ;
 		
@@ -147,12 +149,18 @@ int main() {
 				break;
 				
 			case 11:
-				cout << "Update element" < endl;
-				cout << "Enet value that you wanna update" << endl;
+				cout << "Update element" << endl;
+				cout << "Enter value that you wanna update" << endl;
 				cin >> node;
 				cout << "Enter new value" << endl;
 				cin >> x;
 				a.update(x, node);
+				break;
+				
+			case 12:
+				a.reverse();
+				cout << "List is reversed" << endl;
+				a.displayRecursion(a.getHead());
 				break;
 				
 			case 0:
@@ -162,7 +170,7 @@ int main() {
 			default:
 				cout << "Wrong choice" << endl;		
 		}
-	}*/
+	}
 }
 void List::listInit() {
 	head = NULL;
@@ -388,6 +396,7 @@ void List::reverse() {
 		previous = current;
 		current = next;
 	}
+	
 	head = previous;
 }
 

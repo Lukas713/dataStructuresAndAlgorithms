@@ -46,6 +46,8 @@ class List {
 		static int nodeOnPosition(Node* head, int position);
 		
 		void update(int data, int flag);
+		
+		void reverse();
 };
 
 int main() {
@@ -60,6 +62,7 @@ int main() {
 	a.createNode(9);
 
 
+	a.reverse();
 	a.displayRecursion(a.getHead());
 	
 	/*
@@ -141,6 +144,15 @@ int main() {
 			case 10: 
 				cout << "Display: " << endl;
 				a.displayRecursion(a.getHead());
+				break;
+				
+			case 11:
+				cout << "Update element" < endl;
+				cout << "Enet value that you wanna update" << endl;
+				cin >> node;
+				cout << "Enter new value" << endl;
+				cin >> x;
+				a.update(x, node);
 				break;
 				
 			case 0:
@@ -358,5 +370,25 @@ void List::update(int data, int flag){
 		temp = temp->next;
 	}		
 }	
+
+void List::reverse() {
+	
+	Node* current = new Node;
+	Node* previous = new Node;
+	Node* next = new Node;
+	
+	next = NULL;
+	previous = NULL;
+	current = head;
+	
+	while(current != NULL){
+		
+		next = current->next;
+		current->next = previous;
+		previous = current;
+		current = next;
+	}
+	head = previous;
+}
 
 

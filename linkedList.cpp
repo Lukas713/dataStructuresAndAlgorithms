@@ -61,10 +61,10 @@ int main() {
 	a.createNode(8);
 	a.createNode(9);
 
-/*
+
 	a.reverse();
 	a.displayRecursion(a.getHead());
-*/	
+	
 	
 	while(1) {
 		cout << "-------------------------------------" << endl;

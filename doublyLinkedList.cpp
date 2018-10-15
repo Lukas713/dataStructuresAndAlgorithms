@@ -54,7 +54,7 @@ int main() {
 	
 		while(1) {
 			cout << "-------------------------------------" << endl;
-			cout << "Single link lit operations" << endl;
+			cout << "Doubly link list operations" << endl;
 			cout << "-------------------------------------" << endl;
 			cout << "1. Create node." << endl;
 			cout << "2. Create node at begining." << endl;

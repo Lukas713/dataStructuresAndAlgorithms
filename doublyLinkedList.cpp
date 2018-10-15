@@ -37,14 +37,11 @@ class DoublyList {
 		void deleteLastNode();
 		
 		
-		
 		void display();
 		
 		static void displayRecursion(Node* head);
 		
 		void reverseDoublyList();
-		
-
 };
 
 
@@ -54,12 +51,6 @@ int main() {
 	
 	DoublyList a;
 	a.ListInit();
-	
-	a.createNode(2);
-	a.createNode(4);
-	a.createNode(6);
-	a.createNode(8);
-	a.createNode(10);
 	
 		while(1) {
 			cout << "-------------------------------------" << endl;

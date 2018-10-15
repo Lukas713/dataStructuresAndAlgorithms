@@ -258,31 +258,41 @@ void DoublyList::createNodeAfter(int data, int flag) {
 void DoublyList::deleteNode(int data) {
 	
 	Node* temp = new Node;
+	Node* next = new Node;
+	temp = getHead();
 	
-	temp = head;
+	if(temp->data == data){
+		next = temp->next;
+		next->prev = NULL;
+		head = next;
+		delete temp;
+		cout << "Node deleted!" << endl;
+		return;	
+	}
+	
 	while(temp != NULL){
 		
 		if(temp->data == data){
-			Node* next = new Node;
 			Node* previous = new Node;
-			
 			next = temp->next;
-			previous = temp->prev;
-			if(next != NULL){
-				next->prev = previous;
-				previous->next = next;
+			if(!next){
+				previous = temp->prev;
+				previous->next = NULL;
 				delete temp;
-				cout << "Node deleted!" << endl;
+				cout << "Node deleted" << endl;
 				return;
 			}
+			previous = temp->prev;
+			next->prev = previous;
 			previous->next = next;
+			head = previous;
 			delete temp;
-			cout << "Node deleted!" << endl;
+			cout << "Node deleted" << endl;	
 			return;
 		}
-			
 		temp = temp->next;
-	}		
+	}
+			
 }
 
 void DoublyList::deleteFirstNode() {
@@ -356,5 +366,4 @@ void DoublyList::reverseDoublyList() {
 	cout << "List is reversed" << endl;
 	return;	
 }
-
 

@@ -42,6 +42,23 @@ class DoublyList {
 		static void displayRecursion(Node* head);
 		
 		void reverseDoublyList();
+		
+		void eliminateHigher(Node* head, int data) {
+			
+			Node* temp = new Node;
+			Node* x = new Node;
+			
+			temp = head;
+			
+			while(temp != NULL) {
+				x = temp;
+				if(x->data > data) {
+					deleteNode(x->data);
+					temp = head;
+				}
+				temp = temp->next;
+			}
+		}
 };
 
 
@@ -66,6 +83,7 @@ int main() {
 			cout << "8. Display list." << endl;
 			cout << "9. Display list with recursive function" << endl;
 			cout << "10. Reverse list order" << endl;
+			cout << "11. Eliminate nodes with higher value" << endl;
 			cout << "0. exit" << endl;
 			cin >> choice ;
 			
@@ -129,9 +147,14 @@ int main() {
 					break;
 					cout << "Reversed list: " << endl;
 	
-				
 				case 10: 
 					a.reverseDoublyList();
+					break;
+					
+				case 11: 
+					cout << "Enter limit" << endl;
+					cin >> x;
+					a.eliminateHigher(a.getHead(), x);
 					break;
 					
 				case 0:
@@ -275,7 +298,7 @@ void DoublyList::deleteNode(int data) {
 		if(temp->data == data){
 			Node* previous = new Node;
 			next = temp->next;
-			if(!next){
+			if(next != NULL){
 				previous = temp->prev;
 				previous->next = NULL;
 				delete temp;
@@ -283,9 +306,7 @@ void DoublyList::deleteNode(int data) {
 				return;
 			}
 			previous = temp->prev;
-			next->prev = previous;
-			previous->next = next;
-			head = previous;
+			previous->next = next;;
 			delete temp;
 			cout << "Node deleted" << endl;	
 			return;

@@ -13,7 +13,7 @@ class StackList {
 	
 	public:
 		
-		void stackInit() {
+		StackList() {
 			top = NULL;
 		}
 		
@@ -76,7 +76,6 @@ class StackList {
 int main() {
 	
 	StackList a;
-	a.stackInit();
 	int choice, x;
 	
 	while(1) {

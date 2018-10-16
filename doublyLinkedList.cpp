@@ -15,7 +15,7 @@ class DoublyList {
 		Node* tail;
 		
 	public:
-		void ListInit();
+		DoublyList();
 		
 		Node* getHead();
 		
@@ -67,7 +67,6 @@ int main() {
 	int x, flag, choice ;
 	
 	DoublyList a;
-	a.ListInit();
 	
 		while(1) {
 			cout << "-------------------------------------" << endl;
@@ -165,17 +164,10 @@ int main() {
 					cout << "Wrong choice" << endl;		
 			}
 		}
-
-
-
-
-	
 	return 0;
 }
-
-
 //list initialization
-void DoublyList::ListInit(){
+DoublyList::DoublyList(){
 	head = NULL;
 	tail = NULL;
 }

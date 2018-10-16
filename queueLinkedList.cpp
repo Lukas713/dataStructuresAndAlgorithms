@@ -16,7 +16,7 @@ class QueueList {
 		Node* rear;
 		
 	public:
-		void queueInit();
+		QueueList();
 		
 		void enQueue(int data);
 		
@@ -30,7 +30,6 @@ class QueueList {
 int main() {
 	
 	QueueList a;
-	a.queueInit();
 	int x, choice ;
 	
 	while(1) {
@@ -75,7 +74,7 @@ int main() {
 	return 0 ;
 }
 //ququq initialization
-void QueueList::queueInit() {
+QueueList::QueueList() {
 	
 	front = NULL;
 	rear = NULL;

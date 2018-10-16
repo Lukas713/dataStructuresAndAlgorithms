@@ -14,7 +14,7 @@ class List {
 		Node* tail;
 
 	public:
-		void listInit();
+		List();
 		
 		Node* getHead();
 		
@@ -54,7 +54,6 @@ int main() {
 	
 	int choice, node, position, x, flag; 
 	List a;
-	a.listInit();
 	a.createNode(5);
 	a.createNode(6);
 	a.createNode(7);
@@ -172,7 +171,8 @@ int main() {
 		}
 	}
 }
-void List::listInit() {
+//constructor
+List::List() {
 	head = NULL;
 	tail = NULL;
 }

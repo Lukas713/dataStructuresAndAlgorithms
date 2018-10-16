@@ -1,120 +1,120 @@
 #include <iostream>
-#include <cstdlib>
 
 using namespace std;
 
-struct Node {
+struct Node{
 	int data;
-	Node* next;	
-	
-}*top;
+	Node* next;
+};
 
-class StackList {
+class StackList{
 	
-	public:
+	private:
+		Node* top;
 		
-		StackList() {
+	public:
+		StackList() { //constructor
 			top = NULL;
 		}
 		
-		Node* push(Node* top, int data) {
-			
-			Node* temp = new Node;
-			temp->data = data;
-			temp->next = top;
-			top = temp;
-			return top;	
-		} 
+		Node* peek();
 		
-		void traverse(Node* top) {
-			
-			Node* temp = new Node;
-			temp = top;
-			if(temp == NULL){
-				cout << "List is empty!" << endl;
-				return;
-			}else {
-				while(temp != NULL){
-					cout << temp->data << endl;
-					temp = temp->next;
-				}	
-			}
-		}	
+		void push(int data);
 		
-		Node* pop(Node* top) {
-			
-			if(top == NULL){
-				cout << "List is empty!" << endl;
-			}else {
-				Node* temp = new Node;
-				temp = top;
-				top = temp->next;
-				cout << "Node with value " << temp->data << " is poped." << endl;
-				delete temp;
-			}
-			return top;	
-		}
+		void pop();
 		
-		void minimuValue(Node* top) {
-			
-			Node* temp = new Node;
-			temp = top;
-			int min = top->data;
-			
-			while(temp != NULL){
-				
-				if(temp->data < min){
-					min = temp->data;
-				}
-				temp = temp->next;
-			}
-			cout << min << endl;
-		}
+		void display();
+		
+		bool isEmpty(Node* top);	
 };
-
 
 int main() {
 	
 	StackList a;
-	int choice, x;
+	int x, choice;
 	
-	while(1) {
-		cout << endl;
-        cout<<"Operations on Stack"<<endl;
-        cout<<"-----------------------"<<endl;
-        cout<<"1.Push Element into the Stack"<<endl;
-        cout<<"2.Pop Element from the Stack"<<endl;
-        cout<<"3.Traverse the Stack"<<endl;
-        cout<<"5.Minimum value"<<endl;
-        cout<<"4.Quit"<<endl;
-        cout<<"Enter your Choice: ";
-        cin>>choice;
-        switch(choice) {
-        	case 1:
-        		cout << "Enter elements value" << endl;
-        		cin >> x;
-        		top = a.push(top, x);
-        		break;
-        	
-        	case 2:
-        		top = a.pop(top);
-        		break;
-        		
-        	case 3:
-        		a.traverse(top);
-        		break;
-        		
-        	case 5:
-        		a.minimuValue(top);
-        		break;
-        	
-        	case 4:
-        		exit(1);
-        		break;
-        		
-        	default:
-        		cout << "Wrong option" << endl;	
+	while(1){
+		cout << "******************" << endl;
+		cout << "Stack operations" << endl;
+		cout << "******************" << endl;
+		cout << "1. Push element" << endl;
+		cout << "2. Pop element" << endl;
+		cout << "3. Display list" << endl;
+		cout << "0. Exit" << endl;
+		cout << "Enter option: ";
+		cin >> choice;
+		
+		switch(choice){
+			
+			case 1:
+				cout << "Input value" << endl;
+				cin >> x ;
+				a.push(x);
+				break;
+			
+			case 2:
+				a.pop();
+				break;
+				
+			case 3:
+				a.display();
+				break;
+				
+			case 0:
+				exit(1);
+				break;
+				
+			default:
+				cout << "Wrong option!" << endl;
+				break;	
 		}
 	}
+
 	return 0 ;
 }
+Node* StackList::peek() {	//returns top element
+		return top;
+	}
+		
+void StackList::push(int data) {
+	
+	Node* temp = new Node;
+	temp->data = data;
+	
+	if(!top){ //if top is NULL
+		temp->next = top;
+		top = temp;
+		return;
+	}
+	temp->next = top;
+	top = temp;
+	return;
+}
+		
+void StackList::pop() {
+	
+	Node* temp = new Node;
+	temp = top;
+	top = top->next;
+	delete temp;
+	cout << "element poped" << endl;
+	return;	
+}
+		
+void StackList::display(){
+	
+	Node* temp = new Node;
+	temp = top;
+	while(temp != NULL){
+		cout << temp->data << endl;
+		temp = temp->next;
+	}
+	return;
+}
+		
+bool StackList::isEmpty(Node* top){
+	if(!top){ //if list is empty
+		return true;
+	}
+	return false;
+}	

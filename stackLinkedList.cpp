@@ -54,6 +54,22 @@ class StackList {
 			}
 			return top;	
 		}
+		
+		void minimuValue(Node* top) {
+			
+			Node* temp = new Node;
+			temp = top;
+			int min = top->data;
+			
+			while(temp != NULL){
+				
+				if(temp->data < min){
+					min = temp->data;
+				}
+				temp = temp->next;
+			}
+			cout << min << endl;
+		}
 };
 
 
@@ -64,12 +80,13 @@ int main() {
 	int choice, x;
 	
 	while(1) {
-		
+		cout << endl;
         cout<<"Operations on Stack"<<endl;
         cout<<"-----------------------"<<endl;
         cout<<"1.Push Element into the Stack"<<endl;
         cout<<"2.Pop Element from the Stack"<<endl;
         cout<<"3.Traverse the Stack"<<endl;
+        cout<<"5.Minimum value"<<endl;
         cout<<"4.Quit"<<endl;
         cout<<"Enter your Choice: ";
         cin>>choice;
@@ -86,6 +103,10 @@ int main() {
         		
         	case 3:
         		a.traverse(top);
+        		break;
+        		
+        	case 5:
+        		a.minimuValue(top);
         		break;
         	
         	case 4:

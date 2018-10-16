@@ -23,6 +23,8 @@ class QueueList {
 		void deQueue();
 
 		void traverse();
+		
+		void countNodes();
 };
 
 int main() {
@@ -38,6 +40,7 @@ int main() {
 		cout << "1. Add element" << endl;
 		cout << "2. Remove Element" << endl;
 		cout << "3. Display whole list" << endl;
+		cout << "5. Count nodes" << endl;
 		cout << "4. Exit" << endl;
 		cout << "Enter number" << endl;
 		cin >> choice;
@@ -54,6 +57,10 @@ int main() {
 				
 			case 3: 
 				a.traverse();
+				break;
+				
+			case 5: 
+				a.countNodes();
 				break;
 			
 			case 4:
@@ -116,4 +123,16 @@ void QueueList::traverse() {
 	}
 	
 	cout << " rear" << endl;	
+}
+
+void QueueList::countNodes() {
+	
+	Node* temp = new Node;
+	int counter = 0;
+	temp = front;
+	while(temp) {
+		temp = temp->next;
+		counter++ ;
+	}
+	cout << counter << " nodes" << endl;
 }

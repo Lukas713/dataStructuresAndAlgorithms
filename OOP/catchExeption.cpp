@@ -22,7 +22,7 @@ private:
 	int* data;
 
 public:
-	Array(int n);
+	Array(int n) throw (ArrayExeption); //specifing which errorMSG coud be thrown
 	void setValues();
 
 	void getValues();

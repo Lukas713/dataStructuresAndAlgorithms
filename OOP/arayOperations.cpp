@@ -43,7 +43,7 @@ void insertionSort(int* a, int n) {
 		int current = a[i]; 	//take secnd number
 		int j = i - 1; 		//take first number
 		while (current < a[j] && j >= 0) {	//copare second to first
-			a[j - 1] = a[j]; 	//swap if true
+			a[j + 1] = a[j]; 	//swap if true
 			j--;	//first is now first - 1, and second if swaped mean that it is second still
 		}
 		a[j + 1] = current; //insert current at position

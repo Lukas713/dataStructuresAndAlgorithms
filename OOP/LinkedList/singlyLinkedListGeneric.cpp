@@ -1,6 +1,3 @@
-// testing.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include "pch.h"
 #include <iostream>
 #include <string>
@@ -26,13 +23,13 @@ public:
 };
 
 
-template <typename T>
+template <typename O>
 class Node {
 private:
-	T value; 
-	Node<T>* next; 
+	O value; 
+	Node<O>* next; 
 
-	friend class LinkedList<typename T>; 
+	friend class LinkedList<typename O>; 
 };
 
 template <typename O>
@@ -139,4 +136,3 @@ void LinkedList<O>::display() const {
 		head = head->next;
 	}
 }
-

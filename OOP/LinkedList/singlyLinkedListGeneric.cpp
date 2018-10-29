@@ -24,10 +24,9 @@ public:
 template <typename O> class LinkedList;
 template <typename O>
 class Node {
-private:
+public:
 	O value;
 	Node<O>* next;
-
 	LinkedList<O> list;
 };
 

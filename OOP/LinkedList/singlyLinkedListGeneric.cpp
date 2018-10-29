@@ -27,7 +27,7 @@ class Node {
 public:
 	O value;
 	Node<O>* next;
-	LinkedList<O> list;
+	LinkedList<O> ;
 };
 
 template <typename O> 
@@ -59,6 +59,7 @@ int main()
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "1. Add front" << std::endl;
 		std::cout << "2. Remove front" << std::endl;
+		std::cout << "3. Display" << std::endl; 
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
@@ -131,8 +132,9 @@ void LinkedList<O>::removeFront() {
 
 template <typename O>
 void LinkedList<O>::display() {
-	while (!head) {
+	while (head != NULL) {
 		std::cout << head->value << " ";
 		head = head->next;
 	}
+	return; 
 }

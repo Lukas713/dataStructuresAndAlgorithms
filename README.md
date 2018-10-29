@@ -18,4 +18,14 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
 </p>
 <h3>Data structures and basic operations</h3>
 <h3>Array add & remove operations</h3>
+<p>Tic-Tac toe game</p>
+<h3>Linked list basic operations</h3>
+<p>Tic-Tac toe</p>
+<p>LinkedList class as friend within Node class, catching exeptions, public interface<br>
+public methods; isEmpty(), front(), addFront(), removeFront(), display()
+</p>
+<h3>Linked list generic</h3>
+<p>LinkedList class type variable in class Node, so it can access informations<br>
+use any type of information within one list with template <typename T> keyword and transforming T into adaptable type <br>
+public methods; isEmpty(), front(), addFront(), removeFront(), display()</p>
 

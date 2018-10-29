@@ -68,7 +68,14 @@ void Game::move(int i, int j) {
 		currentPlayer = -currentPlayer;
 		return;
 	}
-	cout << "winner is player: " << currentPlayer << endl;
+
+	if (currentPlayer != 1) {
+		cout << endl;
+		cout << "Winner: X" << endl;
+		return; 
+	}
+	cout << endl;
+	cout << "Winner: O" << endl;
 	return;
 }
 

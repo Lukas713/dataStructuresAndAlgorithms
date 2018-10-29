@@ -3,71 +3,71 @@
 #include <string>
 #include <vector>
 
-using namespace std; 
 
 class Exeption {
 private:
-	string error;
+	std::string error;
 public:
-	Exeption(const string& err)
-		: error(err) {}; 
-	string getError() const {
-		return this->error; 
+	Exeption(const std::string& err)
+		: error(err) {};
+	std::string getError() const {
+		return this->error;
 	}
 };
 
 class ListExeption : public Exeption {
 public:
-	ListExeption(const string& err)
-		:Exeption(err) {}; 
+	ListExeption(const std::string& err)
+		:Exeption(err) {};
 };
 
-
+template <typename O> class LinkedList;
 template <typename O>
 class Node {
 private:
-	O value; 
-	Node<O>* next; 
+	O value;
+	Node<O>* next;
 
-	friend class LinkedList<typename O>; 
+	LinkedList<O> list;
 };
 
-template <typename O>
+template <typename O> 
 class LinkedList {
 private:
-	Node<O>* head; 
+	Node<O>* head;
 
 public:
 	LinkedList()
-		:head(NULL) {}; 
+		:head(NULL) {};
 	~LinkedList();
 	bool isEmpty() const;
 	O& front() const;
 	void addFront(const O& value);
-	void removeFront(); 
-	void display() const; 
+	void removeFront();
+	void display();
 };
+
+
 int main()
 {
 	int choice;
-	string txt;
+	std::string txt;
 
-	LinkedList<string> list; //LinkedList<int> list if want integers 
+	LinkedList<std::string> list; //LinkedList<int> list if want integers 
 	while (1) {
-		cout << endl;
-		cout << "***************************************************" << endl;
-		cout << "Linked List basic operation" << endl;
-		cout << "***************************************************" << endl;
-		cout << "1. Add front" << endl;
-		cout << "2. Remove front" << endl;
-		cout << "0. Exit" << endl;
-		cout << "enter option: ";
-		cin >> choice;
+		std::cout << "***************************************************" << std::endl;
+		std::cout << "Linked List basic operation" << std::endl;
+		std::cout << "***************************************************" << std::endl;
+		std::cout << "1. Add front" << std::endl;
+		std::cout << "2. Remove front" << std::endl;
+		std::cout << "0. Exit" << std::endl;
+		std::cout << "enter option: ";
+		std::cin >> choice;
 		try {
 			switch (choice) {
 			case 1:
-				cout << "Enter text" << endl;
-				cin >> txt;
+				std::cout << "Enter text" << std::endl;
+				std::cin >> txt;
 				list.addFront(txt);
 				break;
 			case 2:
@@ -86,13 +86,13 @@ int main()
 			}
 		}
 		catch (ListExeption& err) {
-			cout << err.getError();
+			std::cout << err.getError();
 		}
 	}
 
 	return 0;
-	
-	return 0; 
+
+	return 0;
 }
 template <typename O>
 LinkedList<O>::~LinkedList() {
@@ -105,8 +105,9 @@ LinkedList<O>::~LinkedList() {
 template <typename O>
 bool LinkedList<O>::isEmpty() const {
 	if (head != NULL)
-		return false
-		return true;
+		return false;
+
+	return true;
 }
 
 template <typename O>
@@ -130,9 +131,9 @@ void LinkedList<O>::removeFront() {
 }
 
 template <typename O>
-void LinkedList<O>::display() const {
+void LinkedList<O>::display() {
 	while (!head) {
-		cout << head->value << " ";
+		std::cout << head->value << " ";
 		head = head->next;
 	}
 }

@@ -83,7 +83,7 @@ int main()
 			std::cout << list.front(); 
 			break; 
 		case 5:
-			list.back();
+			std::cout << list.back();
 			break; 
 		case 0:
 			exit(1);

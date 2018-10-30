@@ -45,6 +45,7 @@ public:
 	void removeFront();
 	void removeBack();
 	void display() const;
+	void reverse(DoublyLinkedList& o); 
 protected:
 	void addAfterX(Node* x, const value& o);
 	void remove(Node* x);
@@ -68,38 +69,42 @@ int main()
 		std::cout << "3. Display" << std::endl;
 		std::cout << "4. Add Back" << std::endl;
 		std::cout << "5. Remove back" << std::endl;
+		std::cout << "6. Reverse" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
 
-			switch (choice) {
-			case 1:
-				std::cout << "Enter text" << std::endl;
-				std::cin >> txt;
-				list.addFront(txt);
-				break;
-			case 2:
+		switch (choice) {
+		case 1:
+			std::cout << "Enter text" << std::endl;
+			std::cin >> txt;
+			list.addFront(txt);
+			break;
+		case 2:
 
-					list.removeFront();
-					break;
+			list.removeFront();
+			break;
 
 
-				break;
-			case 3:
-				list.display();
-				break;
-			case 4:
-				std::cout << "Enter text" << std::endl;
-				std::cin >> txt;
-				list.addBack(txt);
-				break;
-			case 5:
-				list.removeBack();
-				break;
-			case 0:
-				exit(1);
-				break;
-			}
+			break;
+		case 3:
+			list.display();
+			break;
+		case 4:
+			std::cout << "Enter text" << std::endl;
+			std::cin >> txt;
+			list.addBack(txt);
+			break;
+		case 5:
+			list.removeBack();
+			break;
+		case 6:
+			list.reverse(list);
+			list.display(); 
+		case 0:
+			exit(1);
+			break;
+		}
 	}
 
 	return 0;
@@ -153,15 +158,15 @@ void DoublyLinkedList::remove(Node* x) {
 	delete x;
 }
 void DoublyLinkedList::removeFront() {	//invoke after head
-	try{
+	try {
 		if (head->next != tail) {
 			return remove(head->next);
 		}
-		throw ListExeption("List is empty!"); 
+		throw ListExeption("List is empty!");
 	}
-	catch (ListExeption& err){
-		std::cout << err.getError(); 
-	}	
+	catch (ListExeption& err) {
+		std::cout << err.getError();
+	}
 }
 void DoublyLinkedList::removeBack() {	//invoke before last to remove last
 	try {
@@ -185,10 +190,24 @@ void DoublyLinkedList::display() const {
 			delete temp;
 			return;
 		}
-		throw ListExeption("List is empty!"); 
+		throw ListExeption("List is empty!");
 	}
 	catch (ListExeption& err) {
-		std::cout << err.getError(); 
+		std::cout << err.getError();
 	}
-	
+}
+void DoublyLinkedList::reverse(DoublyLinkedList& o) {
+
+	DoublyLinkedList temp;	//creates new object
+	while (!o.isEmpty()) {	
+		std::string s = o.front();	//copy from one
+		o.removeFront(); 
+		temp.addFront(s);	//to another
+	}
+
+	while (!temp.isEmpty()) {	//copy from another
+		std::string s = temp.front();
+		o.addBack(s);	//to one from back
+		temp.removeFront(); 
+	}
 }

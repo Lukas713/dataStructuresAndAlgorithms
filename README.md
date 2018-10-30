@@ -28,4 +28,12 @@ public methods; isEmpty(), front(), addFront(), removeFront(), display()
 <p>LinkedList class type variable in class Node, so it can access informations<br>
 use any type of information within one list with template <typename T> keyword and transforming T into adaptable type <br>
 public methods; isEmpty(), front(), addFront(), removeFront(), display()</p>
+<h3>Doubly Linked list</h3>
+<p>DoublyLinkedList as friended class witin Node(accesing values), Node has private members; previous and next pointers<br>
+List has head and trailer pointers to the first and the last node<br>
+new protected interface; addAfterX(Node* x, string& x) and remove(Node* x). Why? <br>
+Now addFront(string& txt), addBack(string& txt), removeFront(), removeBack() returns addAfterX() and in parameter is head->next for <br>
+removing/adding first node, and addAfterX(tail->prev) to remove a lasts node<br>
+you can use protected methods within class and derived class. 
+</p>
 

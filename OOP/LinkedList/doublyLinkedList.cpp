@@ -25,35 +25,35 @@ typedef std::string value;
 class Node {
 	value txt;
 	Node* prev;
-	Node* next; 
-	friend class DoublyLinkedList; 
+	Node* next;
+	friend class DoublyLinkedList;
 };
 
 class DoublyLinkedList {
 
 private:
 	Node* head;
-	Node* tail; 
+	Node* tail;
 public:
-	DoublyLinkedList(); 
-	~DoublyLinkedList(); 
+	DoublyLinkedList();
+	~DoublyLinkedList();
 	value& front() const;
-	value& back() const; 
-	bool isEmpty() const; 
+	value& back() const;
+	bool isEmpty() const;
 	void addFront(const value& txt);
-	void addBack(const value& txt); 
+	void addBack(const value& txt);
 	void removeFront();
-	void removeBack(); 
+	void removeBack();
 	void display() const;
 protected:
 	void addAfterX(Node* x, const value& o);
-	void remove(Node* x); 
+	void remove(Node* x);
 };
 
 int main()
-{ 
+{
 
-	DoublyLinkedList list; 
+	DoublyLinkedList list;
 	int choice;
 	std::string txt;
 
@@ -67,11 +67,11 @@ int main()
 		std::cout << "2. Remove front" << std::endl;
 		std::cout << "3. Display" << std::endl;
 		std::cout << "4. Add Back" << std::endl;
-		std::cout << "5. Remove back" << std::endl; 
+		std::cout << "5. Remove back" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
-		try {
+
 			switch (choice) {
 			case 1:
 				std::cout << "Enter text" << std::endl;
@@ -79,11 +79,11 @@ int main()
 				list.addFront(txt);
 				break;
 			case 2:
-				if (!list.isEmpty()) {
+
 					list.removeFront();
 					break;
-				}
-				throw ListExeption("List is empty!");
+
+
 				break;
 			case 3:
 				list.display();
@@ -91,19 +91,15 @@ int main()
 			case 4:
 				std::cout << "Enter text" << std::endl;
 				std::cin >> txt;
-				list.addBack(txt); 
+				list.addBack(txt);
 				break;
 			case 5:
-				list.removeBack(); 
+				list.removeBack();
 				break;
 			case 0:
 				exit(1);
 				break;
 			}
-		}
-		catch (ListExeption& err) {
-			std::cout << err.getError();
-		}
 	}
 
 	return 0;
@@ -140,7 +136,7 @@ void DoublyLinkedList::addAfterX(Node* x, const value& o) {	//add node after x
 	newNode->next = x;	 //set next-> to x
 	newNode->prev = x->prev; 		//set previus of newNode to x's previous
 	x->prev->next = newNode;	//set next of node before new node to new node and x's previus to new node
-	x->prev = newNode; 
+	x->prev = newNode;
 }
 void DoublyLinkedList::addFront(const value& txt) {	//invoke addAfter and send head's next
 	return addAfterX(head->next, txt);
@@ -157,20 +153,42 @@ void DoublyLinkedList::remove(Node* x) {
 	delete x;
 }
 void DoublyLinkedList::removeFront() {	//invoke after head
-	return remove(head->next);
+	try{
+		if (head->next != tail) {
+			return remove(head->next);
+		}
+		throw ListExeption("List is empty!"); 
+	}
+	catch (ListExeption& err){
+		std::cout << err.getError(); 
+	}	
 }
 void DoublyLinkedList::removeBack() {	//invoke before last to remove last
-	return remove(tail->prev);
-}
-void DoublyLinkedList::display() const{
-	Node* temp = head;
-	while (temp != NULL) {
-		std::cout << temp->txt << " ";
-		temp = temp->next;
+	try {
+		if (head->next != tail) {
+			return remove(tail->prev);
+		}
+		throw ListExeption("List is empty!");
 	}
-	delete temp; 
-	return; 
+	catch (ListExeption& err) {
+		std::cout << err.getError();
+	}
 }
-
-
-
+void DoublyLinkedList::display() const {
+	try {
+		if (head->next != tail) {
+			Node* temp = head;
+			while (temp != NULL) {
+				std::cout << temp->txt << " ";
+				temp = temp->next;
+			}
+			delete temp;
+			return;
+		}
+		throw ListExeption("List is empty!"); 
+	}
+	catch (ListExeption& err) {
+		std::cout << err.getError(); 
+	}
+	
+}

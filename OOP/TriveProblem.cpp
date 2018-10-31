@@ -1,7 +1,11 @@
+
 #include "pch.h"
 #include <iostream>
 #include <string>
 #include <vector>
+
+
+//PROBLEM: https://docs.google.com/document/d/1uXusoocy43MZ_IeE73_jh3spc-_EziuKMdXHPiDaIhc/edit
 
 class Exeption {	//exeption handling with constructor
 private:
@@ -54,9 +58,6 @@ protected:
 };
 
 
-
-
-
 class ShopingList {
 friend class ShoppingCart;
 
@@ -88,13 +89,13 @@ public:
 };
 
 
-
 int main()
 {
 
 	std::string txt;
 	double pric;
 	int sku, quant, choice; 
+	int i=0; 
 
 	Inventar* inventar = new Inventar;
 	ShoppingCart* a;
@@ -111,6 +112,8 @@ int main()
 		case 1:
 			std::cout << "Enter name: " << std::endl;
 			std::cin >> txt;
+			for (int i = 0; i < txt.length(); i++)
+				if (txt[i] == ' ') txt.erase(i, 1);	//removing white space without STL
 			std::cout << "Enter price: " << std::endl;
 			std::cin >> pric; 
 			std::cout << "Enter quantity: " << std::endl;

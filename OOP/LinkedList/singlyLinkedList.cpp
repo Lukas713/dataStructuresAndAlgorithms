@@ -42,7 +42,8 @@ public:
 	const string& front() const;	//return first node
 	void addFront(const string& o);	//add node to the front
 	void removeFront();		//remove first node
-	void display(); 
+	void display();
+	int penultimate() //find second highest in linked list (need to ave list with integers)	 
 };
 int main()
 {
@@ -127,4 +128,23 @@ void SinglyLinkedList::display() {
 		cout << head->name << " ";
 		head = head->next;
 	}
+}
+int LinkedList::penultimate() {
+	
+	Node* temp = head; 
+	Node* max = head;
+	Node* secondMax = max->next;
+
+	while (temp != NULL) {
+		if (max->number < temp->number) {
+			secondMax = max; 
+			max = temp;
+		}
+		if (max->number > temp->number && secondMax->number < temp->number) {
+			secondMax = temp;
+		}
+		temp = temp->next;
+	}
+	
+	return secondMax->number;
 }

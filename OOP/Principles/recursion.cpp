@@ -23,19 +23,38 @@ int recursiveFactorial(int x) {
 	return x * recursiveFactorial(x - 1); //recur
 }
 
-void countdown(int n) {
-	std::cout << "Counting down " << n << " address: " << &n << std::endl; 
-	if (n > 0) {
-
-		countdown(n - 1); 
+//reverse array recursive
+void recursiveReverse(int* x, int i, int j) {
+	if (j == 0) {
+		return; 
 	}
-	std::cout << "kaboom " << n << " adress: " << &n <<std::endl;
+
+	int temp = x[j - 1]; 
+	x[j - 1] = x[i]; 
+	x[i] = temp;
+	
+	recursiveReverse(x, i + 1, j - 1);
+	std::cout << x[i] << " ";
 }
+
+//get number of elements in array 
+int numberOfRepetition(int* x, int n, int max) {
+	
+	if (max < 0) {
+		return 0 ; 
+	}
+
+	if (x[max-1] != n) {
+		return numberOfRepetition(x, n, max - 1) + 0; 
+	}
+	return numberOfRepetition(x, n, max - 1) + 1; 
+}
+
+
 int main()
 {
-	int n = 4;
-	countdown(n); 
-	
+ 
+
 
 	return 0; 
 }

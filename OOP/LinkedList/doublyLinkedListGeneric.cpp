@@ -160,7 +160,6 @@ void DoublyLinkedList<T>::display(){
 		std::cout << temp->value << " ";
 		temp = temp->next;
 	}
-	delete temp;
 	return; 
 }
 template <typename T>

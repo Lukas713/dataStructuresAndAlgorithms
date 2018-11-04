@@ -36,28 +36,24 @@ public:
 	bool isEmpty() const;	
 	T& front(); 
 	T& back(); 
-	void addFront(const T& value); 
-	void addBack(const T& value); 
-	void removeBack();
+	void addFront(const T value); //takes value, invoke add(head)
+	void addBack(const T& value);	//takes value, invoke add(tail)
+	void removeBack();	//invoke remove(tail)
 	void removeFront(); 
 	void display();
 protected:
-	void add(Node<T>* x, const T& value);
+	void add(Node<T>* x, const T value);
 	void remove(Node<T>* x);
 };
 
 int main()
 {
-
- 
-
 	DoublyLinkedList<int> list;
 	int choice;
 	int number; 
 
-
-
 	while (1) {
+		std::cout << std::endl; 
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "Doubly Linked List basic operation" << std::endl;
 		std::cout << "***************************************************" << std::endl;
@@ -72,7 +68,7 @@ int main()
 
 		switch (choice) {
 		case 1:
-			std::cout << "Enter text" << std::endl;
+			std::cout << "Enter value: " << std::endl;
 			std::cin >> number;
 			list.addFront(number);
 			break;
@@ -98,7 +94,6 @@ int main()
 	}
 
 	return 0;
-
 }
 //templated constructor
 template <typename T>
@@ -138,7 +133,7 @@ T& DoublyLinkedList<T>::back() {	//return last node value
 	return tail->prev->value;
 }
 template <typename T>
-void DoublyLinkedList<T>::addFront(const T& value) {
+void DoublyLinkedList<T>::addFront(const T value) {
 	return add(head, value);	//return add function
 }
 template <typename T>
@@ -154,22 +149,13 @@ void DoublyLinkedList<T>::removeBack() {
 	return remove(tail->prev);	//return remove function
 }
 template <typename T>
-void DoublyLinkedList<T>::display(){
-	Node<T>* temp = head->next;
-	while (temp != tail) {
-		std::cout << temp->value << " ";
-		temp = temp->next;
-	}
-	return; 
-}
-template <typename T>
-void DoublyLinkedList<T>::add(Node<T>* x, const T& value) {
+void DoublyLinkedList<T>::add(Node<T>* x, const T value) {
 	Node<T>* newNode = new Node<T>;	//create pointer to Node, dinamic alocate memory
 	newNode->value = value; 
 	newNode->next = x->next; 
 	newNode->prev = x;
+	x->next->prev = newNode;
 	x->next = newNode; 
-	x->next->prev = newNode; 
 }
 template <typename T>
 void DoublyLinkedList<T>::remove(Node<T>* x) {
@@ -177,13 +163,25 @@ void DoublyLinkedList<T>::remove(Node<T>* x) {
 		if (!isEmpty()) {	
 			Node<T>* prevNode = x->prev;	//creates pointer to Node that points to PREVIOUS of Node from parameter
 			Node<T>* nextNode = x->next;	//creates poiner to Node that points to NEXT of Node from parameter
+
 			prevNode->next = nextNode;		//sets link to next
 			nextNode->prev = prevNode;		//sets link to previous
 			delete x;	//delete wishing node
+			return; 
 		}
 		throw Exeption("List is empty.");	//throw exeption if list is not empty
 	}
 	catch (Exeption& err) {
 		std::cout << err.getError() << std::endl;
 	}
+}
+
+template <typename T>
+void DoublyLinkedList<T>::display() {
+	Node<T>* temp = head->next;
+	while (temp != tail) {
+		std::cout << temp->value << " ";
+		temp = temp->next;
+	}
+	return;
 }

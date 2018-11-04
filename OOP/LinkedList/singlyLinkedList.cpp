@@ -129,6 +129,10 @@ void SinglyLinkedList::display() {
 		head = head->next;
 	}
 }
+/*
+Give an algorithm for finding the penultimate (second to last) node in a
+singly linked list where the last element is indicated by a null next link.
+*/
 int LinkedList::penultimate() {
 	
 	Node* temp = head; 

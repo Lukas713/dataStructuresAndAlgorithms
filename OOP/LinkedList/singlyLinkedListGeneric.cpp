@@ -3,22 +3,15 @@
 #include <string>
 #include <vector>
 
-
+typedef std::string error; 
 class Exeption {
-private:
-	std::string error;
+	error txt; 
 public:
 	Exeption(const std::string& err)
-		: error(err) {};
+		: txt(err) {};
 	std::string getError() const {
-		return this->error;
+		return this->txt;
 	}
-};
-
-class ListExeption : public Exeption {
-public:
-	ListExeption(const std::string& err)
-		:Exeption(err) {};
 };
 
 template <typename O> class LinkedList;
@@ -27,10 +20,10 @@ class Node {
 public:
 	O value;
 	Node<O>* next;
-	LinkedList<O> ;
+	friend class LinkedList<O>;
 };
 
-template <typename O> 
+template <typename O>
 class LinkedList {
 private:
 	Node<O>* head;
@@ -44,8 +37,10 @@ public:
 	void addFront(const O& value);
 	void removeFront();
 	void display();
+	O penultimate(); //find second highest in linked list (need to ave list with integers)
+	Node<O>* getHead() { return this->head;  }
+	void concatenate(Node<O>* y); 
 };
-
 
 int main()
 {
@@ -54,16 +49,18 @@ int main()
 
 	LinkedList<std::string> list; //LinkedList<int> list if want integers 
 	while (1) {
+		std::cout << std::endl; 
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "Linked List basic operation" << std::endl;
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "1. Add front" << std::endl;
 		std::cout << "2. Remove front" << std::endl;
-		std::cout << "3. Display" << std::endl; 
+		std::cout << "3. Display" << std::endl;
+		std::cout << "4. Second largest element" << std::endl;
+		std::cout << "5. Reverse" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
-		try {
 			switch (choice) {
 			case 1:
 				std::cout << "Enter text" << std::endl;
@@ -71,27 +68,19 @@ int main()
 				list.addFront(txt);
 				break;
 			case 2:
-				if (!list.isEmpty()) {
-					list.removeFront();
-					break;
-				}
-				throw ListExeption("List is empty!");
+				list.removeFront();
 				break;
 			case 3:
 				list.display();
+				break;
+			case 4:
+				std::cout << list.penultimate(); 
 				break;
 			case 0:
 				exit(1);
 				break;
 			}
-		}
-		catch (ListExeption& err) {
-			std::cout << err.getError();
-		}
 	}
-
-	return 0;
-
 	return 0;
 }
 template <typename O>
@@ -125,16 +114,71 @@ void LinkedList<O>::addFront(const O& value) {
 
 template <typename O>
 void LinkedList<O>::removeFront() {
-	Node<O>* newNode = head;
-	head = head->next;
-	delete newNode;
+	try {
+		if (!isEmpty()) {
+			Node<O>* newNode = head;
+			head = head->next;
+			delete newNode;
+		}
+		throw Exeption("List is empty!"); 
+	}
+	catch (Exeption& err) {
+		std::cout << err.getError() << "\n"; 
+	}
 }
 
 template <typename O>
 void LinkedList<O>::display() {
-	while (head != NULL) {
-		std::cout << head->value << " ";
-		head = head->next;
+	try {
+		if (!isEmpty()) {
+			Node<O>* temp = head; 
+			while (temp != NULL) {
+				std::cout << temp->value << " ";
+				temp = temp->next;
+			}
+			return;
+		}
+		throw Exeption("List is empty!"); 
 	}
-	return; 
+	catch (Exeption& err) {
+		std::cout << err.getError() << "\n"; 
+	}
+	return;
 }
+/*
+Give an algorithm for finding the penultimate (second to last) node in a
+singly linked list where the last element is indicated by a null next link.
+*/
+template <typename O>
+O LinkedList<O>::penultimate() {
+
+	Node<O>* temp = head;
+	Node<O>* max = head;
+	Node<O>* secondMax = max->next;
+
+	while (temp != NULL) {
+		if (max->value < temp->value) {
+			secondMax = max;
+			max = temp;
+		}
+		if (max->value > temp->value && secondMax->value < temp->value) {
+			secondMax = temp;
+		}
+		temp = temp->next;
+	}
+	return secondMax->value;
+}
+/*
+Describe a good algorithm for concatenating two singly linked lists L and
+M, with header sentinels, into a single list L'that contains all the nodes of L 
+followed by all the nodes of M.
+*/
+template <typename O>
+void LinkedList<O>::concatenate(Node<O>* y) {
+	Node<O>* temp = head; //creates Node pointer
+	while (temp->next != NULL) {
+		temp = temp->next; //traverse untill end of the list
+	}
+	temp->next = y; //set last's link to first of second list
+}
+

@@ -7,18 +7,18 @@ Give a fully generic implementation of the doubly linked list data structure by 
 */
 using namespace std;
 
-typedef std::string error; 
+typedef std::string error;
 class Exeption {
 	error txt;
 public:
-	Exeption(const error& err) 
-		: txt(err) {}; 
+	Exeption(const error& err)
+		: txt(err) {};
 	error& getError() { return this->txt; }
 };
 
 template <typename T> class DoublyLinkedList;
 template <typename T>
-class Node { 
+class Node {
 	T value;
 	Node<T>* next;
 	Node<T>* prev;
@@ -31,16 +31,18 @@ class DoublyLinkedList {
 	Node<T>* head;		//pointer to node, pointing to first element of the lit
 	Node<T>* tail;		//pointer to node, pointing to last element of the list
 public:
-	DoublyLinkedList();		
-	~DoublyLinkedList();		
-	bool isEmpty() const;	
-	T& front(); 
-	T& back(); 
+	DoublyLinkedList();
+	~DoublyLinkedList();
+	bool isEmpty() const;
+	T& front();
+	T& back();
 	void addFront(const T value); //takes value, invoke add(head)
 	void addBack(const T& value);	//takes value, invoke add(tail)
 	void removeBack();	//invoke remove(tail)
-	void removeFront(); 
+	void removeFront();
 	void display();
+	void middleElement(); //Describe a nonrecursive function for finding, by link hopping, the middle
+						  //node of a doubly linked list with header and trailer sentinels.
 protected:
 	void add(Node<T>* x, const T value);
 	void remove(Node<T>* x);
@@ -50,10 +52,10 @@ int main()
 {
 	DoublyLinkedList<int> list;
 	int choice;
-	int number; 
+	int number;
 
 	while (1) {
-		std::cout << std::endl; 
+		std::cout << std::endl;
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "Doubly Linked List basic operation" << std::endl;
 		std::cout << "***************************************************" << std::endl;
@@ -62,6 +64,7 @@ int main()
 		std::cout << "3. Display" << std::endl;
 		std::cout << "4. Add Back" << std::endl;
 		std::cout << "5. Remove back" << std::endl;
+		std::cout << "6. Middle element" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
@@ -87,6 +90,9 @@ int main()
 		case 5:
 			list.removeBack();
 			break;
+		case 6:
+			list.middleElement();
+			break;
 		case 0:
 			exit(1);
 			break;
@@ -104,7 +110,7 @@ DoublyLinkedList<T>::DoublyLinkedList() {
 	head->next = tail;
 	tail->prev = head;
 	head->prev = NULL;
-	tail->next = NULL; 
+	tail->next = NULL;
 }
 //templated destructor
 template <typename T>
@@ -113,13 +119,13 @@ DoublyLinkedList<T>::~DoublyLinkedList() {
 		removeFront();	//remove front
 	}
 	//delete starting nodes
-	delete head;	
+	delete head;
 	delete tail;
 	return;
 }
 template <typename T>
 bool DoublyLinkedList<T>::isEmpty() const {	//function thatchecks if list is empty or not
-	if (head->next != tail) {	
+	if (head->next != tail) {
 		return false;
 	}
 	return true;
@@ -151,23 +157,23 @@ void DoublyLinkedList<T>::removeBack() {
 template <typename T>
 void DoublyLinkedList<T>::add(Node<T>* x, const T value) {
 	Node<T>* newNode = new Node<T>;	//create pointer to Node, dinamic alocate memory
-	newNode->value = value; 
-	newNode->next = x->next; 
+	newNode->value = value;
+	newNode->next = x->next;
 	newNode->prev = x;
 	x->next->prev = newNode;
-	x->next = newNode; 
+	x->next = newNode;
 }
 template <typename T>
 void DoublyLinkedList<T>::remove(Node<T>* x) {
 	try {
-		if (!isEmpty()) {	
+		if (!isEmpty()) {
 			Node<T>* prevNode = x->prev;	//creates pointer to Node that points to PREVIOUS of Node from parameter
 			Node<T>* nextNode = x->next;	//creates poiner to Node that points to NEXT of Node from parameter
 
 			prevNode->next = nextNode;		//sets link to next
 			nextNode->prev = prevNode;		//sets link to previous
 			delete x;	//delete wishing node
-			return; 
+			return;
 		}
 		throw Exeption("List is empty.");	//throw exeption if list is not empty
 	}
@@ -175,7 +181,6 @@ void DoublyLinkedList<T>::remove(Node<T>* x) {
 		std::cout << err.getError() << std::endl;
 	}
 }
-
 template <typename T>
 void DoublyLinkedList<T>::display() {
 	Node<T>* temp = head->next;
@@ -184,4 +189,23 @@ void DoublyLinkedList<T>::display() {
 		temp = temp->next;
 	}
 	return;
+}
+template <typename T>
+void DoublyLinkedList<T>::middleElement() {
+	try {
+		if (!isEmpty()) {
+			Node<T>* temp = head;	//creates pointer to node, pointing to head
+			Node<T>* jumper = head;	//creates pointer to node, pointing to head
+			while (jumper->next != NULL) {	//while traverser is not at the end of the list
+				temp = temp->next;	//traverse by one
+				jumper = jumper->next->next;	//traverse by two
+			}
+			std::cout << "Middle element is " << temp->value << "\n";
+			return; 
+		}
+		throw Exeption("List is empty!"); 
+	}
+	catch (Exeption& err) {
+		std::cout << err.getError(); 
+	} 
 }

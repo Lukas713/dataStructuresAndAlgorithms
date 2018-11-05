@@ -30,7 +30,6 @@ class Node {
 };
 
 class CircularLinkedList {
-
 private:
 	Node* cursor;	//pointer to node that points to some node in the list
 public:
@@ -40,9 +39,9 @@ public:
 	value& front() const;
 	value& back() const;
 	void advance();		//move cursor to the next Node in the list
-	void addNode(const value& txt); 
-	void removeNode(); 
-	void display() const;
+	void addNode(const value& txt);
+	void removeNode();
+	void display() const; 
 };
 
 int main()
@@ -51,9 +50,8 @@ int main()
 	int choice;
 	std::string txt;
 
-
-
 	while (1) {
+		std::cout << std::endl; 
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "Circular Linked List basic operation" << std::endl;
 		std::cout << "***************************************************" << std::endl;
@@ -62,7 +60,6 @@ int main()
 		std::cout << "3. Display" << std::endl;
 		std::cout << "4. Return front" << std::endl;
 		std::cout << "5. Return back" << std::endl;
-		std::cout << "6. Display" << std::endl; 
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
@@ -80,11 +77,11 @@ int main()
 			list.display();
 			break;
 		case 4:
-			std::cout << list.front(); 
-			break; 
+			std::cout << list.front();
+			break;
 		case 5:
 			std::cout << list.back();
-			break; 
+			break;
 		case 0:
 			exit(1);
 			break;
@@ -117,7 +114,6 @@ value& CircularLinkedList::back() const {	//returns cursor which points to back
 	}
 	catch (ListExeption& err) {
 		std::cout << err.getError();	//have to fix this
-		return;
 	}
 }
 value& CircularLinkedList::front() const {	//return first 
@@ -129,9 +125,7 @@ value& CircularLinkedList::front() const {	//return first
 	}
 	catch (ListExeption& err) {
 		std::cout << err.getError();	//have to fix this
-		return;
 	}
-
 }
 void CircularLinkedList::advance() {	//set cursor to next
 	if (cursor != NULL) {	//checks if list is not empt
@@ -173,11 +167,16 @@ void CircularLinkedList::removeNode() {
 	}
 }
 
-void CircularLinkedList::display() const{
-	Node* temp = cursor->next;
+void CircularLinkedList::display() const {
+	Node* temp = cursor;
+	std::cout << temp->txt << " ";
+	temp = temp->next;
+	int counter = 1; 
 	while (temp != cursor) {
 		std::cout << temp->txt << " ";
 		temp = temp->next;
+		counter++; 
 	}
-	return; 
+	std::cout << "\n" << counter << " elements"; 
+	return;
 }

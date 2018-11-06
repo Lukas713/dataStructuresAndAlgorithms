@@ -41,12 +41,14 @@ public:
 	Node<O>* getHead() { return this->head; }
 	void concatenate(Node<O>* y);
 	void reverse(); // algorithm for reversing a singly linked list 
+	int count(const Node<O>* hd); //recursive algorithm that counts the number of nodes in a singly linked list
 };
 
 int main()
 {
 	int choice;
 	std::string txt;
+	int number; 
 
 	LinkedList<std::string> list; //LinkedList<int> list if want integers 
 	while (1) {
@@ -59,6 +61,7 @@ int main()
 		std::cout << "3. Display" << std::endl;
 		std::cout << "4. Second largest element" << std::endl;
 		std::cout << "5. Reverse" << std::endl;
+		std::cout << "6. Count elements" << std::endl;
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
@@ -78,8 +81,12 @@ int main()
 			std::cout << list.penultimate();
 			break;
 		case 5:
-			list.reverseRecursive(list.getHead(), NULL);
-			break; 
+			list.reverse();
+			break;
+		case 6:
+			number = list.count(list.getHead()); 
+			std::cout << number << " elements in list"; 
+			break;
 		case 0:
 			exit(1);
 			break;
@@ -201,6 +208,18 @@ void LinkedList<O>::reverse() {
 		current = next;		//change to next node
 	}
 	head = previous; //change head to new begining
+}
+/*
+Recursive algorithm that counts the number of nodes in a singly
+linked list
+*/
+template <typename O>
+int LinkedList<O>::count(const Node<O>* hd) {
+	if (hd != NULL) {
+		return count(hd->next) + 1; 
+	}
+
+	return 0; 
 }
 
 

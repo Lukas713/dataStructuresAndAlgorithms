@@ -52,6 +52,15 @@ protected:
 
 int main()
 {
+	DoublyLinkedList<int> a; 
+	a.addFront(3); 
+	a.addFront(1); 
+	DoublyLinkedList<int> b;
+	b.addFront(4); 
+	b.addFront(1); 
+	a.concatenate(b.getHead(), b.getTail()); 
+	a.display(); 
+	/*
 	DoublyLinkedList<int> list;
 	int choice;
 	int number;
@@ -100,7 +109,7 @@ int main()
 			break;
 		}
 	}
-
+	*/
 	return 0;
 }
 //templated constructor

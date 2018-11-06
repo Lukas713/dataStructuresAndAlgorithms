@@ -36,8 +36,8 @@ public:
 	bool isEmpty() const;
 	T& front();
 	T& back();
-	Node<T>* getTail() { return this->tail; }
-	Node<T>* getHead() { return this->head; }
+	Node<T>* getTail() { return tail; }
+	Node<T>* getHead() { return head; }
 	void addFront(const T value); //takes value, invoke add(head)
 	void addBack(const T& value);	//takes value, invoke add(tail)
 	void removeBack();	//invoke remove(tail)
@@ -52,15 +52,7 @@ protected:
 
 int main()
 {
-	DoublyLinkedList<int> a; 
-	a.addFront(3); 
-	a.addFront(1); 
-	DoublyLinkedList<int> b;
-	b.addFront(4); 
-	b.addFront(1); 
-	a.concatenate(b.getHead(), b.getTail()); 
-	a.display(); 
-	/*
+
 	DoublyLinkedList<int> list;
 	int choice;
 	int number;
@@ -109,7 +101,6 @@ int main()
 			break;
 		}
 	}
-	*/
 	return 0;
 }
 //templated constructor
@@ -228,12 +219,12 @@ with header and trailer sentinel nodes, into a single list L
 (must explicitly create test)
 */
 template <typename T>
-void DoublyLinkedList<T>::concatenate(Node<T>* h, Node<T>* t) {
-	Node<T>* tailPtr = getTail(); 
-	tailPtr->prev->next = h->next; 
-	h->next->prev = tailPtr->prev;
-	tail->prev = t->prev; 
-	tail->next = NULL; 
-	tail = t; 
+void DoublyLinkedList<T>::concatenate(Node<T>* h, Node<T>* t) { 
+	Node<T>* tailPtr = getTail(); //set node pointer ointing to tail
+	tailPtr->prev->next = h->next;	//last node's next is first of second list
+	h->next->prev = tailPtr->prev;	//previous of first node from second list is last in first list
+	tail->prev = t->prev;	//tail previous from first list is tail previous from second list
+	tail->next = NULL;	//tail next is null
+	tail = t;	//set tail same as second t; 
 }
 

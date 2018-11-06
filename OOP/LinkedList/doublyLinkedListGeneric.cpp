@@ -36,13 +36,15 @@ public:
 	bool isEmpty() const;
 	T& front();
 	T& back();
+	Node<T>* getTail() { return this->tail; }
+	Node<T>* getHead() { return this->head; }
 	void addFront(const T value); //takes value, invoke add(head)
 	void addBack(const T& value);	//takes value, invoke add(tail)
 	void removeBack();	//invoke remove(tail)
 	void removeFront();
 	void display();
-	void middleElement(); //Describe a nonrecursive function for finding, by link hopping, the middle
-						  //node of a doubly linked list with header and trailer sentinels.
+	void middleElement(); //nonrecursive function for finding node of a doubly linked list 
+	void concatenate(Node<T>* h, Node<T>* t);  //algorithm for concatenating two doubly linked lists
 protected:
 	void add(Node<T>* x, const T value);
 	void remove(Node<T>* x);
@@ -190,6 +192,8 @@ void DoublyLinkedList<T>::display() {
 	}
 	return;
 }
+//Describe a nonrecursive function for finding, by link hopping, the middle
+//node of a doubly linked list with header and trailer sentinels.
 template <typename T>
 void DoublyLinkedList<T>::middleElement() {
 	try {
@@ -201,11 +205,24 @@ void DoublyLinkedList<T>::middleElement() {
 				jumper = jumper->next->next;	//traverse by two
 			}
 			std::cout << "Middle element is " << temp->value << "\n";
-			return; 
+			return;
 		}
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
 	catch (Exeption& err) {
-		std::cout << err.getError(); 
-	} 
+		std::cout << err.getError();
+	}
 }
+/*
+Give a fast algorithm for concatenating two doubly linked lists L and M,
+with header and trailer sentinel nodes, into a single list L
+(must explicitly create test)
+*/
+template <typename T>
+void DoublyLinkedList<T>::concatenate(Node<T>* h, Node<T>* t) {
+	Node<T>* tailPtr = getTail(); 
+	h->next->prev = tailPtr->prev; 
+	tailPtr->prev->next = h->next;
+	tail = t; 
+}
+

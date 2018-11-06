@@ -230,8 +230,10 @@ with header and trailer sentinel nodes, into a single list L
 template <typename T>
 void DoublyLinkedList<T>::concatenate(Node<T>* h, Node<T>* t) {
 	Node<T>* tailPtr = getTail(); 
-	h->next->prev = tailPtr->prev; 
-	tailPtr->prev->next = h->next;
+	tailPtr->prev->next = h->next; 
+	h->next->prev = tailPtr->prev;
+	tail->prev = t->prev; 
+	tail->next = NULL; 
 	tail = t; 
 }
 

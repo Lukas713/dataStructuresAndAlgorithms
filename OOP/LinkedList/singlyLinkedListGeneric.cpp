@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
-typedef std::string error; 
+typedef std::string error;
 class Exeption {
-	error txt; 
+	error txt;
 public:
 	Exeption(const std::string& err)
 		: txt(err) {};
@@ -38,8 +38,9 @@ public:
 	void removeFront();
 	void display();
 	O penultimate(); //find second highest in linked list (need to ave list with integers)
-	Node<O>* getHead() { return this->head;  }
-	void concatenate(Node<O>* y); 
+	Node<O>* getHead() { return this->head; }
+	void concatenate(Node<O>* y);
+	void reverse(); // algorithm for reversing a singly linked list 
 };
 
 int main()
@@ -49,7 +50,7 @@ int main()
 
 	LinkedList<std::string> list; //LinkedList<int> list if want integers 
 	while (1) {
-		std::cout << std::endl; 
+		std::cout << std::endl;
 		std::cout << "***************************************************" << std::endl;
 		std::cout << "Linked List basic operation" << std::endl;
 		std::cout << "***************************************************" << std::endl;
@@ -61,25 +62,28 @@ int main()
 		std::cout << "0. Exit" << std::endl;
 		std::cout << "enter option: ";
 		std::cin >> choice;
-			switch (choice) {
-			case 1:
-				std::cout << "Enter text" << std::endl;
-				std::cin >> txt;
-				list.addFront(txt);
-				break;
-			case 2:
-				list.removeFront();
-				break;
-			case 3:
-				list.display();
-				break;
-			case 4:
-				std::cout << list.penultimate(); 
-				break;
-			case 0:
-				exit(1);
-				break;
-			}
+		switch (choice) {
+		case 1:
+			std::cout << "Enter text" << std::endl;
+			std::cin >> txt;
+			list.addFront(txt);
+			break;
+		case 2:
+			list.removeFront();
+			break;
+		case 3:
+			list.display();
+			break;
+		case 4:
+			std::cout << list.penultimate();
+			break;
+		case 5:
+			list.reverseRecursive(list.getHead(), NULL);
+			break; 
+		case 0:
+			exit(1);
+			break;
+		}
 	}
 	return 0;
 }
@@ -120,10 +124,10 @@ void LinkedList<O>::removeFront() {
 			head = head->next;
 			delete newNode;
 		}
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
 	catch (Exeption& err) {
-		std::cout << err.getError() << "\n"; 
+		std::cout << err.getError() << "\n";
 	}
 }
 
@@ -131,17 +135,17 @@ template <typename O>
 void LinkedList<O>::display() {
 	try {
 		if (!isEmpty()) {
-			Node<O>* temp = head; 
+			Node<O>* temp = head;
 			while (temp != NULL) {
 				std::cout << temp->value << " ";
 				temp = temp->next;
 			}
 			return;
 		}
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
 	catch (Exeption& err) {
-		std::cout << err.getError() << "\n"; 
+		std::cout << err.getError() << "\n";
 	}
 	return;
 }
@@ -170,7 +174,7 @@ O LinkedList<O>::penultimate() {
 }
 /*
 Describe a good algorithm for concatenating two singly linked lists L and
-M, with header sentinels, into a single list L'that contains all the nodes of L 
+M, with header sentinels, into a single list L'that contains all the nodes of L
 followed by all the nodes of M.
 */
 template <typename O>
@@ -181,4 +185,22 @@ void LinkedList<O>::concatenate(Node<O>* y) {
 	}
 	temp->next = y; //set last's link to first of second list
 }
+/*
+Describe algorithm for reversing a singly linked list L, so
+that the ordering of the nodes becomes opposite of what it was before.
+*/
+template <typename O>
+void LinkedList<O>::reverse() {
+	Node<O>* current = head; //set current node pointer to head node
+	Node<O>* previous = NULL, *next = NULL;	//init two node pointers to null
+
+	while (current != NULL) {	//untill end of the list
+		next = current->next;	//next of current 
+		current->next = previous;	//change he's next to previous 
+		previous = current;		//move previous pointer to current so step above coud work propertly
+		current = next;		//change to next node
+	}
+	head = previous; //change head to new begining
+}
+
 

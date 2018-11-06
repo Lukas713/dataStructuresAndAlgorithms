@@ -83,6 +83,22 @@ int maxBinary(int* f, int i, int n){
 	
 	return (left < right) ? left : right;  
 }
+/*
+Describe a recursive algorithm that will check if an array A of integers
+contains an integer A[i] that is the sum of two integers that appear earlier
+in A, that is, such that A[i] = A[ j] +A[k] for j,k < i.
+*/
+bool checkTwoEarlier(int* f, int n) {
+	if (n == 1) {
+		return false; 
+	}
+
+	if (f[n] == (f[n - 2] + f[n - 1])) {
+		return true; 
+	}
+
+	return checkTwoEarlier(f, n - 1); 
+}
 int main()
 {
  	int field[] = {1, 2, 3, 4, 5, 6};

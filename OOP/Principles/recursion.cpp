@@ -1,4 +1,4 @@
-#include "pch.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,12 +6,20 @@
 
 
 //cout elements of the array
-int recursionArray(int* x, int n) {
+int sumLinear(int* x, int n) {
 	if (n == 1) {	//base test
 		return x[0]; 
 	}
 
 	return recursionArray(x, n - 1) + x[n - 1];	//recur
+}
+//Binary recursion
+int sumBinary(int* f, int i, int n){
+	if(n <= 1){
+		return f[0]
+	}
+	
+	return sumBinary(f, i, n/2) + sumBinary(f, i+(n/2), n/2); 
 }
 
 //count factorial
@@ -50,10 +58,36 @@ int numberOfRepetition(int* x, int n, int max) {
 	return numberOfRepetition(x, n, max - 1) + 1; 
 }
 
-
+//Describe a recursive algorithm for finding the maximum element in an array A of n elements. 
+/*LINEAR APROACH*/
+int findMaxRecur(int* f, int n){
+	int max;
+	if(n == 1){
+		return f[0]; 
+	}
+	
+	max = findMaxRecur(f, n-1); 
+	if(max < f[n-1]){
+		max = f[n-1]; 
+	}
+	return max; 
+}
+/*BINARY RECURSION*/
+int maxBinary(int* f, int i, int n){
+	if(n == i){
+		return f[i]; 
+	}
+	int mid = (i + n) / 2; 
+	int left = maxBinary(f, i, mid);
+	int right = maxBinary(f, mid+1, n); 
+	
+	return (left < right) ? left : right;  
+}
 int main()
 {
- 
+ 	int field[] = {1, 2, 3, 4, 5, 6};
+ 	int x = sumBinary(field, 0, 6);
+ 	std::cout << x; 
 
 
 	return 0; 

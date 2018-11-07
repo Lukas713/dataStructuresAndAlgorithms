@@ -210,9 +210,9 @@ void solveHanoiPuzzle(int n, char source, char destination, char temporary) {
 		std::cout << "Move disk " << n << " from " << source << " to " << destination << "\n";
 		return;
 	}
-	solveHanoiPuzzle(n - 1, source, temporary, destination);
-	std::cout << "Move disk " << n << " from " << source << " to " << destination << "\n";
-	solveHanoiPuzzle(n - 1, temporary, destination, destination);
+	solveHanoiPuzzle(n - 1, source, temporary, destination);	//move n-1 disk from A to C
+	std::cout << "Move disk " << n << " from " << source << " to " << destination << "\n";	//move last from A to B 
+	solveHanoiPuzzle(n - 1, temporary, destination, source);	//move rest from C to B
 }
 int
 

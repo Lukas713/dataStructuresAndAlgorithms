@@ -3,23 +3,23 @@
 #include <string>
 #include <vector>
 
-class ThreeDimensions {
-	int x; 
-	int y; 
-	int z;
-	int*** Matrix; 
+class Matrix {
+	int x;
+	int y;
+	int** Matrice;
 public:
-	ThreeDimensions(const int i = 3, const int j = 3, const int k = 3);
-	virtual ~ThreeDimensions();
+	Matrix(const int i = 3, const int j = 3);
+	virtual ~Matrix();
+	void print(); 
+	void operator+(Matrix M);
+	void operator*(Matrix M);
+protected:
 	void createMatrix();	//create matrixx with dinamic alocation
 	void fillMatrix();		//feed up matriwith random numbers
 };
-			
+
 int main()
 {
- 
-
-
 
 
 
@@ -31,36 +31,54 @@ int main()
 	return 0;
 }
 //constructor
-ThreeDimensions::ThreeDimensions(const int i = 3, const int j = 3, const int k = 3)
-	:x(i), y(j), z(k) {};
-//Destrutor
-ThreeDimensions::~ThreeDimensions() {
+Matrix::Matrix(const int i, const int j)
+	:x(i), y(j){
+	createMatrix(); 
+};
+//destructor
+Matrix::~Matrix() {
 	for (int i = 0; i < x; i++) {
-		for (int j = 0; j < y; j++) {
-			delete[] Matrix[i][j];
-		}
-		delete[] Matrix[i];
+		delete[] Matrice[i];
 	}
-	delete[] Matrix;
+	delete[] Matrice;
+	std::cout << "Matrice deleted \n";
 }
-void ThreeDimensions::createMatrix() {
+void Matrix::createMatrix() {
 	//dinamic alocation
-	Matrix = new int**[x];
+	Matrice = new int*[x];
 	for (int i = 0; i < x; i++) {
-		Matrix[i] = new int*[y];
-		for (int j = 0; j < y; j++) {
-			Matrix[i][j] = new int[z];
-		}
+		Matrice[i] = new int[y];
 	}
 	//invoke function that will feed up 3D matrix with random number from 1 to 100
 	fillMatrix();
 }
-void ThreeDimensions::fillMatrix() {
+void Matrix::fillMatrix() {
 	for (int i = 0; i < x; i++) {
 		for (int j = 0; j < y; j++) {
-			for (int k = 0; k < z; j++) {
-				Matrix[i][j][k] = rand() % 100;
-			}
+			Matrice[i][j] = rand() % 100; 
+		}
+	}
+}
+void Matrix::print() {
+	for (int i = 0; i < x; i++) {
+		for (int j = 0; j < y; j++) {
+			std::cout << Matrice[i][j] << " "; 
+		}
+		std::cout << "\n"; 
+	}
+}
+
+void Matrix::operator+(Matrix M) {
+	for (int i = 0; i < x; i++) {
+		for (int j = 0; j < y; j++) {
+			Matrice[i][j] += M.Matrice[i][j];
+		}
+	}
+}
+void Matrix::operator*(Matrix M) {
+	for (int i = 0; i < x; i++) {
+		for (int j = 0; j < y; j++) {
+			Matrice[i][j] *= M.Matrice[i][j];
 		}
 	}
 }

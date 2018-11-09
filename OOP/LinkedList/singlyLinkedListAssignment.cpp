@@ -2,9 +2,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-/*
-Create singly linked list that maintain 10 best scores
-*/
 
 typedef std::string error;
 class Exeption {
@@ -34,7 +31,7 @@ public:
 		:head(NULL), limit(10), counter(1) {
 		menu(); 
 	};
-	//~Scores(); 
+	virtual ~Scores(); 
 	void add(const user, const double points);
 	void print();
 	void menu();
@@ -45,6 +42,7 @@ protected:
 	void removeBack();
 	bool isFull() const;
 	bool isEmpty() const;
+	void removeFront(); 
 };
 int main()
 {
@@ -57,13 +55,18 @@ int main()
 
 	return 0;
 }
+Scores::~Scores() {	//destrutor
+	while (!isEmpty()) {
+		removeFront();
+	}
+	return;
+}
 bool Scores::isFull() const {
 	if (counter != limit) {
 		return false;
 	}
 	return true;
 }
-
 void Scores::addAfter(Node* newNode) {
 	Node* temp = head;	//create pointer to head
 	while (temp->points >= newNode->points) {	//find "perfect" spot
@@ -84,7 +87,7 @@ void Scores::addFront(Node* newNode) {	//add first node
 	head = newNode;
 	return;
 }
-Node* Scores::lastNode() {
+Node* Scores::lastNode() {	//return lasst node of the list
 	Node* temp = new Node;
 	temp = head;
 	while (temp->next != NULL)
@@ -109,7 +112,12 @@ void Scores::print() {
 		std::cout << err.getError() << "\n"; 
 	}
 }
-
+void Scores::removeFront() {
+	Node* temp = head;
+	head = head->next;
+	delete temp; 
+	return; 
+}
 void Scores::removeBack() {
 	Node* temp = new Node;
 	temp = head;

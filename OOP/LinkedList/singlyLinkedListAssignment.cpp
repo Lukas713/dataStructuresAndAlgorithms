@@ -29,9 +29,9 @@ class Scores {
 public:
 	Scores()
 		:head(NULL), limit(10), counter(1) {
-		menu(); 
+		menu();
 	};
-	virtual ~Scores(); 
+	virtual ~Scores();
 	void add(const user, const double points);
 	void print();
 	void menu();
@@ -42,12 +42,12 @@ protected:
 	void removeBack();
 	bool isFull() const;
 	bool isEmpty() const;
-	void removeFront(); 
+	void removeFront();
 };
 int main()
 {
 
-	Scores list; 
+	Scores list;
 
 
 
@@ -78,9 +78,9 @@ void Scores::addAfter(Node* newNode) {
 		temp = temp->next;	//traverse
 	}
 	//if first node is lower
-	newNode->next = temp; 
+	newNode->next = temp;
 	head = newNode;
-	return; 
+	return;
 }
 void Scores::addFront(Node* newNode) {	//add first node
 	newNode->next = head;
@@ -88,8 +88,7 @@ void Scores::addFront(Node* newNode) {	//add first node
 	return;
 }
 Node* Scores::lastNode() {	//return lasst node of the list
-	Node* temp = new Node;
-	temp = head;
+	Node* temp = head; 
 	while (temp->next != NULL)
 		temp = temp->next;	//traverse untill last node
 	return temp;
@@ -97,31 +96,28 @@ Node* Scores::lastNode() {	//return lasst node of the list
 void Scores::print() {
 	try {
 		if (!isEmpty()) {
-			Node* temp = new Node;
-			temp = head;
+			Node* temp = head;
 			while (temp != NULL) {
 				std::cout << temp->nickname << " : " << temp->points << std::endl;
 				temp = temp->next;
 			}
-			delete temp;
 			return;
 		}
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
 	catch (Exeption& err) {
-		std::cout << err.getError() << "\n"; 
+		std::cout << err.getError() << "\n";
 	}
 }
 void Scores::removeFront() {
 	Node* temp = head;
 	head = head->next;
-	delete temp; 
-	return; 
+	delete temp;
+	return;
 }
 void Scores::removeBack() {
-	Node* temp = new Node;
-	temp = head;
-	Node* prev = NULL;	
+	Node* temp = head;
+	Node* prev = NULL;
 	while (temp != NULL) {	//traverse untill last node
 		if (temp->next == NULL) {
 			prev->next = NULL;

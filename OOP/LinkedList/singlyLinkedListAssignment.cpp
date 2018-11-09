@@ -28,13 +28,10 @@ class Scores {
 	int counter;
 public:
 	Scores()
-		:head(NULL), limit(10), counter(1) {
-		menu();
-	};
-	virtual ~Scores();
+		:head(NULL), limit(10), counter(1) {};
+	~Scores();
 	void add(const user, const double points);
 	void print();
-	void menu();
 protected:
 	Node* lastNode();
 	void addFront(Node* newNode);
@@ -44,10 +41,12 @@ protected:
 	bool isEmpty() const;
 	void removeFront();
 };
+void menu(Scores& list);
 int main()
 {
 
 	Scores list;
+	menu(list); 
 
 
 
@@ -59,7 +58,6 @@ Scores::~Scores() {	//destrutor
 	while (!isEmpty()) {
 		removeFront();
 	}
-	return;
 }
 bool Scores::isFull() const {
 	if (counter != limit) {
@@ -68,52 +66,55 @@ bool Scores::isFull() const {
 	return true;
 }
 void Scores::addAfter(Node* newNode) {
-	Node* temp = head;	//create pointer to head
-	while (temp->points >= newNode->points) {	//find "perfect" spot
-		if (temp->next == NULL || temp->next->points < newNode->points) {
-			newNode->next = temp->next;
-			temp->next = newNode;
-			return;
+	if (!isEmpty()) {
+		Node* temp = head;	//create pointer to head
+		while (temp->points >= newNode->points) {	//find "perfect" spot
+			if (temp->next == NULL || temp->next->points < newNode->points) {
+				newNode->next = temp->next;
+				temp->next = newNode;
+				return;
+			}
+			temp = temp->next;	//traverse
 		}
-		temp = temp->next;	//traverse
+		//if first node is lower
+		newNode->next = temp;
+		head = newNode;
+		return; 
 	}
-	//if first node is lower
-	newNode->next = temp;
-	head = newNode;
-	return;
+	std::cout << "List is empty! \n"; 
 }
 void Scores::addFront(Node* newNode) {	//add first node
 	newNode->next = head;
 	head = newNode;
-	return;
 }
-Node* Scores::lastNode() {	//return lasst node of the list
-	Node* temp = head; 
-	while (temp->next != NULL)
-		temp = temp->next;	//traverse untill last node
-	return temp;
+Node* Scores::lastNode() {	//return last node of the list
+	if (!isEmpty()) {
+		Node* temp = head;
+		while (temp->next != NULL)
+			temp = temp->next;	//traverse untill last node
+		return temp;
+	}
+	std::cout << "List is empty! \n"; 
 }
 void Scores::print() {
-	try {
-		if (!isEmpty()) {
-			Node* temp = head;
-			while (temp != NULL) {
-				std::cout << temp->nickname << " : " << temp->points << std::endl;
-				temp = temp->next;
-			}
-			return;
+	if (!isEmpty()) {
+		Node* temp = head;
+		while (temp != NULL) {
+			std::cout << temp->nickname << " : " << temp->points << std::endl;
+			temp = temp->next;
 		}
-		throw Exeption("List is empty!");
+		return; 
 	}
-	catch (Exeption& err) {
-		std::cout << err.getError() << "\n";
-	}
+	std::cout << "List is empty \n"; 
 }
 void Scores::removeFront() {
-	Node* temp = head;
-	head = head->next;
-	delete temp;
-	return;
+	if (!isEmpty()) {
+		Node* temp = head;
+		head = head->next;
+		delete temp;
+		return; 
+	}
+	std::cout << "List is empty! \n"; 
 }
 void Scores::removeBack() {
 	Node* temp = head;
@@ -139,6 +140,7 @@ void Scores::add(const user nickname, const double points) {
 		if (isFull()) {	// if list is full
 			if (points < lastNode()->points) {	//if last node points is higher than new node points
 				std::cout << "You failed \n";
+				delete newNode; 
 				return;
 			}
 			removeBack();
@@ -151,7 +153,15 @@ void Scores::add(const user nickname, const double points) {
 	}
 	return addFront(newNode);
 }
-void Scores::menu() {
+
+bool Scores::isEmpty() const {
+	if (head != NULL) {
+		return false;
+	}
+	return true;
+}
+
+void menu(Scores& list) {
 	double points;
 	int choice;
 	std::string nickname;
@@ -171,10 +181,10 @@ void Scores::menu() {
 			std::cin >> nickname;
 			std::cout << "Enter points: ";
 			std::cin >> points;
-			add(nickname, points);
+			list.add(nickname, points);
 			break;
 		case 2:
-			print();
+			list.print();
 			break;
 		case 0:
 			exit(1);
@@ -183,10 +193,4 @@ void Scores::menu() {
 			std::cout << "Wrong option!";
 		}
 	}
-}
-bool Scores::isEmpty() const {
-	if (head != NULL) {
-		return false;
-	}
-	return true;
 }

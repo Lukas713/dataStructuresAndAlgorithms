@@ -1,4 +1,5 @@
 #include "pch.h"
+#pragma warning( disable : 4290 )  //https://msdn.microsoft.com/en-us/library/sa28fef8.aspx
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,12 +18,12 @@ class Stack {
 	int counter;	//counter (-1 at start)
 	T* item; //pointer to "that" type
 public:
-	Stack(int limit);	//constructor, set max elements and counter
+	Stack(int limit = 10);	//constructor, set max elements and counter
 	int size() const; //return current size of array
 	bool empty() const; //return if array is empty
-	const T& top() const; //return top'es element
-	void push(const T& x);	//push item reference to stack
-	void pop(); //removes top'est element
+	const T& top() const throw(Exeption); //return top'es element
+	void push(const T& x) throw(Exeption);	//push item reference to stack
+	void pop() throw(Exeption); //removes top'est element
 };
 
 template <typename T>
@@ -78,7 +79,7 @@ return top elements
 throw exeption if list is empty
 */
 template <typename T>
-const T& Stack<T>::top() const {
+const T& Stack<T>::top() const throw(Exeption){
 	try {
 		if (!empty()) {
 			return item[counter];
@@ -96,7 +97,7 @@ add referance to stack
 or throws exeption
 */
 template <typename T>
-void Stack<T>::push(const T& x) {
+void Stack<T>::push(const T& x) throw(Exeption){
 	try {
 		if (size() < N) {
 			counter += 1;
@@ -116,7 +117,7 @@ decrese counter by one (remove top element)
 or throw exeption
 */
 template <typename T>
-void Stack<T>::pop() {
+void Stack<T>::pop() throw(Exeption){
 	try {
 		if (!empty()) {
 			counter -= 1;

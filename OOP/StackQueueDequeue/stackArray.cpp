@@ -27,16 +27,10 @@ public:
 };
 
 template <typename T>	
-void reverse(std::vector<T>& V){	//reverse vector elements
-	Stack<T> S(V.size())); 	//create stack of size same as vector
-	for(int i=0; i<V.size()); i++){	
-		S.push(V[i]));	//push vector elements into stack
-	}
-	for(int i=0; i<V.size()); i++){
-		V[i] = S.top();	//return top element from stack
-		S.pop();	//pop element from stack
-	}
-}
+void reverse(std::vector<T>& V); //reverse vector using stack
+
+template <typename T>
+bool matchingSimbols(T* field, int size); //check if parentheses are correct
 
 template <typename T>
 void menu(Stack<T>& stack);
@@ -183,5 +177,43 @@ void menu(Stack<T>& stack) {
 			std::cout << "Wrong option! \n";
 			break;
 		}
+	}
+}
+
+template <typename T>
+bool matchingSimbols(T* field, int size) {	//check parentheses
+	Stack<T> S(size); //create stack of size same as array
+	for (int i = 0; i < size; i++) {
+		if (field[i] == '(' || field[i] == '{' || field[i] == '[') {	//if parentheses are "open symbol"
+			S.push(field[i]); //push that symbol on stack
+		}
+		else if (field[i] == ')' || field[i] == '}' || field[i] == ']') {	//if parentheses are "close symbol"
+			if (S.isEmpty()) {	//if Stack is empty and you have "close symbol"
+				return false; //INCORRECT
+			}
+			else if ((S.peek() == '(' && field[i] == ')') || (S.peek() == '{' && field[i] == '}')
+					|| (S.peek() == '[' && field[i] == ']')) {	//if top field and new field match
+				S.pop();	//remove both
+			}
+			else {
+				return false;	//INCORRECT
+			}
+		}
+	}
+	if (!S.isEmpty()) {
+		return false; 
+	}
+	return true; 
+}
+
+template <typename T>	
+void reverse(std::vector<T>& V){	//reverse vector elements
+	Stack<T> S(V.size())); 	//create stack of size same as vector
+	for(int i=0; i<V.size()); i++){	
+		S.push(V[i]));	//push vector elements into stack
+	}
+	for(int i=0; i<V.size()); i++){
+		V[i] = S.top();	//return top element from stack
+		S.pop();	//pop element from stack
 	}
 }

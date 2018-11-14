@@ -11,14 +11,14 @@ class Exeption {
 	error txt;
 public:
 	Exeption(const error& err)
-		: txt(err) {}; 
+		: txt(err) {};
 	error getError() {
-		return this->txt; 
+		return this->txt;
 	}
 };
 
- 
-template <typename T> class LinkedList; 
+
+template <typename T> class LinkedList;
 template <typename T>
 class Node {
 	T value; //typename value
@@ -40,30 +40,30 @@ public:
 	void removeFront() throw(Exeption);//remove first Node
 };
 
-typedef std::string Elem; 
+typedef std::string Elem;
 class Stack {
 	int n; //current size of the list
-	LinkedList<Elem> S;	//linked list of items type Elem(string)
+	LinkedList<Elem> S;	//generic linked list type Elem (string)
 
 public:
 	Stack()	//init Linked list in stack, and number of items
 		: S(), n(0) {};
 	int size() const;	//return number of elements in list
 	bool isEmpty() const;	//asks if list is totaly empty
-	const Elem& top() const throw(Exeption);	//return top most item
-	void push(const Elem& newElement);	//add const element into list
-	void pop() throw(Exeption);		//remove top element from list
+	const Elem& top() const throw(Exeption);	//invoke S.front()
+	void push(const Elem& newElement);	//ivoke S.addFront()
+	void pop() throw(Exeption);		//invoke S.removeFront()
 };
 
 
 void menu(Stack& stack);
 
 int main()
-{	
-	
- 
-	Stack stack; 
-	menu(stack); 
+{
+
+
+	Stack stack;
+	menu(stack);
 
 
 
@@ -81,11 +81,11 @@ Linked list methods declaration
 */
 template <typename T>
 bool LinkedList<T>::isEmpty() const {
-	return (head == NULL); 
+	return (head == NULL);
 }
 template <typename T>
 const T& LinkedList<T>::front() const {
-	return head->value; 
+	return head->value;
 }
 template <typename T>
 void LinkedList<T>::addFront(const T& value) {
@@ -95,18 +95,18 @@ void LinkedList<T>::addFront(const T& value) {
 	head = newNode; //set head pointer to points to newly created node
 }
 template <typename T>
-void LinkedList<T>::removeFront() throw(Exeption){
+void LinkedList<T>::removeFront() throw(Exeption) {
 	try {
 		if (!isEmpty()) {
 			Node<T>* oldNode = head;
 			head = head->next;
 			delete oldNode;
-			return; 
+			return;
 		}
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
 	catch (Exeption& err) {
-		std::cout << err.getError() << "\n"; 
+		std::cout << err.getError() << "\n";
 	}
 }
 /*
@@ -118,28 +118,28 @@ int Stack::size() const {
 bool Stack::isEmpty() const {
 	return (n == 0); //check if number of items in stack is 0
 }
-const Elem& Stack::top() const throw(Exeption){
+const Elem& Stack::top() const throw(Exeption) {
 	if (isEmpty()) {
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
-	return S.front(); 
+	return S.front();
 }
-void Stack::push(const Elem& value){
-	n ++; 
-	S.addFront(value); 
+void Stack::push(const Elem& value) {
+	n++;
+	S.addFront(value);
 }
 
 void Stack::pop() throw(Exeption) {
 	try {
 		if (!isEmpty()) {
-			n--; 
-			S.removeFront(); 
-			return; 
+			n--;
+			S.removeFront();
+			return;
 		}
-		throw Exeption("List is empty!"); 
+		throw Exeption("List is empty!");
 	}
 	catch (Exeption& err) {
-		std::cout << err.getError() << "\n"; 
+		std::cout << err.getError() << "\n";
 	}
 }
 /*

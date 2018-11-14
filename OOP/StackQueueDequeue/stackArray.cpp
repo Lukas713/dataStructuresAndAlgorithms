@@ -26,6 +26,18 @@ public:
 	void pop() throw(Exeption); //removes top'est element
 };
 
+template <typename T>	
+void reverse(std::vector<T>& V){	//reverse vector elements
+	Stack<T> S(V.size())); 	//create stack of size same as vector
+	for(int i=0; i<V.size()); i++){	
+		S.push(V[i]));	//push vector elements into stack
+	}
+	for(int i=0; i<V.size()); i++){
+		V[i] = S.top();	//return top element from stack
+		S.pop();	//pop element from stack
+	}
+}
+
 template <typename T>
 void menu(Stack<T>& stack);
 

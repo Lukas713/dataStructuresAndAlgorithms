@@ -3,16 +3,24 @@
 #include <iostream>
 #include <string>
 #include <vector>
+/*
+Implementation of generic queue using dynammicly alocated array
+*/
+#include "pch.h"
+#pragma warning( disable : 4290 )  //https://msdn.microsoft.com/en-us/library/sa28fef8.aspx
+#include <iostream>
+#include <string>
+#include <vector>
 
 /*
 Queue ircuar implementation
 */
 typedef std::string error;
 class Exeption {
-	error txt; 
+	error txt;
 public:
 	Exeption(error err)
-		: txt(err) {}; 
+		: txt(err) {};
 	error& getError() { return this->txt; };
 };
 
@@ -23,12 +31,13 @@ class Queue {
 	int f; //front of queue
 	int r;	//rear of queue
 	int n;	//number of elements
-	int limit;	
-	T* Q; 
+	int limit;
+	T* Q;
 
 public:
 	Queue(int max = 5)
 		:f(0), r(0), n(0), limit(max), Q(new T[limit]) {};	//dinamicly alocate limit elements
+	~Queue(); //destructor delete Q array
 	bool isEmpty() const;	//check if list is empty
 	int size() const;		//return number of elements inside queue
 	const T& front() const throw(Exeption);	//return referance to first element 
@@ -40,7 +49,7 @@ template <typename T>
 void menu();
 int main()
 {
- 
+
 	menu<int>(); //invoke menu of the program
 
 
@@ -49,6 +58,10 @@ int main()
 
 
 	return 0;
+}
+template <typename T>
+Queue<T>::~Queue() {
+	delete[] Q; 
 }
 template <typename T>
 bool Queue<T>::isEmpty() const {
@@ -78,7 +91,7 @@ void Queue<T>::enqueue(const T& value) {
 	}
 }
 template <typename T>
-void Queue<T>::dequeue() throw(Exeption){
+void Queue<T>::dequeue() throw(Exeption) {
 	try {
 		if (!isEmpty()) {
 			f = (f + 1) % limit;

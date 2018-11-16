@@ -76,7 +76,6 @@ void Game::move(int i, int j) {
 	}
 	cout << endl;
 	cout << "Winner: O" << endl;
-	return;
 }
 
 bool Game::isWinner(int mark) {

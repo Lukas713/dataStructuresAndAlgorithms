@@ -35,7 +35,7 @@ public:
 	const T& front() const throw(Exeption); //return referance to front element
 	const T& rear() const throw(Exeption);	//return referance to rear element
 	void advance() throw (Exeption); //move cursor to next position
-	void addNode(const T& value) throw(Exeption);	//add new node 
+	void addNode(const T& value);	//add new node 
 	void removeNode() throw(Exeption);	//remove node from front
 };
 
@@ -118,7 +118,7 @@ void CircleList<T>::advance() throw(Exeption) {
 	}
 }
 template <typename T>
-void CircleList<T>::addNode(const T& value) throw (Exeption){
+void CircleList<T>::addNode(const T& value){
 	Node<T>* newNode = new Node<T>;
 	newNode->value = value;
 

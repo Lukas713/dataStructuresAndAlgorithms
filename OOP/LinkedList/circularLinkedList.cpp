@@ -97,13 +97,9 @@ CircularLinkedList::~CircularLinkedList() {	//destructor removes nodes
 	while (!isEmpty()) {
 		removeNode();
 	}
-	return;
 }
 bool CircularLinkedList::isEmpty() const {	//checs if list is empty
-	if (cursor != NULL) {
-		return false;
-	}
-	return true;
+	return (cursor == NULL); 
 }
 value& CircularLinkedList::back() const {	//returns cursor which points to back
 	try {
@@ -130,9 +126,7 @@ value& CircularLinkedList::front() const {	//return first
 void CircularLinkedList::advance() {	//set cursor to next
 	if (cursor != NULL) {	//checks if list is not empt
 		cursor = cursor->next;
-		return;
 	}
-	return;
 }
 
 void CircularLinkedList::addNode(const value& txt) {
@@ -145,7 +139,6 @@ void CircularLinkedList::addNode(const value& txt) {
 	}
 	newNode->next = newNode;
 	cursor = newNode;
-	return;
 }
 void CircularLinkedList::removeNode() {
 	try {
@@ -178,5 +171,4 @@ void CircularLinkedList::display() const {
 		counter++; 
 	}
 	std::cout << "\n" << counter << " elements"; 
-	return;
 }

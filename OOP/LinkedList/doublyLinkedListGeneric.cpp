@@ -123,14 +123,10 @@ DoublyLinkedList<T>::~DoublyLinkedList() {
 	//delete starting nodes
 	delete head;
 	delete tail;
-	return;
 }
 template <typename T>
 bool DoublyLinkedList<T>::isEmpty() const {	//function thatchecks if list is empty or not
-	if (head->next != tail) {
-		return false;
-	}
-	return true;
+	return (head->next == tail); 
 }
 template <typename T>
 T& DoublyLinkedList<T>::front() {	//return first node value
@@ -190,7 +186,6 @@ void DoublyLinkedList<T>::display() {
 		std::cout << temp->value << " ";
 		temp = temp->next;
 	}
-	return;
 }
 //Describe a nonrecursive function for finding, by link hopping, the middle
 //node of a doubly linked list with header and trailer sentinels.

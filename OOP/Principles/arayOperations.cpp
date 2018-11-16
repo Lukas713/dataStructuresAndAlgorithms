@@ -101,7 +101,6 @@ void Scores::addEntry(const GameEntry& o) {
 		i--; //iterate
 	}
 	entry[i + 1] = o;	//push object to spot
-	return;
 }
 
 GameEntry Scores::removeEntry(const int i) throw(IndexOutOfBounds) {
@@ -123,6 +122,5 @@ void Scores::display() {
 		cout << entry[i].getName() << ": " << entry[i].getScore() << endl;
 		i--;
 	}
-	return;
 }
 

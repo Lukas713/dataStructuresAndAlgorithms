@@ -98,13 +98,9 @@ SinglyLinkedList::~SinglyLinkedList() {
 	while (!isEmpty()) {
 		removeFront();
 	}
-	return;
 }
 bool SinglyLinkedList::isEmpty() const {
-	if (head != NULL) {
-		return false;
-	}
-	return true;
+	return (head == NULL); 
 }
 const string& SinglyLinkedList::front() const {
 	return head->name;

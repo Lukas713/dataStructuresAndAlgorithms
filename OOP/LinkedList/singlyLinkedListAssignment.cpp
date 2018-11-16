@@ -60,10 +60,7 @@ Scores::~Scores() {	//destrutor
 	}
 }
 bool Scores::isFull() const {
-	if (counter != limit) {
-		return false;
-	}
-	return true;
+	return (counter == limit); 
 }
 void Scores::addAfter(Node* newNode) {
 	if (!isEmpty()) {
@@ -155,10 +152,7 @@ void Scores::add(const user nickname, const double points) {
 }
 
 bool Scores::isEmpty() const {
-	if (head != NULL) {
-		return false;
-	}
-	return true;
+	return (head == NULL); 
 }
 
 void menu(Scores& list) {

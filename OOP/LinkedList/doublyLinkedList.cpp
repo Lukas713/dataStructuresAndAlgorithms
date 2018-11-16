@@ -123,10 +123,8 @@ DoublyLinkedList::~DoublyLinkedList() {	//destructor
 	delete tail;	//delete alocated tail
 }
 bool DoublyLinkedList::isEmpty() const {
-	if (head->next != tail) {	//is empty? 
-		return false;
-	}
-	return true;
+	return (head->next == tail); //is list empty?
+
 }
 value& DoublyLinkedList::front() const {
 	return head->next->txt;		//get head element

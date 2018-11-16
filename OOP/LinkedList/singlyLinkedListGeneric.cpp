@@ -99,15 +99,11 @@ LinkedList<O>::~LinkedList() {
 	while (!isEmpty()) {
 		removeFront();
 	}
-	return;
 }
 
 template <typename O>
 bool LinkedList<O>::isEmpty() const {
-	if (head != NULL)
-		return false;
-
-	return true;
+	return (head == NULL); 
 }
 
 template <typename O>
@@ -154,7 +150,6 @@ void LinkedList<O>::display() {
 	catch (Exeption& err) {
 		std::cout << err.getError() << "\n";
 	}
-	return;
 }
 /*
 Give an algorithm for finding the penultimate (second to last) node in a

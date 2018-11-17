@@ -100,6 +100,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Queue with Circular Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularLinkedList.cpp</td>
   </tr>
+  <tr>
+    <td>Queue with Circular Linked List Assignment</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularListAssignment.cpp</td>
+  </tr>
    <tr>
     <td>Deque with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeArray.cpp</td>
@@ -112,6 +116,7 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Double Stack with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
   </tr>
+
 </table>
 
 

@@ -108,6 +108,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Deque with Doubly Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeDoublyLinkedList.cpp</td>
   </tr>
+  <tr>
+    <td>Double Stack with Array</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
+  </tr>
 </table>
 
 

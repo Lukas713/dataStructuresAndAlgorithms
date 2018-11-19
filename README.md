@@ -120,7 +120,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Double Stack with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
   </tr>
-
+   <tr>
+    <td>ArrayVector</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/arrayVector.cpp</td>
+  </tr>
 </table>
 
 

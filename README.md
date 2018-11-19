@@ -94,7 +94,7 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
   </tr>
     <tr>
     <td>PostFix notation with Stack</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/postFixNotation.cpp</td>
   </tr>
    <tr>
     <td>Queue with Array</td>

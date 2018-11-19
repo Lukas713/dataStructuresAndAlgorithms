@@ -88,8 +88,12 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Stack with Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedList.cpp</td>
   </tr>
-   <tr>
+  <tr>
     <td>Stack with Generic Linked List</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
+  </tr>
+    <tr>
+    <td>PostFix notation with Stack</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
   </tr>
    <tr>

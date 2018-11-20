@@ -128,6 +128,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>DoublyList with Iterator</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/DoublyListIterator.cpp</td>
   </tr>
+   <tr>
+    <td>DoublyList Sequence with Iterator, BubbleSort</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/sequenceDoublyList.cpp</td>
+  </tr>
 </table>
 
 

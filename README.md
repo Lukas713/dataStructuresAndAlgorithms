@@ -124,6 +124,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Vector implementation with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/arrayVector.cpp</td>
   </tr>
+  <tr>
+    <td>DoublyList with Iterator</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/DoublyListIterator.cpp</td>
+  </tr>
 </table>
 
 

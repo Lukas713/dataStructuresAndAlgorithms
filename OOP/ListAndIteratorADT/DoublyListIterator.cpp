@@ -2,6 +2,7 @@
 #pragma warning( disable : 4290 )  //https://msdn.microsoft.com/en-us/library/sa28fef8.aspx
 #include <iostream>
 #include <string>
+#include <list>
 #include <vector>
 #include <algorithm>
 
@@ -15,12 +16,15 @@ public:
 };
 
 typedef int Elem;
+typedef NodeList::Iterator iterator; 
 class NodeList {	//node base type List
+private:
 	struct Node {	//nested struct inside class
 		Elem value;
 		Node* next;
 		Node* previous;
 	};
+
 public:
 	class Iterator {	//nested class
 		Node* v;	//pointer to node
@@ -33,10 +37,12 @@ public:
 		Iterator& operator--(); //move to previous position and return referance to it
 		friend class NodeList; //only Node list can access private memers and create new operator
 	};
+
 private:
 	Node* header;	//head of the list
 	Node* trailer;	//tail of the list
 	int n;	//node counter
+
 public:
 	NodeList();
 	int size() const;
@@ -50,57 +56,27 @@ public:
 	void eraseBack(); //invoke erase(--end()), have to decrement to position bacwards one node
 	void erase(const Iterator& p);	//remove element at position p
 };
+
+class SequenceList : public NodeList {
+public:
+	Iterator atIndex(int i) const;	//returns position from index i
+	int indexOf(const Iterator& p) const;	//returns index int of Iterator(referance) p
+};
+
 int main() {
 
-	int choice, n;
-	NodeList L;
-	typedef NodeList::Iterator Iterator; 
+	
 
-	std::cout << "***************************************************" << std::endl;
-	std::cout << "List basic operation usig ITERATOR" << std::endl;
-	std::cout << "***************************************************" << std::endl;
-	std::cout << "1. Add front" << std::endl;
-	std::cout << "2. Remove front" << std::endl;
-	std::cout << "3. Add Back" << std::endl;
-	std::cout << "4. Remove back" << std::endl;
-	std::cout << "5. Size of the list?" << std::endl;
-	std::cout << "6. Display elements" << std::endl; 
-	std::cout << "0. Exit" << std::endl;
-	while (1) {
-		std::cout << "enter option: ";
-		std::cin >> choice;
+	
+	
+	
+	
 
-		switch (choice) {
-		case 1:
-			std::cout << "Enter value" << std::endl;
-			std::cin >> n;
-			L.insertFront(n);
-			break;
-		case 2:
-			L.eraseFront();
-			break;
-		case 3:
-			std::cout << "Enter value" << std::endl;
-			std::cin >> n;
-			L.insertBack(n);
-			break;
-		case 4:
-			L.eraseBack();
-			break;
-		case 5:
-			std::cout << L.size() << "\n";
-			break;
-		case 6:
-			for (Iterator i = L.begin(); i != L.end(); ++i) {
-				std::cout << *i << " "; 
-			}
-			std::cout << "\n"; 
-			break;
-		case 0:
-			exit(1);
-			break;
-		}
-	}
+
+
+
+
+
 
 	return 0;
 }
@@ -187,4 +163,30 @@ void NodeList::erase(const Iterator& p) {
 	predecessor->next = successor;	successor->previous = predecessor; //change links
 	delete oldNode;
 	n--;	//decrement n by 1
+}
+/*
+int param
+traverse from 0 to i
+return iterator at i - 1 indice
+*/
+SequenceList::Iterator SequenceList::atIndex(int i) const {
+	iterator p = begin();	//set iterator to header
+	for (int j = 0; j < i; j++)	//traverse untill i
+		++p;
+	return p; //return that iterator
+}
+/*
+param iterator
+traverse untill iterator
+count hops
+return i (number of hops)
+*/
+int SequenceList::indexOf(const Iterator& p) const {
+	iterator x = begin();	//set iterator to header
+	int i = 0;
+	while (x != p) {	//traverse untill x is diferent of p and count evry hop
+		++x;
+		i++;
+	}
+	return i; //return number of hops
 }

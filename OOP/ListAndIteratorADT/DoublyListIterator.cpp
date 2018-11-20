@@ -14,7 +14,7 @@ public:
 	error& getError() { return this->txt; };
 };
 
-typedef int Elem; 
+typedef int Elem;
 class NodeList {	//node base type List
 	struct Node {	//nested struct inside class
 		Elem value;
@@ -38,7 +38,7 @@ private:
 	Node* trailer;	//tail of the list
 	int n;	//node counter
 public:
-	NodeList(); 
+	NodeList();
 	int size() const;
 	bool isEmpty() const;
 	Iterator begin() const;	//beggining position
@@ -50,10 +50,11 @@ public:
 	void eraseBack(); //invoke erase(--end()), have to decrement to position bacwards one node
 	void erase(const Iterator& p);	//remove element at position p
 };
-int main(){
+int main() {
 
 	int choice, n;
 	NodeList L;
+	typedef NodeList::Iterator Iterator; 
 
 	std::cout << "***************************************************" << std::endl;
 	std::cout << "List basic operation usig ITERATOR" << std::endl;
@@ -63,6 +64,7 @@ int main(){
 	std::cout << "3. Add Back" << std::endl;
 	std::cout << "4. Remove back" << std::endl;
 	std::cout << "5. Size of the list?" << std::endl;
+	std::cout << "6. Display elements" << std::endl; 
 	std::cout << "0. Exit" << std::endl;
 	while (1) {
 		std::cout << "enter option: ";
@@ -72,7 +74,7 @@ int main(){
 		case 1:
 			std::cout << "Enter value" << std::endl;
 			std::cin >> n;
-			L.insertFront(n); 
+			L.insertFront(n);
 			break;
 		case 2:
 			L.eraseFront();
@@ -83,10 +85,16 @@ int main(){
 			L.insertBack(n);
 			break;
 		case 4:
-			L.eraseBack(); 
+			L.eraseBack();
 			break;
 		case 5:
-			std::cout << L.size() << "\n"; 
+			std::cout << L.size() << "\n";
+			break;
+		case 6:
+			for (Iterator i = L.begin(); i != L.end(); ++i) {
+				std::cout << *i << " "; 
+			}
+			std::cout << "\n"; 
 			break;
 		case 0:
 			exit(1);

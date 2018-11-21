@@ -1,9 +1,14 @@
 #include "pch.h"
-#pragma warning( disable : 4290 )  //https://msdn.microsoft.com/en-us/library/sa28fef8.aspx
 #include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
+
+/*
+Provide the missing housekeeping functions (copy constructor, assignment
+operator, and destructor) for the class ArrayVector of Code Fragment
+6.2.
+*/
 
 typedef std::string error;
 class Exeption {
@@ -25,7 +30,8 @@ public:
 	int size() const;	//return n
 	bool isEmpty() const;	//check if n is less then 0
 	int& operator[](int n);		//operator overload to access indice of array
-	int& at(int n) throw(Exeption);	//return element at index of array
+	int& at(int n);	//return element at index of array
+	ArrayVector& operator=(ArrayVector& x); 
 	void erase(int i); //erase element on index and shift whole array to left by one spot	
 	void insert(int i, const int& value); //insert value to ith element
 	void reserve(int n); //Request that the allocated storage space be large enough to hold n elements.
@@ -37,14 +43,17 @@ int main()
 {
 
 
-	ArrayVector a; 
-	a.reserve(5); 
+	ArrayVector a;
+	a.reserve(5);
 	a.insert(0, 1);
-	a.insert(1, 1);
-	a.insert(2, 1);
-	a.insert(3, 1);
-	a.insert(4, 1); 
-	a.insert(5, 2); 
+	a.insert(1, 5);
+	a.insert(2, 1+8);
+	std::cout << a.at(0) << "\n"; 
+
+	ArrayVector b; 
+	b = a; 
+	std::cout << b.at(3); 
+	
 
 
 
@@ -61,9 +70,9 @@ bool ArrayVector::isEmpty() const {
 int& ArrayVector::operator[](int n) {
 	return field[n];
 }
-int& ArrayVector::at(int i) throw (Exeption) {
+int& ArrayVector::at(int i){
 	try {
-		if (i < 0 || i > n)
+		if (i >= 0 || i < n)
 			return field[i];
 		throw Exeption("Index out of bounds!");
 	}
@@ -97,4 +106,15 @@ void ArrayVector::insert(int i, const int& value) {
 	}
 	field[i] = value;
 	n++;
+}
+ArrayVector& ArrayVector::operator=(ArrayVector& x) {
+	if (x.capacity > 0) {
+		reserve(x.capacity); 
+	}
+	if (x.field != NULL) {
+		for (int i = 0; i < x.size(); i++) {
+			insert(i, x.at(i)); 
+		}
+	}
+	return*this;
 }

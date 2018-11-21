@@ -36,13 +36,15 @@ public:
 int main()
 {
 
-	ArrayVector a;
 
-
-
-
-
-
+	ArrayVector a; 
+	a.reserve(5); 
+	a.insert(0, 1);
+	a.insert(1, 1);
+	a.insert(2, 1);
+	a.insert(3, 1);
+	a.insert(4, 1); 
+	a.insert(5, 2); 
 
 
 
@@ -54,7 +56,7 @@ int ArrayVector::size() const {
 	return n;
 }
 bool ArrayVector::isEmpty() const {
-	return size() == 0;
+	return (size() == 0);
 }
 int& ArrayVector::operator[](int n) {
 	return field[n];
@@ -82,13 +84,13 @@ void ArrayVector::reserve(int N) {
 		newField[i] = field[i];	//copy elements from first array to second
 	}
 	if (field != NULL) {
-		delete[] field; //delete old field
+		delete[] field;
 	}
 	field = newField; //change pointer to new array
 	capacity = N;	//change capacity
 }
 void ArrayVector::insert(int i, const int& value) {
-	if (n >= capacity)
+	if (n == capacity)
 		reserve(std::max(i, capacity * 2)); //double size array coz of overflow
 	for (int j = n - 1; j >= i; j--) {	//traverse untill searched index from en of 
 		field[j + 1] = field[j];

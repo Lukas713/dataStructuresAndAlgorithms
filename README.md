@@ -96,6 +96,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>PostFix notation with Stack</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/postFixNotation.cpp</td>
   </tr>
+  <tr>
+    <td>Stack adapter with Vector functions</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackAdapterVectorFunctions.cpp</td>
+  </tr>
    <tr>
     <td>Queue with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueArray.cpp</td>

@@ -4,9 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-/*
-Vector struture implemetation using Array
-*/
+
 
 typedef std::string error;
 class Exeption {
@@ -17,9 +15,10 @@ public:
 	error& getError() { return this->txt; };
 };
 
+template <typename T>
 class ArrayVector {
 	int capacity;	//max elements
-	int* field;		//array
+	T* field;		//array
 	int n;	//counter of elements
 
 public:
@@ -29,28 +28,19 @@ public:
 	~ArrayVector(); //destructor
 	int size() const;	//return n
 	bool isEmpty() const;	//check if n is less then 0
-	int& operator[](int n);		//operator overload to access indice of array
-	int& at(int n);	//return element at index of array
+	T& operator[](int n);		//operator overload to access indice of array
+	T& at(int n);	//return element at index of array
 	ArrayVector& operator=(ArrayVector& x); 
 	void erase(int i); //erase element on index and shift whole array to left by one spot	
-	void insert(int i, const int& value); //insert value to ith element
+	void insert(int i, const T& value); //insert value to ith element
 	void reserve(int n); //Request that the allocated storage space be large enough to hold n elements.
 };
-
-
 
 int main()
 {
 
 
-	ArrayVector a;
-	a.reserve(5);
-	a.insert(0, 1);
-	a.insert(1, 5);
-	a.insert(2, 1+8);
-	std::cout << a.at(0) << "\n"; 
-
-	ArrayVector b(a); 
+ 
 	
 
 
@@ -60,7 +50,8 @@ int main()
 	return 0;
 }
 //copy constructor
-ArrayVector::ArrayVector(ArrayVector& V) {
+template <typename T>
+ArrayVector<T>::ArrayVector(ArrayVector& V) {
 	if (V.field != NULL) {	//if vector is not empty
 		reserve(V.capacity);	//reserve space with same capacity
 		for (int i = 0; i < V.size(); i++) {	//insert i element as V
@@ -68,22 +59,27 @@ ArrayVector::ArrayVector(ArrayVector& V) {
 		}
 	}
 }
-ArrayVector::~ArrayVector() {
+template <typename T>
+ArrayVector<T>::~ArrayVector() {
 	if (n == 0) {
 		return;
 	}
 	erase(0);
 }
-int ArrayVector::size() const {
+template <typename T>
+int ArrayVector<T>::size() const {
 	return n;
 }
-bool ArrayVector::isEmpty() const {
+template <typename T>
+bool ArrayVector<T>::isEmpty() const {
 	return (size() == 0);
 }
-int& ArrayVector::operator[](int n) {
+template <typename T>
+T& ArrayVector<T>::operator[](int n) {
 	return field[n];
 }
-int& ArrayVector::at(int i){
+template <typename T>
+T& ArrayVector<T>::at(int i){
 	try {
 		if (i >= 0 || i < n)
 			return field[i];
@@ -93,15 +89,17 @@ int& ArrayVector::at(int i){
 		std::cout << err.getError() << "\n";
 	}
 }
-void ArrayVector::erase(int i) {
+template <typename T>
+void ArrayVector<T>::erase(int i) {
 	for (int j = i + 1; j < n; j++)
 		field[j - 1] = field[j];
 	n--;
 }
-void ArrayVector::reserve(int N) {
+template <typename T>
+void ArrayVector<T>::reserve(int N) {
 	if (N < capacity)	//if N is less then cap
 		return;
-	int* newField = new int[N]; //alocate new array
+	int* newField = new T[N]; //alocate new array
 	for (int i = 0; i < n; i++) {
 		newField[i] = field[i];	//copy elements from first array to second
 	}
@@ -111,7 +109,8 @@ void ArrayVector::reserve(int N) {
 	field = newField; //change pointer to new array
 	capacity = N;	//change capacity
 }
-void ArrayVector::insert(int i, const int& value) {
+template <typename T>
+void ArrayVector<T>::insert(int i, const T& value) {
 	if (n == capacity)
 		reserve(std::max(i, capacity * 2)); //double size array coz of overflow
 	for (int j = n - 1; j >= i; j--) {	//traverse untill searched index from en of 
@@ -120,7 +119,8 @@ void ArrayVector::insert(int i, const int& value) {
 	field[i] = value;
 	n++;
 }
-ArrayVector& ArrayVector::operator=(ArrayVector& x) {
+template <typename T>
+ArrayVector<T>& ArrayVector<T>::operator=(ArrayVector& x) {
 	if (x.capacity > 0) {
 		reserve(x.capacity); 
 	}

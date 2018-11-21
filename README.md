@@ -125,16 +125,12 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
   </tr>
    <tr>
-    <td>Vector implementation with Array</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/vectorArray.cpp</td>
-  </tr>
-  <tr>
-    <td>DoublyList with Iterator</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/DoublyListIterator.cpp</td>
+    <td>Vector container</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/vector.cpp</td>
   </tr>
    <tr>
-    <td>DoublyList Sequence with Iterator, BubbleSort</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/sequenceDoublyList.cpp</td>
+    <td>List container</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/list.cpp</td>
   </tr>
 </table>
 

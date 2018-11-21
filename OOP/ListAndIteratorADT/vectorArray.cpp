@@ -5,9 +5,7 @@
 #include <algorithm>
 
 /*
-Provide the missing housekeeping functions (copy constructor, assignment
-operator, and destructor) for the class ArrayVector of Code Fragment
-6.2.
+Vector struture implemetation using Array
 */
 
 typedef std::string error;
@@ -27,6 +25,8 @@ class ArrayVector {
 public:
 	ArrayVector()
 		: capacity(0), n(0), field(NULL) {};  //capacity, number of elements, field pointer
+	ArrayVector(ArrayVector& V);
+	~ArrayVector(); //destructor
 	int size() const;	//return n
 	bool isEmpty() const;	//check if n is less then 0
 	int& operator[](int n);		//operator overload to access indice of array
@@ -50,9 +50,7 @@ int main()
 	a.insert(2, 1+8);
 	std::cout << a.at(0) << "\n"; 
 
-	ArrayVector b; 
-	b = a; 
-	std::cout << b.at(3); 
+	ArrayVector b(a); 
 	
 
 
@@ -60,6 +58,21 @@ int main()
 
 
 	return 0;
+}
+//copy constructor
+ArrayVector::ArrayVector(ArrayVector& V) {
+	if (V.field != NULL) {	//if vector is not empty
+		reserve(V.capacity);	//reserve space with same capacity
+		for (int i = 0; i < V.size(); i++) {	//insert i element as V
+			insert(i, V.at(i));
+		}
+	}
+}
+ArrayVector::~ArrayVector() {
+	if (n == 0) {
+		return;
+	}
+	erase(0);
 }
 int ArrayVector::size() const {
 	return n;

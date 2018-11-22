@@ -59,24 +59,46 @@ public:
 	void pushBack(const T& value);
 	void removeFront();
 };
+/*
+Give complete C++ code for a new class, ShrinkingVector, that extends
+the Vector class and adds a function shrinkToFit(),
+which replaces the underlying array with an array whose capacity
+is exactly equal to the number of elements currently in the vector.
+*/
+template <typename T>
+class ShrinkingVector : public Vector<T> {
+public:
+	void shrinkToFit();
+};
 
+template <typename T>
+void ShrinkingVector<T>::shrinkToFit() {
+	if (!Vector<T>::isEmpty()) {
+		ShrinkingVector<T>::reserve(Vector<T>::size()); 
+	}
+}
 
 int main() {
 
 	
-	Vector<int> x; 
-	x.reserve(5);
-	x.insert(0, 1);
-	x.insert(1, 6);
-	x.insert(2, 3);
-	x.insert(3, 4);
-	x.pushBack(12); 
+
+
+	Vector<int> z; 
+	z.reserve(5); 
+	z.insert(0, 1);
+	z.insert(1, 2);
+	z.insert(2, 3); 
+
+
+
 	
-	Vector<int> z(x); 
-	
+
 	for (Vector<int>::Iterator p = z.begin(); p != z.end(); ++p) {
 		std::cout << *p << " "; 
 	}
+	 
+
+	 
 	
 
 
@@ -131,7 +153,7 @@ typename Vector<T>::Iterator Vector<T>::begin() const {
 template <typename T>
 T& Vector<T>::at(int i) {
 	try {
-		if (i >= 0 && i <= n) {
+		if (+i >= 0 && i <= n) {
 			return field[i];
 		}
 		throw Exeption("Index out of bounds");

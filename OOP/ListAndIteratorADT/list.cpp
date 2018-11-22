@@ -37,7 +37,7 @@ public:
 		bool operator==(const Iterator& p) const; //comparison operator to check if two iterators pointing/not poining to same object (not just value)
 		bool operator!=(const Iterator& x) const;	//to same object (not just value)
 		Iterator& operator++(); //move to next position and return referance to it
-		Iterator operator++(int); 
+		Iterator operator++(int);
 		Iterator& operator--(); //move to previous position and return referance to it
 		friend class NodeList; //only Node list can access private memers and create new operator
 	};
@@ -49,16 +49,16 @@ private:
 
 public:
 	NodeList();		//constructor
-	NodeList(NodeList& L); 
+	NodeList(NodeList& L);
 	~NodeList();	//destructor
 	int size() const;
 	bool isEmpty() const;
 	Iterator begin() const;	//beggining position
 	Iterator end() const;		//position after last node
 	void operator=(NodeList& L);
-	void insertFront(const int& value);	//ivoke insert(begin(), value)
-	void insertBack(const int& value);		//ivoke insert(end(), value)
-	void insert(const Iterator& p, const int& value);	//insert Element before position p
+	void insertFront(int value);	//ivoke insert(begin(), value)
+	void insertBack(int value);		//ivoke insert(end(), value)
+	void insert(const Iterator& p, int value);	//insert Element before position p
 	void eraseFront(); //ivoke erase(begin())
 	void eraseBack(); //invoke erase(--end()), have to decrement to position bacwards one node
 	void erase(const Iterator& p);	//remove element at position p
@@ -66,7 +66,7 @@ public:
 
 
 //LIST, access anywhere in the list
-class SequenceList : public NodeList{
+class SequenceList : public NodeList {
 public:
 	Iterator atIndex(int i) const;	//returns position from index i
 	int indexOf(const Iterator& p) const;	//returns index int of Iterator(referance) p
@@ -126,18 +126,18 @@ void bubbleSort2(SequenceList& S) {
 }
 int main() {
 
-	
 
 
-	NodeList a; 
+
+	NodeList a;
 	a.insertBack(1);
 	a.insertBack(2);
-	
-	NodeList b = a; 
+
+	NodeList b = a;
 	for (NodeList::Iterator p = b.begin(); p != b.end(); ++p) {
-		std::cout << *p << " "; 
+		std::cout << *p << " ";
 	}
-	
+
 
 
 
@@ -196,10 +196,10 @@ NodeList::NodeList(NodeList& L) {
 }
 NodeList::~NodeList() {
 	while (!isEmpty()) {
-		eraseFront(); 
+		eraseFront();
 	}
-	delete header; 
-	delete trailer; 
+	delete header;
+	delete trailer;
 }
 
 int NodeList::size() const {
@@ -224,11 +224,11 @@ void NodeList::operator=(NodeList& L) {
 		}
 	}
 }
-void NodeList::insertFront(const int& value) {
+void NodeList::insertFront(int value) {
 	return insert(begin(), value);
 }
 
-void NodeList::insertBack(const int& value) {
+void NodeList::insertBack(int value) {
 	return insert(end(), value);
 }
 /*
@@ -239,7 +239,7 @@ increment n by 1
 no return value
 */
 
-void NodeList::insert(const Iterator& p, const int& value) {	//insert element before p
+void NodeList::insert(const Iterator& p, int value) {	//insert element before p
 	Node* position = p.v;	//pointer to p's node
 	Node* predecessor = position->previous; //u is a pointer to p's previous node
 	Node* newNode = new Node;	//new node to insert

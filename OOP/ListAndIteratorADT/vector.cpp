@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <iostream>
 #include <string>
+#include <list>
 #include <vector>
 #include <algorithm>
 
@@ -11,7 +12,6 @@ For these reasons and more, vector is the preferred sequence container for most 
 When in doubt as to what kind of sequence container to use, start by using a vector!
 */
 
-
 typedef std::string error;
 class Exeption {
 	error txt;
@@ -21,127 +21,216 @@ public:
 	error& getError() { return this->txt; };
 };
 
+
 template <typename T>
-class ArrayVector {
-	int capacity;	//max elements
-	T* field;		//array
-	int n;	//counter of elements
+class Vector {
+	int capacity;
+	int n;
+	T* field;
 
 public:
-	ArrayVector()
-		: capacity(0), n(0), field(NULL) {};  //capacity, number of elements, field pointer
-	ArrayVector(ArrayVector& V);	//copy constructor
-	~ArrayVector(); //destructor
+	class Iterator {	//nested class as iterator
+		Iterator(T& p);		//only vector can create iterator
+		T* p; //position pointer
+
+	public:
+		T& operator*();	//acces value
+		bool operator==(Iterator p) const; 
+		bool operator!=(Iterator p) const; 
+		Iterator& operator++(); //move to next position
+		Iterator& operator++(int); 
+		Iterator& operator--();
+		Iterator& operator--(int);
+		template <typename T> friend class Vector; 
+	};
+
+	Vector();	//constructor
+	Vector(Vector& V);	//copy constructor
+	~Vector();	//destructor
 	int size() const;	//return n
-	bool isEmpty() const;	//check if n is less then 0
-	T& operator[](int n);		//operator overload to access indice of array
-	T& at(int n);	//return element at index of array
-	ArrayVector& operator=(ArrayVector& x);
-	void erase(int i); //erase element on index and shift whole array to left by one spot	
-	void insert(int i, const T& value); //insert value to ith element
-	void reserve(int n); //Request that the allocated storage space be large enough to hold n elements.
+	bool isEmpty() const;	//if vector is empty
+	T& operator[](int i);	//acces operator
+	T& at(int i);	//acces function
+	Iterator begin() const;
+	Iterator end() const; 
+	void insert(const int where, const T& value);	//insert value at indice where
+	void erase(const int where);	//delete indice where
+	void reserve(const int N);	//create array of N spots
+	void pushBack(const T& value);
+	void removeFront();
 };
 
-int main()
-{
-	ArrayVector<int> x; 
-	x.reserve(3); 
+
+int main() {
+
+	
+	Vector<int> x; 
+	x.reserve(5);
 	x.insert(0, 1);
-	x.insert(3, 4); 
-	x.insert(4, 5); 
-	x.erase(3); 
-	ArrayVector<int> b = x; 
-	b.insert(3, 4);
-	std::cout << b.size();
-
-
-
-
+	x.insert(1, 6);
+	x.insert(2, 3);
+	x.insert(3, 4);
+	x.pushBack(12); 
+	
+	Vector<int> z(x); 
+	
+	for (Vector<int>::Iterator p = z.begin(); p != z.end(); ++p) {
+		std::cout << *p << " "; 
+	}
+	
 
 
 
 	return 0;
 }
-//copy constructor
 template <typename T>
-ArrayVector<T>::ArrayVector(ArrayVector& V) {
-	if (V.field != NULL) {	//if vector is not empty
-		reserve(V.capacity);	//reserve space with same capacity
-		for (int i = 0; i < V.size(); i++) {	//insert i element as V
-			insert(i, V.at(i));
-		}
+Vector<T>::Vector()	//constructor
+	: n(0), capacity(0), field(NULL) {};	//init members
+
+template <typename T>
+Vector<T>::~Vector() {	//destructor
+	while (!isEmpty()) {
+		removeFront();
 	}
 }
+
 template <typename T>
-ArrayVector<T>::~ArrayVector() {
-	if (n == 0) {
-		return;
+Vector<T>::Vector(Vector& V) {	//copy constructor
+	if (!V.isEmpty()) {
+		reserve(V.capacity);
+		for (Vector<T>::Iterator p = V.begin(); p != V.end(); ++p)
+			pushBack(*p);
 	}
-	erase(0);
 }
+
 template <typename T>
-int ArrayVector<T>::size() const {
-	return n;
+int Vector<T>::size() const {
+	return n;	//return number of elements
 }
+
 template <typename T>
-bool ArrayVector<T>::isEmpty() const {
-	return (size() == 0);
+bool Vector<T>::isEmpty() const {
+	return (n == 0);	//is Vector list empty?
 }
+
 template <typename T>
-T& ArrayVector<T>::operator[](int n) {
-	return field[n];
+T& Vector<T>::operator[](int i) {
+	return field[i];	//return specific indice value
 }
+
 template <typename T>
-ArrayVector<T>& ArrayVector<T>::operator=(ArrayVector& x) {
-	if (x.capacity > 0) {
-		reserve(x.capacity);
-	}
-	if (x.field != NULL) {
-		for (int i = 0; i < x.size(); i++) {
-			insert(i, x.at(i));
-		}
-	}
-	return*this;
+typename Vector<T>::Iterator Vector<T>::end() const {
+	return Iterator(field[n]);	//invoke Iterator constructor on last element
 }
+
 template <typename T>
-T& ArrayVector<T>::at(int i) {
+typename Vector<T>::Iterator Vector<T>::begin() const {
+	return Iterator(field[0]);	//invoke Iterator constructor on first element
+}
+
+template <typename T>
+T& Vector<T>::at(int i) {
 	try {
-		if (i >= 0 || i < n)
+		if (i >= 0 && i <= n) {
 			return field[i];
-		throw Exeption("Index out of bounds!");
+		}
+		throw Exeption("Index out of bounds");
 	}
 	catch (Exeption& err) {
 		std::cout << err.getError() << "\n";
 	}
 }
+
 template <typename T>
-void ArrayVector<T>::erase(int i) {
-	for (int j = i + 1; j < n; j++)
-		field[j - 1] = field[j];
+void Vector<T>::erase(const int i) {
+	for (int j = i - 1; j < n; j++)
+		field[j - 1] = field[j];		//delete element in arra and shift rest of array
 	n--;
 }
+
 template <typename T>
-void ArrayVector<T>::reserve(int N) {
-	if (N < capacity)	//if N is less then cap
-		return;
-	int* newField = new T[N]; //alocate new array
-	for (int i = 0; i < n; i++) {
-		newField[i] = field[i];	//copy elements from first array to second
-	}
-	if (field != NULL) {
-		delete[] field;
-	}
-	field = newField; //change pointer to new array
-	capacity = N;	//change capacity
+void Vector<T>::removeFront() {
+	erase(0);
 }
+
 template <typename T>
-void ArrayVector<T>::insert(int i, const T& value) {
-	if (n == capacity)
-		reserve(std::max(i, capacity * 2)); //double size array coz of overflow
-	for (int j = n - 1; j >= i; j--) {	//traverse untill searched index from en of 
-		field[j + 1] = field[j];
+void Vector<T>::reserve(const int N) {
+	if (N <= capacity) {
+		return;
 	}
+	T* newField = new T[N];	//alocate storge for values
+
+	if (field != NULL) {	//if first array is not empty
+		for (int i = 0; i < n; i++) {
+			newField[i] = field[i];	//copy elements into new array
+		}
+		delete[] field; //delete old one
+	}
+	field = newField;	//set field  
+	capacity = N;	//capacity
+}
+
+template <typename T>
+void Vector<T>::insert(const int i, const T& value) {
+	if (n == capacity) {
+		reserve(std::max(i, capacity * 2));
+	}
+	for (int j = n - 1; j >= i; j--)
+		field[j + 1] = field[j];	//shift elements up
 	field[i] = value;
 	n++;
 }
 
+template <typename T>
+void Vector<T>::pushBack(const T& value) {
+	insert(n, value);
+}
+
+/*
+Iterator declaration
+*/
+template <typename T>
+Vector<T>::Iterator::Iterator(T& position) {	//Iterator constructor
+	p = &position;	//sets adress of position to position pointer
+}
+
+template <typename T>
+typename Vector<T>::Iterator& Vector<T>::Iterator::operator++() {	//prefix increment
+	p = (p + 1);	//move to next position
+	return *this;
+}
+
+template <typename T>
+typename Vector<T>::Iterator& Vector<T>::Iterator::operator++(int) {	//post increment
+	Vector<T>::Iterator old = *this;
+	++(*this);
+	return old;
+}
+
+template <typename T>
+typename Vector<T>::Iterator& Vector<T>::Iterator::operator--() {	//prefix increment
+	p = (p - 1);	//move to previous position
+	return *this;	
+}
+
+template <typename T>
+typename Vector<T>::Iterator& Vector<T>::Iterator::operator--(int) {	//post increment
+	Vector<T>::Iterator old = *this; 
+	--(*this); 
+	return old; 
+}
+
+template <typename T>
+bool Vector<T>::Iterator::operator==(Iterator v) const {
+	return (p == v.p);	//if pointer that points to T element is same as 
+}
+
+template <typename T>
+bool Vector<T>::Iterator::operator!=(Iterator v) const {	//diference operator
+	return (p != v.p);
+}
+
+template <typename T>
+T& Vector<T>::Iterator::operator*() {	//acces position pointer value
+	return *p;
+}

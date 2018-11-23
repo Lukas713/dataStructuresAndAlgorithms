@@ -130,11 +130,15 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
   </tr>
    <tr>
     <td>Sequence container with doubly list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/list.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listDoubly.cpp</td>
   </tr>
-     <tr>
+  <tr>
     <td>Sequence container with circular list</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listCircular.cpp</td>
+  </tr>
+  <tr>
+    <td>Sequence container with singly list</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listSingly.cpp</td>
   </tr>
 </table>
 

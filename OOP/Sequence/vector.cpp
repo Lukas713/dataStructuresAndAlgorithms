@@ -35,13 +35,13 @@ public:
 
 	public:
 		T& operator*();	//acces value
-		bool operator==(Iterator p) const; 
-		bool operator!=(Iterator p) const; 
+		bool operator==(Iterator p) const;
+		bool operator!=(Iterator p) const;
 		Iterator& operator++(); //move to next position
-		Iterator& operator++(int); 
+		Iterator& operator++(int);
 		Iterator& operator--();
 		Iterator& operator--(int);
-		template <typename T> friend class Vector; 
+		template <typename T> friend class Vector;
 	};
 
 	Vector();	//constructor
@@ -52,12 +52,13 @@ public:
 	T& operator[](int i);	//acces operator
 	T& at(int i);	//acces function
 	Iterator begin() const;
-	Iterator end() const; 
+	Iterator end() const;
 	void insert(const int where, const T& value);	//insert value at indice where
 	void erase(const int where);	//delete indice where
 	void reserve(const int N);	//create array of N spots
-	void pushBack(const T& value);
-	void removeFront();
+	void pushBack(const T& value);	// o(1)
+	void removeFront();	//slow, must shift all elements
+	void removeBack(); 
 };
 /*
 Give complete C++ code for a new class, ShrinkingVector, that extends
@@ -74,32 +75,32 @@ public:
 template <typename T>
 void ShrinkingVector<T>::shrinkToFit() {
 	if (!Vector<T>::isEmpty()) {
-		ShrinkingVector<T>::reserve(Vector<T>::size()); 
+		ShrinkingVector<T>::reserve(Vector<T>::size());
 	}
 }
 
 int main() {
 
-	
 
 
-	Vector<int> z; 
-	z.reserve(5); 
+
+	Vector<int> z;
+	z.reserve(5);
 	z.insert(0, 1);
 	z.insert(1, 2);
-	z.insert(2, 3); 
+	z.insert(2, 3);
 
 
 
-	
+
 
 	for (Vector<int>::Iterator p = z.begin(); p != z.end(); ++p) {
-		std::cout << *p << " "; 
+		std::cout << *p << " ";
 	}
-	 
 
-	 
-	
+
+
+
 
 
 
@@ -208,6 +209,11 @@ void Vector<T>::pushBack(const T& value) {
 	insert(n, value);
 }
 
+template <typename T>
+void Vector<T>::removeBack() {
+	erase(n);
+}
+
 /*
 Iterator declaration
 */
@@ -232,14 +238,14 @@ typename Vector<T>::Iterator& Vector<T>::Iterator::operator++(int) {	//post incr
 template <typename T>
 typename Vector<T>::Iterator& Vector<T>::Iterator::operator--() {	//prefix increment
 	p = (p - 1);	//move to previous position
-	return *this;	
+	return *this;
 }
 
 template <typename T>
 typename Vector<T>::Iterator& Vector<T>::Iterator::operator--(int) {	//post increment
-	Vector<T>::Iterator old = *this; 
-	--(*this); 
-	return old; 
+	Vector<T>::Iterator old = *this;
+	--(*this);
+	return old;
 }
 
 template <typename T>

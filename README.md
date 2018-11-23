@@ -125,16 +125,16 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
   </tr>
    <tr>
-    <td>Vector container with array</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/vector.cpp</td>
+    <td>Sequence container with vector</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/vector.cpp</td>
   </tr>
    <tr>
     <td>Sequence container with doubly list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/list.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/list.cpp</td>
   </tr>
      <tr>
     <td>Sequence container with circular list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/ListAndIteratorADT/listCircular.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listCircular.cpp</td>
   </tr>
 </table>
 

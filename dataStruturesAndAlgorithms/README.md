@@ -1,7 +1,7 @@
 # dataStruturesAndAlgorithms
 
 <hr>
-<h3>OOP repository</h3>
+<h3>OOP reporisotry</h3>
 <p>Learning: Object oriented programming, data structures & algorithms and C++ all at once <br>
 Resourse: Data Structures & Algorithms in C++<br>
 Michael T. Goodrich, Roberto Tamassia, David Mount
@@ -88,9 +88,17 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Stack with Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedList.cpp</td>
   </tr>
-   <tr>
+  <tr>
     <td>Stack with Generic Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
+  </tr>
+    <tr>
+    <td>PostFix notation with Stack</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/postFixNotation.cpp</td>
+  </tr>
+  <tr>
+    <td>Stack adapter with Vector functions</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackAdapterVectorFunctions.cpp</td>
   </tr>
    <tr>
     <td>Queue with Array</td>
@@ -100,6 +108,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Queue with Circular Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularLinkedList.cpp</td>
   </tr>
+  <tr>
+    <td>Queue with Circular Linked List Assignment</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularListAssignment.cpp</td>
+  </tr>
    <tr>
     <td>Deque with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeArray.cpp</td>
@@ -107,6 +119,26 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
    <tr>
     <td>Deque with Doubly Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeDoublyLinkedList.cpp</td>
+  </tr>
+  <tr>
+    <td>Double Stack with Array</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
+  </tr>
+   <tr>
+    <td>Sequence container with vector</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/vector.cpp</td>
+  </tr>
+   <tr>
+    <td>Sequence container with doubly list</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listDoubly.cpp</td>
+  </tr>
+  <tr>
+    <td>Sequence container with circular list</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listCircular.cpp</td>
+  </tr>
+  <tr>
+    <td>Sequence container with singly list</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listSingly.cpp</td>
   </tr>
 </table>
 

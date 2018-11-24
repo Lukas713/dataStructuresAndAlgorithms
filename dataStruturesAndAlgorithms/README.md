@@ -57,19 +57,11 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <th>Link</th>
   </tr>
   <tr>
-    <td>Singly Linked List</td>           	
-	<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/singlyLinkedList.cpp</td>
-  </tr>
-  <tr>
-    <td>Generic Singly Linked List</td>
+    <td>Singly Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/singlyLinkedListGeneric.cpp</td>
   </tr>
   <tr>
     <td>Doubly Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/doublyLinkedList.cpp</td>
-  </tr>
-  <tr>
-    <td>Generic Doubly Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/doublyLinkedListGeneric.cpp</td>
   </tr>
   <tr>
@@ -84,12 +76,8 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Stack with STL Vector</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackVectorSTL.cpp</td>
   </tr>
-   <tr>
-    <td>Stack with Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedList.cpp</td>
-  </tr>
   <tr>
-    <td>Stack with Generic Linked List</td>
+    <td>Stack with Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
   </tr>
     <tr>
@@ -107,10 +95,6 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
    <tr>
     <td>Queue with Circular Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularLinkedList.cpp</td>
-  </tr>
-  <tr>
-    <td>Queue with Circular Linked List Assignment</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularListAssignment.cpp</td>
   </tr>
    <tr>
     <td>Deque with Array</td>

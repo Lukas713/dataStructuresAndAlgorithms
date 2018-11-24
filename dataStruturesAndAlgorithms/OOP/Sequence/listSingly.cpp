@@ -20,54 +20,54 @@ public:
 
 class List {
 	struct Node {
-		int value; 
+		int value;
 		Node* next;
 	};
 public:
 	class Iterator {
-		Iterator(Node* p); 
-		Node* v; 
+		Iterator(Node* p);
+		Node* v;
 	public:
-		bool operator==(const Iterator& p) const; 
-		bool operator!=(const Iterator& p) const; 
-		int& operator*(); 
-		Iterator& operator++(); 
-		Iterator& operator++(int); 
-		friend class List; 
+		bool operator==(const Iterator& p) const;
+		bool operator!=(const Iterator& p) const;
+		int& operator*();
+		Iterator& operator++();
+		Iterator& operator++(int);
+		friend class List;
 	};
 
-	List(); 
-	~List(); 
-	int size() const; 
-	bool isEmpty() const; 
-	Iterator begin(); 
-	Iterator end(); 
+	List();
+	~List();
+	int size() const;
+	bool isEmpty() const;
+	Iterator begin();
+	Iterator end();
 	void insertFront(const int value);
 	void insertAfter(Iterator& p, const int value);
 	void removeFront();
 	void removeAfter(Iterator& p);
 
 private:
-	Node* head; 
+	Node* head;
 	int n;	//list size
 };
 
 int main() {
 
-	
-	List a; 
-	List::Iterator p = a.begin(); 
+
+	List a;
+	List::Iterator p = a.begin();
 	a.insertAfter(p, 4);
-	a.insertFront(2); 
-	a.insertFront(1); 
+	a.insertFront(2);
+	a.insertFront(1);
 	a.insertFront(0);
-	a.removeFront(); 
+	a.removeFront();
 	for (List::Iterator ptr = a.begin(); ptr != a.end(); ++ptr) {
-		std::cout << *ptr << " "; 
+		std::cout << *ptr << " ";
 	}
 
 
-	
+
 
 
 
@@ -99,7 +99,7 @@ List::Iterator List::begin() {
 }
 
 List::Iterator List::end() {
-	return Iterator(NULL); 
+	return Iterator(NULL);
 }
 
 List::Iterator& List::Iterator::operator++() {
@@ -127,10 +127,10 @@ void List::insertAfter(Iterator& p, const int value) {
 	n++;
 }
 void List::insertFront(const int value) {
-	Node* newNode = new Node; 
-	newNode->value = value; 
-	newNode->next = head; 
-	head = newNode; 
+	Node* newNode = new Node;
+	newNode->value = value;
+	newNode->next = head;
+	head = newNode;
 }
 
 void List::removeFront() {

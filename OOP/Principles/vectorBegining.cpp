@@ -9,7 +9,7 @@
 using namespace std;
 
 class Vect {
-private: 
+private:
 	double x;
 	double y;
 
@@ -21,20 +21,26 @@ public:
 	Vect& operator+(const Vect& second);	//addition two vectors
 	Vect& operator*(const double scalar);	//multiplication two vectors (vector returns)
 	double& operator*(const Vect& second);	//multiplication  vector	(scalar returns)
-
+	void swap(Vect& x); 
+	
 	void showCoords() const;
 };
+
+
+
+
 int main()
 {
-	Vect one(3, 7);
-	Vect two(4, 1);
-	Vect c(5, 2);
+	Vect one(9, 12); 
+	Vect two(10, 2); 
 
-	
-	double coords = one * two;
-	
+	one.showCoords(); 
+	one.swap(two);
+	std::cout << "\n"; 
+	one.showCoords(); 
 
-	
+
+
 }
 Vect::Vect() {
 	this->x = 0;
@@ -66,9 +72,15 @@ double& Vect::operator*(const Vect& second) {
 
 	double coords[2];
 	coords[0] = x * second.x;
-	coords[1]  = y * second.y;
+	coords[1] = y * second.y;
 
 	double* coordPointer = coords;
 	return *coordPointer;
+}
+
+void Vect::swap(Vect& x) {	//call-by-referance
+	Vect temp = static_cast<Vect &&> (x);	//casting x lvalue as rvalue into temp variable (not copy)
+	x = static_cast<Vect &&>(*this);
+	*this = static_cast<Vect &&> (temp);
 }
 

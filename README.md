@@ -124,6 +124,10 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
     <td>Sequence container with singly list</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listSingly.cpp</td>
   </tr>
+  <tr>
+    <td>Binary search tree</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
+  </tr>
 </table>
 
 

@@ -2,9 +2,14 @@
 
 <hr>
 <h3>OOP reporisotry</h3>
-<p>Learning: Object oriented programming, data structures & algorithms and C++ all at once <br>
-Resourse: Data Structures & Algorithms in C++<br>
-Michael T. Goodrich, Roberto Tamassia, David Mount
+<p><h4>Learning resources:</h4> 
+Object oriented programming, data structures & algorithms and C++ all at once <br>
+<h3>Data Structures & Algorithms in C++</h3>
+Michael T. Goodrich, Roberto Tamassia, David Mount<br>
+<h3>Data structures and algorithm analysis in C++ fourth edition</h3>
+Mark Allen Weiss
+<h4>Algorithms: fourth edition</h4>
+Robert Sedgewick and Kevin Wayne<hr>
 </p>
 <h3>C++ primer and OOP principles</h3>
 <table>

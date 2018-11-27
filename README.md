@@ -126,7 +126,7 @@ Michael T. Goodrich, Roberto Tamassia, David Mount
   </tr>
   <tr>
     <td>Binary search tree</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binaryTree.cpp</td>
   </tr>
 </table>
 

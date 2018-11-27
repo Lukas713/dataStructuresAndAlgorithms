@@ -12,71 +12,69 @@ class Tree {
 		Node* right; //link to higher values
 
 		Node(const int& val, Node* lft, Node* rgt)
-			: value(val), left(lft), right(rgt) {}; 
+			: value(val), left(lft), right(rgt) {};
 		Node(int&& val, Node* lft, Node* rgt)
-			: value(static_cast<int &&>(val)), left(lft), right(rgt) {}; 
+			: value(static_cast<int &&>(val)), left(lft), right(rgt) {};
 	};
 
 	Node* root; //node root
-	
+
 	void insert(const int& value, Node*& root);
 	void insert(int&& x, Node*& root);
-	void remove(const int& value, Node*& root); 
-	bool contains(const int value, Node* root) const; 
-	Node* removeMin(Node*& root); 
-	void emptyTree(Node*& root); 
-	Node* clone(Node* root); 
+	void remove(const int& value, Node*& root);
+	bool contains(const int value, Node* root) const;
+	Node* removeMin(Node*& root);
+	void emptyTree(Node*& root);
+	Node* clone(Node* root);
 
 public:
 	Tree();
 	Tree(const Tree& T);
-	~Tree(); 
-	void insert(const int value); 
-	void remove(const int value); 
-	bool contains(const int value) const; 
+	~Tree();
+	void insert(const int value);
+	void remove(const int value);
+	bool contains(const int value) const;
 	Node* findMin(Node*& root) const;
 	Node* findMax(Node*& root) const;
 
 	void display() {
-		Node* x = findMin(root); 
-		Node* y = findMax(root); 
-		std::cout << "min: " << x->value; 
-		std::cout << "max: " << y->value; 
+		Node* x = findMin(root);
+		Node* y = findMax(root);
+		std::cout << "min: " << x->value;
+		std::cout << "max: " << y->value;
 	}
 };
 
 int main()
 {
-	Tree a;  
-	
+	Tree a;
+
 	for (int i = 0; i < 5; i++) {
-		a.insert(rand() % 100); 
+		a.insert(rand() % 100);
 	}
-	a.insert(28); 
-	a.insert(36); 
+	a.insert(28);
+	a.insert(36);
 	a.insert(35);
-	a.insert(37); 
-	a.remove(34); 
-	std::cout << a.contains(34); 
-	
+	a.insert(37);
+	a.remove(41);
+	std::cout << a.contains(0);
+	std::cout << "\n";  
 
 
-	return 0; 
+
+	return 0;
 }
 /*
 public methds
 */
 Tree::Tree()
-	:root(nullptr) {}; 
+	:root(nullptr) {};
 Tree::~Tree() {
-	emptyTree(root); 
+	emptyTree(root);
 }
 Tree::Tree(const Tree& T)
 	:root(nullptr) {
-	root = clone(T.root); 
-}
-Tree::~Tree() {
-	emptyTree(root); 
+	root = clone(T.root);
 }
 void Tree::insert(const int x) {
 	return insert(x, root);
@@ -94,7 +92,7 @@ Tree::Node* Tree::clone(Node* r) {
 	if (r != nullptr) {
 		return new Node(r->value, clone(r->left), clone(r->right));	//recreate tree with recursion calls of left/right side
 	}
-	return nullptr; 
+	return nullptr;
 }
 bool Tree::contains(const int val, Node* r) const {	//check if value is in the tree
 	if (r == nullptr) {	//if there is no souch value
@@ -181,7 +179,8 @@ void Tree::remove(const int& value, Node*& r) {
 		return remove(value, r->right); //recursive call for right side
 	}
 	else if (r->left != nullptr && r->right != nullptr) {
-		r->value = removeMin(r->right)->value; //find r's successor and delete
+		r->value = findMin(r->right)->value; 
+		remove(r->value, r->right); 
 	}
 	else {
 		Node* oldNode = r;
@@ -190,10 +189,10 @@ void Tree::remove(const int& value, Node*& r) {
 	}
 }
 void Tree::emptyTree(Node*& r) {
-	if (r != nullptr) {	
+	if (r != nullptr) {
 		emptyTree(r->left);	//recursive call for left side
 		emptyTree(r->right);	//for right side of the root
-		delete r;	
+		delete r;
 	}
 	r = nullptr;
 }

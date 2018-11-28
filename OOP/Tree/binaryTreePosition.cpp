@@ -41,9 +41,6 @@ public:
 		Node* v; //pointer to node
 	};
 	typedef std::list<Position> PositionList;	 //list of positions
-	class List {
-		PositionList a; 
-	};
 	BinaryTree(); 
 	int size() const;	//check number of nodes
 	bool isEmpty() const;	//check if tree is empty

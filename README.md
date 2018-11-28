@@ -137,7 +137,6 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Binary search tree</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
   </tr>
-
 </table>
 
 

@@ -6,12 +6,12 @@
 #include <list>
 
 /*
-The most basic entity structure is Node. Node is declared inside protected part of BinaryTree class as struct. 
+The most basic entity structure is Node. Node is declared inside protected part of BinaryTree class as struct.
 Each node has value, link to parent, left and right node. In public section of BinaryTree class we define Position.
-He's data members consist of Node pointer to a Tree. Access to node's value is provided with overloaded 
-dereferencing operatr ("*"). BinaryTree is declared as friend. Functions parent(), left(), right() are used to 
-accessed apropriate member of a Node structure. List declaration is used to represent list of nodes. 
-There are some update methods inside BinaryTree. addRoot(), expandExternal() and removeAboveExternal() 
+He's data members consist of Node pointer to a Tree. Access to node's value is provided with overloaded
+dereferencing operatr ("*"). BinaryTree is declared as friend. Functions parent(), left(), right() are used to
+accessed apropriate member of a Node structure. List declaration is used to represent list of nodes.
+There are some update methods inside BinaryTree. addRoot(), expandExternal() and removeAboveExternal()
 BinaryTree private part consist of Node pointer (Node* root) and number of nodes (int n).
 */
 
@@ -19,7 +19,7 @@ template <typename T>
 class BinaryTree {
 
 protected:	//only BinaryTree and derived class can access Node
-	struct Node {	
+	struct Node {
 		T value;	//element
 		Node* parent;	//link to parent node
 		Node* left;		//link to left node
@@ -29,7 +29,7 @@ protected:	//only BinaryTree and derived class can access Node
 	};
 
 public:
-	class Position {	
+	class Position {
 	public:
 		Position(Node* x = NULL);	//constructor
 		T& operator*();		//access element
@@ -44,7 +44,7 @@ public:
 	};
 	typedef std::list<Position> PositionList;	 //list of positions
 
-	BinaryTree(); 
+	BinaryTree();
 	int size() const;	//check number of nodes
 	bool isEmpty() const;	//check if tree is empty
 	Position getRoot() const; //get the root
@@ -52,9 +52,10 @@ public:
 	void addRoot();		//add root to empty tree
 	void expandEternal(const Position& p);	//expand external Node
 	Position removeAboveExternal(const Position& p); //remove p and parent
-	int depth(const Position& p); 
-	void preorderPrint(Position p); 
-	void postorderPrint(Position p); 
+	int depth(Position p);
+	void preorderPrint(Position p);
+	void postorderPrint(Position p);
+	void inorderPrint(Position p); 
 protected:
 	void preorder(Node* v, PositionList& pl) const;
 
@@ -62,30 +63,33 @@ private:
 	Node* root;		//root pointer to first node
 	int n;	//number of nodes 
 };
+
 int main()
 {
-	
-	
-	BinaryTree<int> T; 
+
+
+	BinaryTree<int> T;
 	T.addRoot();	//create's root node 
 	BinaryTree<int>::Position p = T.getRoot();
-	*p = 313; 
-	T.expandEternal(p); 
-	*(p.left()) = 5; 
+	*p = 313;
+	T.expandEternal(p);
+	*(p.left()) = 5;
 	*(p.right()) = 2;
-	T.expandEternal(p.left()); 
-	*(p.left().left()) = 6; 
-	*(p.left().right()) = 9; 
-	T.expandEternal(p.right()); 
-	*(p.right().left()) = 3; 
-	*(p.right().right()) = 7; 
+	T.expandEternal(p.left());
+	*(p.left().left()) = 6;
+	*(p.left().right()) = 9;
+	T.expandEternal(p.right());
+	*(p.right().left()) = 3;
+	*(p.right().right()) = 7;
 
-	int x = T.depth(p.right().left()); 
-	T.preorderPrint(p); 
-	std::cout << " "; 
-	T.postorderPrint(p); 
-	
-	
+	int x = T.depth(p.right().left());
+	T.preorderPrint(p);
+	std::cout << " ";
+	T.postorderPrint(p);
+	std::cout << " ";
+	T.inorderPrint(p); 
+
+
 
 
 
@@ -96,7 +100,7 @@ Position methods
 */
 template <typename T>
 BinaryTree<T>::Position::Position(Node* x) {
-	this->v = x; 
+	this->v = x;
 }
 
 template <typename T>
@@ -202,13 +206,13 @@ void BinaryTree<T>::preorder(Node* v, PositionList& L) const {	//list of all nod
 
 template <typename T>
 typename BinaryTree<T>::PositionList BinaryTree<T>::positions() const {	//list of all node
-	PositionList L; 
+	PositionList L;
 	preorder(root, L);	//traverse the tree and stores nodes inside list
 	return PositionList(L);		//return resulting list
 }
 
 template <typename T>
-int BinaryTree<T>::depth(const Position& p) {
+int BinaryTree<T>::depth(Position p) {
 	if (p.isRoot()) {
 		return 0;
 	}
@@ -233,4 +237,14 @@ void BinaryTree<T>::postorderPrint(Position p) {	//visits children of tree first
 		postorderPrint(p.right());
 	}
 	std::cout << *p << " ";
+}
+template <typename T>
+void BinaryTree<T>::inorderPrint(Position p) {	//with inorder traversal, node is visited between recursive calls
+	if (!p.isExternal()) {
+		inorderPrint(p.left());
+	}
+	std::cout << *p << " ";		//node visit
+	if (!p.isExternal()) {
+		inorderPrint(p.right());
+	}
 }

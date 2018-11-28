@@ -8,7 +8,7 @@ Object oriented programming, data structures & algorithms and C++ all at once <b
 Michael T. Goodrich, Roberto Tamassia, David Mount<br>
 <h3>Data structures and algorithm analysis in C++ fourth edition</h3>
 Mark Allen Weiss
-<h4>Algorithms: fourth edition</h4>
+<h3>Algorithms: fourth edition</h3>
 Robert Sedgewick and Kevin Wayne<hr>
 </p>
 <h3>C++ primer and OOP principles</h3>
@@ -129,10 +129,15 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Sequence container with singly list</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listSingly.cpp</td>
   </tr>
-  <tr>
-    <td>Binary search tree</td>
+   <tr>
+    <td>Binary tree</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binaryTree.cpp</td>
   </tr>
+  <tr>
+    <td>Binary search tree</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
+  </tr>
+
 </table>
 
 

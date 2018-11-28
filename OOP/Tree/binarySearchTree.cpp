@@ -1,198 +1,353 @@
 #include "pch.h"
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include <vector>
 
+/*
+terminology:
+	node with links that either null or references to other nodes.
+	node is pointed to by just one other node, parent.
+	node has two links, referance to left child and right child.
+	each link is pointing to binary tree, whose root is referenced node.
 
+definition:
+	Binary search tree (BST) is a binary tree where each node has comparable key with associated value
+	and satisfies the restriction that the key in any node is larger then keys in all node's LEFT
+	subtree, and smaller then the keys in all nodes in the node's right subtree.
+*/
+template <typename Value, typename Key>
 class Tree {
 
-	struct Node {
-		int value;	//associated value
-		Node* left; //link to lower values
-		Node* right; //link to higher values
-
-		Node(const int& val, Node* lft, Node* rgt)
-			: value(val), left(lft), right(rgt) {};
-		Node(int&& val, Node* lft, Node* rgt)
-			: value(static_cast<int &&>(val)), left(lft), right(rgt) {};
+	struct  Node
+	{
+		Value value;
+		Key key;
+		Node* left; //link to left child
+		Node* right;	//lin to right child
+		Node(Key k, Value v, Node* lft, Node* rgt)
+			: key(k), value(v), left(lft), right(rgt) {};
+		Node(Key&& k, Value&& v, Node* lft, Node* rgt)
+			: key(std::move(k)), value(std::move(v)), left(lft), right(rgt) {};
+		Node& operator=(Node t); 
 	};
 
-	Node* root; //node root
+	Node* root; //root node
 
-	void insert(const int& value, Node*& root);
-	void insert(int&& x, Node*& root);
-	void remove(const int& value, Node*& root);
-	bool contains(const int value, Node* root) const;
-	Node* removeMin(Node*& root);
-	void emptyTree(Node*& root);
-	Node* clone(Node* root);
-
+	Node* clone(Node* root) const; //invoked by copy constructor
+	Node* getElement(Key key, Node* root);	//find element with key
+	Node* findMinimum(Node* root); //find minimum inside tree
+	Node* findMaximum(Node* root);	//find maximum inside tree
+	void pushElement(Key key, Value value, Node*& root);  //push element into tree
+	void deleteElement(Key key, Node*& root);	//find Key node, invoke deleteElementExtension(r->right)
+	Node* deleteElementExtension(Node*& root);	//finds lowers in subTree and returns
+	void deleteMinimum(Node*& root);	//delete node with minimum key
+	void deleteMaximum(Node*& root);	//delete node with maximum key
+	void emptyTree(Node*& root);	//destructor invoke this method
+	void preorder(Node* root);
+	void postorder(Node* root);
+	int height(Node* root);
+	
 public:
-	Tree();
-	Tree(const Tree& T);
-	~Tree();
-	void insert(const int value);
-	void remove(const int value);
-	bool contains(const int value) const;
-	Node* findMin(Node*& root) const;
-	Node* findMax(Node*& root) const;
-
-	void display() {
-		Node* x = findMin(root);
-		Node* y = findMax(root);
-		std::cout << "min: " << x->value;
-		std::cout << "max: " << y->value;
+	Tree(); //constuct root node
+	Tree(const Tree& T);	//copy constructor
+	~Tree();	//destructor
+	void getElement(Key key);	//invoke getElement(key, root)
+	void pushElement(Key key, Value value);	//invoke pushElement(key, value, root) 
+	void deleteElement(Key key);
+	void displayPreorder(); //invoke preorder(Node* root); 
+	void displayPostorder(); //invoke postorder(Node* root);
+	/*check height, minimum and maximum*/
+	void status() {
+		std::cout << "height: " << height(root) << "\n"; 
+		std::cout << "maximum: " << findMaximum(root)->value << "\n"; 
+		std::cout << "minimum: " << findMinimum(root)->value << "\n"; 
 	}
 };
 
 int main()
 {
-	Tree a;
+	Tree<int, int> a;
+	a.pushElement(5, 5); 
+	a.pushElement(10, 10); 
+	a.pushElement(3, 3); 
+	a.pushElement(6, 6); 
+	a.pushElement(12, 12);
+	a.pushElement(4, 4);
+	a.pushElement(2, 2); 
 
-	for (int i = 0; i < 5; i++) {
-		a.insert(rand() % 100);
-	}
-	a.insert(28);
-	a.insert(36);
-	a.insert(35);
-	a.insert(37);
-	a.remove(41);
-	std::cout << a.contains(0);
-	std::cout << "\n";  
+	a.status(); 
+	
 
 
 
 	return 0;
 }
 /*
-public methds
+assignment constructor
 */
-Tree::Tree()
-	:root(nullptr) {};
-Tree::~Tree() {
-	emptyTree(root);
-}
-Tree::Tree(const Tree& T)
-	:root(nullptr) {
-	root = clone(T.root);
-}
-void Tree::insert(const int x) {
-	return insert(x, root);
-}
-bool Tree::contains(const int value) const {
-	return contains(value, root);
-}
-void Tree::remove(const int v) {
-	return remove(v, root);
+template <typename Value, typename Key>
+typename Tree<Value, Key>::Node& Tree<Value, Key>::Node::operator=(Node t){
+	key = t.key;
+	value = t.value;
+	left = t.left;
+	right = t.right;
 }
 /*
-internal methods
+constructor
 */
-Tree::Node* Tree::clone(Node* r) {
-	if (r != nullptr) {
-		return new Node(r->value, clone(r->left), clone(r->right));	//recreate tree with recursion calls of left/right side
-	}
-	return nullptr;
-}
-bool Tree::contains(const int val, Node* r) const {	//check if value is in the tree
-	if (r == nullptr) {	//if there is no souch value
-		return false;
-	}
-	else if (r->value > val) {	//if value is higher then argument, go to right node
-		return contains(val, r->left);
-	}
-	else if (r->value < val) {
-		return contains(val, r->right);	//if value is lower then argument, go to left noe
-	}
-	else {
-		return true;	//return true
-	}
+template <typename Value, typename Key>
+Tree<Value, Key>::Tree()
+	:root(nullptr) {}; 
+/*
+copy constructor
+*/
+template <typename Value, typename Key>
+Tree<Value, Key>::Tree(const Tree& T)
+	:root(nullptr) {
+	root = clone(T.root); 
+}; 
+/*
+destructor
+*/
+template <typename Value, typename Key>
+Tree<Value, Key>::~Tree() {
+	emptyTree(root); 
 }
 
-void Tree::insert(const int& val, Node*& r) {	//const ref to value and reference to pointer(root)
-	if (r != nullptr) {	//if root of tree/subTree is nullPtr
-		if (r->value > val) {
-			return insert(val, r->left);	//if value is higher, go left
-		}
-		else if (r->value < val) {	//if value is lower, go right
-			return insert(val, r->right);
-		}
-		else {
-			//do nothing... for now
-		}
-	}
-	r = new Node(val, nullptr, nullptr);	//insert new root
+template <typename Value, typename Key>
+void Tree<Value, Key>::displayPreorder() {
+	return preorder(root);
 }
-void Tree::insert(int&& v, Node*& r) {	//rvalue and ref. to pointer (root)
-	if (r != nullptr) {
-		if (r->value > v) {
-			return insert(std::move(v), r->right);
-		}
-		else if (r->value < v) {
-			return insert(std::move(v), r->left);
-		}
-		else {
-			//do nothing for now
-		}
-	}
-	r = new Node(static_cast<int &&>(v), nullptr, nullptr);
+template <typename Value, typename Key>
+void Tree<Value, Key>::displayPostorder() {
+	return postorder(root);
 }
+/*
+Postordered traversal of an ordered tree,
+where the root of Tree is visited first
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::postorder(Node* r) {
+	if (r == nullptr) {
+		return;
+	}
 
-Tree::Node* Tree::findMin(Node*& r) const {	//ref to pointer(root)
-	if (r == nullptr) {	//if it hits empty root
-		return r;
-	}
-	if (r->left == nullptr) {	//if it hits empty left root
-		return r;
-	}
-	return findMin(r->left);	//recursive call to next left
+	postorder(r->left);
+	postorder(r->right);
+	std::cout << "key: " << r->key << " value: " << r->value << " \n";
 }
-Tree::Node* Tree::findMax(Node*& r) const {
+/*
+Preordered traversal of an ordered tree,
+where the children of each node are ordered from left to right
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::preorder(Node* r) {
+	if (r == nullptr) {
+		return;
+	}
+	std::cout << "key: " << r->key << " value: " << r->value << " \n";
+	preorder(r->left);
+	preorder(r->right);
+}
+/*
+1 param: root
+recreate tree with recursive calls
+*/
+template <typename Value, typename Key>
+typename Tree<Value, Key>::Node* Tree<Value, Key>::clone(Node* r) const {
 	if (r == nullptr) {
 		return r;
 	}
-	if (r->right == nullptr) {
-		return r;
-	}
-	return findMax(r->right);
+	return new Node(r->key, r->value, clone(r->left), clone(r->right));
 }
-Tree::Node* Tree::removeMin(Node*& r) {
-	if (r == nullptr) {
-		return r;
-	}
-	if (r->left == nullptr) {	//find lowerst node
-		Node* old = r;
-		r = (r->right != nullptr) ? r->right : r->left;
-		return old;
-	}
-	return removeMin(r->left);
-}
-void Tree::remove(const int& value, Node*& r) {
-	if (r == nullptr) {
-		return;		//item not found
-	}
-
-	if (r->value > value) {
-		return remove(value, r->left);	//recursive call for left side
-	}
-	else if (r->value < value) {
-		return remove(value, r->right); //recursive call for right side
-	}
-	else if (r->left != nullptr && r->right != nullptr) {
-		r->value = findMin(r->right)->value; 
-		remove(r->value, r->right); 
-	}
-	else {
-		Node* oldNode = r;
-		r = (r->left != nullptr) ? r->left : r->right;
-		delete oldNode;
-	}
-}
-void Tree::emptyTree(Node*& r) {
+/*
+1 param: root
+search right/left side of tree
+set evrything to null
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::emptyTree(Node*& r) {
 	if (r != nullptr) {
-		emptyTree(r->left);	//recursive call for left side
-		emptyTree(r->right);	//for right side of the root
+		emptyTree(r->left);
+		emptyTree(r->right);
 		delete r;
 	}
 	r = nullptr;
+}
+
+template <typename Value, typename Key>
+void Tree<Value, Key>::pushElement(Key key, Value value) {
+	pushElement(key, value, root);	//invoke
+}
+/*
+3 params: key, value and root node
+search with recursion untill nullptr
+insert new Node on that spot
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::pushElement(Key key, Value value, Node*& r) {
+	if (r != nullptr) {
+		if (r->key > key) {
+
+			return pushElement(key, value, r->left);
+		}
+		else if (r->key < key) {
+
+			return pushElement(key, value, r->right);
+		}
+	}
+	r = new Node(key, value, nullptr, nullptr);
+}
+template <typename Value, typename Key>
+void Tree<Value, Key>::getElement(Key key) {
+	Node* temp = getElement(key, root);	//invoke
+	if (temp != nullptr) {
+		std::cout << temp->value << "\n";
+	}
+	else {
+		std::cout << "No souch element" << "\n";
+	}
+}
+/*
+2 params: key and root node
+search untill args.key == key
+return r
+*/
+template <typename Value, typename Key>
+typename Tree<Value, Key>::Node* Tree<Value, Key>::getElement(Key key, Node* r) {
+	if (r != nullptr) {
+
+		if (r->key > key) {	//if r's key is higher, go right
+			return getElement(key, r->left);
+		}
+		else if (r->key < key) {	//if r'y key is lower, go left
+			return getElement(key, r->right);
+		}
+		else {
+			return r;	//return r
+		}
+	}
+	return r; // return nullptr if it is not found
+}
+/*
+1 param root node
+search untill left link is empty
+(thats smallest value)
+*/
+template <typename Value, typename Key>
+typename Tree<Value, Key>::Node* Tree<Value, Key>::findMinimum(Node* r) {
+	if (r->left == nullptr) {
+		return r;
+	}
+	return findMinimum(r->left);
+}
+/*
+1 param root node
+search untill right link is empty
+(thats highest value)
+*/
+template <typename Value, typename Key>
+typename Tree<Value, Key>::Node* Tree<Value, Key>::findMaximum(Node* r) {
+	if (r->right == nullptr) {
+		return r;
+	}
+	return findMaximum(r->right);
+}
+/*
+1 param: root
+recursive search untill smallest value (left link is nullptr)
+set it to right, and delete
+no return value
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::deleteMinimum(Node*& r) {
+	if (r == nullptr) {
+		return;
+	}
+	if (r->left == nullptr) {
+		Node* old = r;
+		r = r->right;
+		delete old;
+		return;
+	}
+	return deleteMinimum(r->left);
+}
+/*
+1 param: root
+recursive search untill highest value (right link is nullptr)
+set it to left, and delete
+no return value
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::deleteMaximum(Node*& r) {
+	if (r == nullptr) {
+		return;
+	}
+	if (r->right == nullptr) {
+		Node* old = r;
+		r = r->left;
+		delete old;
+		return;
+	}
+	return deleteMaximum(r->right);
+}
+template <typename Value, typename Key>
+void Tree<Value, Key>::deleteElement(Key key) {
+	return deleteElement(key, root);
+}
+/*
+2 params: key and root
+finds node, invoke findMinDeleteMin(r->right)
+delete old
+*/
+template <typename Value, typename Key>
+void Tree<Value, Key>::deleteElement(Key key, Node*& r) {
+	if (r == nullptr) {
+		return;
+	}
+	if (r->key > key) {
+		return deleteElement(key, r->left);
+	}
+	else if (r->key < key) {
+		return deleteElement(key, r->right);
+	}
+	else if (r->left != nullptr && r->right != nullptr) {	//if node with two link is found
+		Node* temp = deleteElementExtension(r->right);
+		r->key = temp->key;	//find minimum successor from right subtree and set it to r->key
+		r->value = temp->value;
+		delete temp;  
+	}
+	else {
+		Node* old = r;
+		r = (r->left != nullptr) ? r->left : r->right;
+		delete old;
+	}
+}
+/*
+1 param: node
+set up last node for deletion at deleteElement
+return node that will be deleted
+*/
+template <typename Value, typename Key>
+typename Tree<Value, Key>::Node* Tree<Value, Key>::deleteElementExtension(Node*& r) {
+	if (r == nullptr) {
+		return r;
+	}
+	if (r->left != nullptr) {
+		return deleteElementExtension(r->left);
+	}
+	Node* oldNode = r;
+	r = r->right;
+	return oldNode; 
+}
+/*
+return height of the tree using postorder traverse
+*/
+template <typename Value, typename Key>
+int Tree<Value, Key>::height(Node* r) {
+	if (r == nullptr) {
+		return -1; 
+	}
+	return std::max(height(r->right), height(r->left)) + 1; 
 }

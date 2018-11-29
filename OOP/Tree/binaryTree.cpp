@@ -59,6 +59,9 @@ public:
 	void postorderPrint(Position p);
 	void inorderPrint(Position p);
 	void externalLeft(Position p, int& i);
+	void sumPaths(Position p, int& i);
+	void sumInternalPaths(Position p, int& i);
+	void sumExternalPaths(Position p, int& i);
 
 protected:
 	void preorder(Node* v, PositionList& pl) const;
@@ -71,6 +74,7 @@ private:
 	Node* root;	//root pointer to first node
 	int n;	//number of nodes 
 };
+
 
 
 int main()
@@ -110,17 +114,17 @@ int main()
 
  
 	BinaryTree<int> L = T;
-	std::cout << "\n"; 
-	L.display(); 
-	std::cout << "\n"; 
-	T.display(); 
 	p = L.getRoot(); 
-	*p = 1; 
-	std::cout << "\n"; 
-	std::cout << *T.getRoot(); 
-	std::cout << "\n";
-	std::cout << *L.getRoot();
 
+	int i = 0; 
+	L.sumPaths(p, i); 
+	std::cout << "\n number of paths: " << i << "\n";
+	i = 0; 
+	L.sumInternalPaths(p, i); 
+	std::cout << "\n number of internal paths: " << i << "\n";
+	i = 0; 
+	L.sumExternalPaths(p, i);
+	std::cout << "\n number of external paths: " << i << "\n";
 	return 0;
 }
 /*
@@ -338,6 +342,52 @@ int BinaryTree<T>::depth(Position p) {
 	else {
 		return 1 + depth(p.parent());
 	}
+}
+/*
+2 params: position and integer referance
+counts depths of every node and adds to i
+no return value
+*/
+template <typename T>
+void BinaryTree<T>::sumPaths(Position p, int& i) {
+	if (p.v == NULL) {
+		return;
+	} 
+	i += depth(p);
+	sumPaths(p.left(), i); 
+	sumPaths(p.right(), i); 
+}
+/*
+2 params: position and referance to int
+if internal position, add he's depth to int
+no return value
+*/
+template <typename T>
+void BinaryTree<T>::sumInternalPaths(Position p, int& i) {
+	if (p.v == NULL) {
+		return;
+	}
+	if (!p.isExternal()) {
+		i += depth(p);
+	}
+	sumInternalPaths(p.left(), i);
+	sumInternalPaths(p.right(), i);
+}
+/*
+2 params: position and referance to int
+if external, add he's depth to int
+no return value
+*/
+template <typename T>
+void BinaryTree<T>::sumExternalPaths(Position p, int& i) {
+	if (p.v == NULL) {
+		return;
+	}
+	if (p.isExternal()) {
+		i += depth(p);
+	}
+	sumExternalPaths(p.left(), i);
+	sumExternalPaths(p.right(), i);
 }
 
 template <typename T>

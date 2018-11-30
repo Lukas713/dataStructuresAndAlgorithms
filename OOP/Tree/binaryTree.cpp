@@ -62,6 +62,9 @@ public:
 	void sumPaths(Position p, int& i);
 	void sumInternalPaths(Position p, int& i);
 	void sumExternalPaths(Position p, int& i);
+	void eulerPrint(Position p);
+	int levelWidth(Position root, int lvl); //count width of tree lvl
+	void reflect(Position root);	//left nodes become right and right become left
 
 protected:
 	void preorder(Node* v, PositionList& pl) const;
@@ -76,10 +79,8 @@ private:
 };
 
 
-
 int main()
 {
-
 	BinaryTree<int> T;
 	T.addRoot();	//create's root node 
 
@@ -95,36 +96,17 @@ int main()
 	*(p.right().left()) = 3;
 	*(p.right().right()) = 7;
 
-	int x = T.depth(p.right());
-	T.preorderPrint(p);
-	std::cout << " ";
-	T.postorderPrint(p);
-	std::cout << " ";
-	T.inorderPrint(p);
-	p = T.getRoot();
-	x = 0; 
-	T.externalLeft(p, x); 
-	std::cout << "\n number of left external elements: "; 
-	std::cout << x; 
-	p = T.getRoot(); 
-	x = T.height(p); 
-	std::cout << "\n height: " << x; 
-	x = T.depth(p.right().left()); 
-	std::cout << "\n depth: " << x; 
-
+	BinaryTree<int> R;
+	R.addRoot();	//create's root node 
+	BinaryTree<int>::Position r = R.getRoot();
+	*r = 5;
+	R.expandEternal(r);
+	*(r.left()) = 6;
+	*(r.right()) = 9;
  
-	BinaryTree<int> L = T;
-	p = L.getRoot(); 
+	std::cout << "\n";  
+ 
 
-	int i = 0; 
-	L.sumPaths(p, i); 
-	std::cout << "\n number of paths: " << i << "\n";
-	i = 0; 
-	L.sumInternalPaths(p, i); 
-	std::cout << "\n number of internal paths: " << i << "\n";
-	i = 0; 
-	L.sumExternalPaths(p, i);
-	std::cout << "\n number of external paths: " << i << "\n";
 	return 0;
 }
 /*
@@ -391,9 +373,9 @@ void BinaryTree<T>::sumExternalPaths(Position p, int& i) {
 }
 
 template <typename T>
-void BinaryTree<T>::preorderPrint(Position p) {	//root is visited first and then the subtrees as children
-	std::cout << *p << " ";						//are visited recursively
-	if (!p.isExternal()) {
+void BinaryTree<T>::preorderPrint(Position p) {		//root is visited first and then the subtrees as children
+	std::cout << *p << " ";							//are visited recursively
+	if (!p.isExternal()) { 
 		preorderPrint(p.left());
 		preorderPrint(p.right());
 	}
@@ -416,6 +398,23 @@ void BinaryTree<T>::inorderPrint(Position p) {	//with inorder traversal, node is
 	if (!p.isExternal()) {
 		inorderPrint(p.right());
 	}
+}
+/*
+1 param: Position p
+every node is visited three times
+external nodes 3 times in a row
+*/
+template <typename T>
+void BinaryTree<T>::eulerPrint(Position p) {
+	std::cout << *p << " ";
+	if (!p.isExternal()) {
+		eulerPrint(p.left());
+	}
+	std::cout << *p << " ";
+	if (!p.isExternal()) {
+		eulerPrint(p.right());
+	}
+	std::cout << *p << " ";
 }
 /*
 Algorithm for counting the number of left external nodes in a
@@ -443,4 +442,35 @@ int BinaryTree<T>::height(Position p) {
 	}
 	return 1 + std::max(height(p.left()), height(p.right()));
 }
-
+/*
+2 params: root position and level of tree
+returns number of children at that level
+return int
+*/
+template <typename T>
+int BinaryTree<T>::levelWidth(Position r, int lvl) {
+	if (r.v == NULL || lvl < 1) {
+		return 0;
+	}
+	if (lvl == 1) {
+		return 1;
+	}
+	return levelWidth(r.left(), lvl - 1) + levelWidth(r.right(), lvl - 1);
+}
+/*
+1 param: Position
+opens all nodes with recursive calls
+swap right and left
+no return value
+*/
+template <typename T>
+void BinaryTree<T>::reflect(Position r) {	//clone with postorder
+	if (r.v == NULL) {
+		return;
+	}
+	reflect(r.left());
+	reflect(r.right());
+	Node* temp = r.v->right;
+	r.v->right = r.v->left;
+	r.v->left = temp;
+}

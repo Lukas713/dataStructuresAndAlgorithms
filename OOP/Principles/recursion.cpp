@@ -24,6 +24,8 @@ bool checkTwoEarlier(int* f, int n);
 
 int fibonacci(int n);
 
+void fibonaciSequence(int n, int i, int temp)
+
 void rearanger(int* f, int i, int n);
 
 void reverseString(word& f, int i, int n);
@@ -214,9 +216,21 @@ void solveHanoiPuzzle(int n, char source, char destination, char temporary) {
 	std::cout << "Move disk " << n << " from " << source << " to " << destination << "\n";	//move last from A to B 
 	solveHanoiPuzzle(n - 1, temporary, destination, source);	//move rest from C to B
 }
-int
-
-
+/*
+Write n numbers of fibonaci
+*/
+void fibonaciSequence(int i, int n, int temp){
+	if(n == 0){
+		return; 
+	}
+	
+	i = (temp + i); 
+	std::cout << i << " "; 
+	if(i == 0) std::cout << i << " "; 
+	temp = (i - temp);
+	
+	fibonaciSequence(--n, i, temp);  
+}
 
 
 

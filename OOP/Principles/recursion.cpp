@@ -32,7 +32,17 @@ void reverseString(word& f, int i, int n);
 
 bool checkIfPalindrome(word& f, int i, int n);
 
+bool primeOrNot(int n, int i);
+
 void solveHanoiPuzzle(int n, char source, char destination, char temporary);
+
+int product(int n, int m);
+
+void printToZero(int n);
+
+int countZeros(int* x, int i, int n);
+
+void printToZero(int n);
 int main()
 
 {
@@ -231,8 +241,58 @@ void fibonaciSequence(int i, int n, int temp){
 	
 	fibonaciSequence(--n, i, temp);  
 }
+/*
+Write a recursive program to determine whether a given integer is prime or not
+*/
+bool primeOrNot(int n, int i) {
+	if (i == n) {
+		return true;
+	}
 
+	(i == 1) ? ++i : i;
 
+	if (n % i == 0) {
+		return false;
+	}
+	return primeOrNot(n, ++i);
+}
+/*
+Find Product of 2 Numbers using Recursion
+*/
+int product(int n, int m) {
+	if (m == 1) {
+		return n; 
+	}
 
-
-
+	return n + product(n, --m); 
+}
+/*
+Count the number of zeros in an array of integers.
+*/
+int countZeros(int* x, int i, int n) {
+	if (i == n) {
+		return 0; 
+	}
+	
+	return (x[i] == 0) ? 1 + countZeros(x, ++i, n) : 0 + countZeros(x, ++i, n); 
+}
+/*
+Write a function using recursion to print numbers from n to 0
+*/
+void printToZero(int n) {
+	if (n == 0) {
+		return;
+	}
+	std::cout << n << " "; 
+	return printToZero(--n); 
+}
+/*
+Write a function using recursion to print numbers from 0 to n
+*/
+void printToZero(int n) {
+	if (n == 0) {
+		return;
+	}
+	printToZero(n - 1); 
+	std::cout << n << " ";
+}

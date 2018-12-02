@@ -24,7 +24,7 @@ bool checkTwoEarlier(int* f, int n);
 
 int fibonacci(int n);
 
-void fibonaciSequence(int n, int i, int temp)
+void fibonaciSequence(int n, int i, int temp);
 
 void rearanger(int* f, int i, int n);
 

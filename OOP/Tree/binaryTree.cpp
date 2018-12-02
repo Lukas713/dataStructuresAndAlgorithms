@@ -24,7 +24,7 @@ protected:	//only BinaryTree and derived class can access Node
 		Node* parent;	//link to parent node
 		Node* left;		//link to left node
 		Node* right;	//lin to right node
-		Node(T val=0, Node* prnt = NULL, Node* lft = NULL, Node* rgt = NULL)	//constructor
+		Node(T val = 0, Node* prnt = NULL, Node* lft = NULL, Node* rgt = NULL)	//constructor
 			:value(val), parent(prnt), left(lft), right(rgt) {};
 	};
 
@@ -65,6 +65,8 @@ public:
 	void eulerPrint(Position p);
 	int levelWidth(Position root, int lvl); //count width of tree lvl
 	void reflect(Position root);	//left nodes become right and right become left
+	T findMax(Position p);
+	Position find(Position root, T value); 
 
 protected:
 	void preorder(Node* v, PositionList& pl) const;
@@ -79,33 +81,32 @@ private:
 };
 
 
+
 int main()
 {
 	BinaryTree<int> T;
 	T.addRoot();	//create's root node 
 
 	BinaryTree<int>::Position p = T.getRoot();
-	*p = 313;
+	*p = 3;
 	T.expandEternal(p);
 	*(p.left()) = 5;
 	*(p.right()) = 2;
 	T.expandEternal(p.left());
-	*(p.left().left()) = 6;
+	*(p.left().left()) = 69;
 	*(p.left().right()) = 9;
 	T.expandEternal(p.right());
 	*(p.right().left()) = 3;
-	*(p.right().right()) = 7;
+	*(p.right().right()) = 12;
 
-	BinaryTree<int> R;
-	R.addRoot();	//create's root node 
-	BinaryTree<int>::Position r = R.getRoot();
-	*r = 5;
-	R.expandEternal(r);
-	*(r.left()) = 6;
-	*(r.right()) = 9;
- 
-	std::cout << "\n";  
- 
+
+	p = T.find(p, 695); 
+	if (*p != NULL) {
+		std::cout << *p;
+	}
+	else {
+		std::cout << "there is no souch number!\n"; 
+	}
 
 	return 0;
 }
@@ -158,15 +159,15 @@ BinaryTree<T>::~BinaryTree() {	//destroy whole tree
 template <typename T>
 BinaryTree<T>::BinaryTree(const BinaryTree& T)	//copy constrcutor
 	:root(NULL), n(0) {
-	root = clone(T.getRoot().v); 
+	root = clone(T.getRoot().v);
 }
 template <typename T>
 BinaryTree<T>& BinaryTree<T>::operator=(BinaryTree T) {	//assignment operator
 	if (this != &T) {
-		if (root != NULL) emptyTree(root); 
-		root = clone(T.getRoot().v); 
+		if (root != NULL) emptyTree(root);
+		root = clone(T.getRoot().v);
 	}
-	return *this; 
+	return *this;
 }
 /*
 1 param: position
@@ -174,7 +175,7 @@ visit left side, then right side
 clone Tree
 */
 template <typename T>
-typename BinaryTree<T>::Node* BinaryTree<T>::clone(Node* p) const{	//clone with postorder
+typename BinaryTree<T>::Node* BinaryTree<T>::clone(Node* p) const {	//clone with postorder
 	if (p == NULL) {
 		return p;
 	}
@@ -206,7 +207,7 @@ bool BinaryTree<T>::Position::isRoot() const {
 /*
 no param
 number of nodes
-return int 
+return int
 */
 template <typename T>
 int BinaryTree<T>::size() const {
@@ -334,10 +335,10 @@ template <typename T>
 void BinaryTree<T>::sumPaths(Position p, int& i) {
 	if (p.v == NULL) {
 		return;
-	} 
+	}
 	i += depth(p);
-	sumPaths(p.left(), i); 
-	sumPaths(p.right(), i); 
+	sumPaths(p.left(), i);
+	sumPaths(p.right(), i);
 }
 /*
 2 params: position and referance to int
@@ -375,7 +376,7 @@ void BinaryTree<T>::sumExternalPaths(Position p, int& i) {
 template <typename T>
 void BinaryTree<T>::preorderPrint(Position p) {		//root is visited first and then the subtrees as children
 	std::cout << *p << " ";							//are visited recursively
-	if (!p.isExternal()) { 
+	if (!p.isExternal()) {
 		preorderPrint(p.left());
 		preorderPrint(p.right());
 	}
@@ -473,4 +474,47 @@ void BinaryTree<T>::reflect(Position r) {	//clone with postorder
 	Node* temp = r.v->right;
 	r.v->right = r.v->left;
 	r.v->left = temp;
+}
+/*
+1 param: root node
+check higher value (left or right sie)
+return higher value
+*/
+template <typename T>
+T BinaryTree<T>::findMax(Position p) {
+	if (p.isExternal()) {
+		return *p;
+	}
+	T maxL = findMax(p.left());
+	T maxR = findMax(p.right());
+	T max = maxL > maxR ? maxL : maxR;
+
+	return (max > *p) ? max : *p;
+}
+/*
+2 params: root position and value
+check left/right side for argument value
+if found, return that position
+if not, return root position
+*/
+template <typename T>
+typename BinaryTree<T>::Position BinaryTree<T>::find(Position p, T value) {
+	if (p.isExternal() || *p == value) {
+		return p;
+	}
+	Position left = find(p.left(), value);
+	Position right = find(p.right(), value);
+
+	if (*left == value) {
+		return left;
+	}
+	else if (*right == value) {
+		return right;
+	}
+	else {
+		if (p.isRoot()) {
+			std::cout << "Not found! \n";
+		}
+		return p;
+	}
 }

@@ -53,23 +53,23 @@ public:
 	void addRoot();		//add root to empty tree
 	void expandEternal(const Position& p);	//expand external Node
 	Position removeAboveExternal(const Position& p); //remove p and parent
-	int depth(Position p);
-	int height(Position p);
+	int depth(const Position& p) const;
+	int height(const Position& p) const;
 	void preorderPrint(Position p);
 	void postorderPrint(Position p);
 	void inorderPrint(Position p);
-	void externalLeft(Position p, int i);
-	void sumPaths(Position p, int i);
-	void sumInternalPaths(Position p, int i);
-	void sumExternalPaths(Position p, int i);
-	void eulerPrint(Position p);
-	int levelWidth(Position root, int lvl); //count width of tree lvl
-	void reflect(Position root);	//left nodes become right and right become left
+	void externalLeft(const Position& p, int& i);	//counting left external nodes
+	void sumPaths(const Position& p, int i);
+	void sumInternalPaths(const Position& p, int i);
+	void sumExternalPaths(const Position& p, int i);
+	void eulerPrint(const Position& p);
+	int levelWidth(const Position& root, int lvl) const; //count width of tree lvl
+	void reflect(const Position& root);	//left nodes become right and right become left
 	T findMax(Position p);
 	Position find(Position root, T value);
 	/*if base data type is int*/
-	int areAllHigherThen(int n, Position root) const; //return 1 if all tree's values are higher then n, 0 if not
-	int sumAllValues(Position root) const; 
+	int areAllHigherThen(int n, const Position& root) const; //return 1 if all tree's values are higher then n, 0 if not
+	int sumAllValues(Position root) const;
 
 protected:
 	void preorder(Node* v, PositionList& pl) const;
@@ -105,8 +105,9 @@ int main()
 	*(p.right().right()) = 12;
 
 
-	int x = T.sumAllValues(p); 
-	std::cout << x << "\n"; 
+	int x = 0;
+	x = T.sumAllValues(p); 
+	std::cout << x; 
 	return 0;
 }
 /*
@@ -317,7 +318,7 @@ compute depth of Node
 return int
 */
 template <typename T>
-int BinaryTree<T>::depth(Position p) {
+int BinaryTree<T>::depth(const Position& p) const {
 	if (p.isRoot()) {
 		return 0;
 	}
@@ -326,12 +327,24 @@ int BinaryTree<T>::depth(Position p) {
 	}
 }
 /*
+return height of tree
+argument position
+test if its NULL,
+*/
+template <typename T>
+int BinaryTree<T>::height(const Position& p) const {
+	if (p.v == NULL) {
+		return -1;
+	}
+	return 1 + std::max(height(p.left()), height(p.right()));
+}
+/*
 2 params: position and integer referance
 counts depths of every node and adds to i
 no return value
 */
 template <typename T>
-void BinaryTree<T>::sumPaths(Position p, int i) {
+void BinaryTree<T>::sumPaths(const Position& p, int i) {
 	if (p.v == NULL) {
 		return;
 	}
@@ -345,7 +358,7 @@ if internal position, add he's depth to int
 no return value
 */
 template <typename T>
-void BinaryTree<T>::sumInternalPaths(Position p, int i) {
+void BinaryTree<T>::sumInternalPaths(const Position& p, int i) {
 	if (p.v == NULL) {
 		return;
 	}
@@ -361,7 +374,7 @@ if external, add he's depth to int
 no return value
 */
 template <typename T>
-void BinaryTree<T>::sumExternalPaths(Position p, int i) {
+void BinaryTree<T>::sumExternalPaths(const Position& p, int i) {
 	if (p.v == NULL) {
 		return;
 	}
@@ -405,7 +418,7 @@ every node is visited three times
 external nodes 3 times in a row
 */
 template <typename T>
-void BinaryTree<T>::eulerPrint(Position p) {
+void BinaryTree<T>::eulerPrint(const Position& p) {
 	std::cout << *p << " ";
 	if (!p.isExternal()) {
 		eulerPrint(p.left());
@@ -421,7 +434,7 @@ Algorithm for counting the number of left external nodes in a
 binary tree, using the Binary tree ADT.
 */
 template <typename T>
-void BinaryTree<T>::externalLeft(Position p, int i) {
+void BinaryTree<T>::externalLeft(const Position& p, int& i) {
 	if (p.v == NULL) return;
 
 	if (p.isExternal() && p.parent().left().v == p.v) {
@@ -430,25 +443,14 @@ void BinaryTree<T>::externalLeft(Position p, int i) {
 	externalLeft(p.left(), i);
 	externalLeft(p.right(), i);
 }
-/*
-return height of tree
-argument position
-test if its NULL,
-*/
-template <typename T>
-int BinaryTree<T>::height(Position p) {
-	if (p.v == NULL) {
-		return -1;
-	}
-	return 1 + std::max(height(p.left()), height(p.right()));
-}
+
 /*
 2 params: root position and level of tree
 returns number of children at that level
 return int
 */
 template <typename T>
-int BinaryTree<T>::levelWidth(Position r, int lvl) {
+int BinaryTree<T>::levelWidth(const Position& r, int lvl) const {
 	if (r.v == NULL || lvl < 1) {
 		return 0;
 	}
@@ -464,7 +466,7 @@ swap right and left
 no return value
 */
 template <typename T>
-void BinaryTree<T>::reflect(Position r) {	//clone with postorder
+void BinaryTree<T>::reflect(const Position& r) {	//clone with postorder
 	if (r.v == NULL) {
 		return;
 	}
@@ -521,10 +523,10 @@ typename BinaryTree<T>::Position BinaryTree<T>::find(Position p, T value) {
 2 params: n value and root position
 if every node has lower value then value n
 return 1, else return 0
-int return 
+int return
 */
 template <typename T>
-int BinaryTree<T>::areAllHigherThen(int n, Position r) const {
+int BinaryTree<T>::areAllHigherThen(int n, const Position& r) const {
 	int i = 0;
 	if (*r < n) {
 		i = 1;

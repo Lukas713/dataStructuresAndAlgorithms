@@ -55,9 +55,9 @@ public:
 	Position removeAboveExternal(const Position& p); //remove p and parent
 	int depth(const Position& p) const;
 	int height(const Position& p) const;
-	void preorderPrint(Position p);
-	void postorderPrint(Position p);
-	void inorderPrint(Position p);
+	void preorderPrint(Position& p);
+	void postorderPrint(Position& p);
+	void inorderPrint(Position& p);
 	void externalLeft(const Position& p, int& i);	//counting left external nodes
 	void sumPaths(const Position& p, int i);
 	void sumInternalPaths(const Position& p, int i);
@@ -103,11 +103,11 @@ int main()
 	T.expandEternal(p.right());
 	*(p.right().left()) = 3;
 	*(p.right().right()) = 12;
+	T.preorderPrint(p); 
+	T.postorderPrint(p); 
+	T.inorderPrint(p); 
 
 
-	int x = 0;
-	x = T.sumAllValues(p); 
-	std::cout << x; 
 	return 0;
 }
 /*
@@ -386,30 +386,30 @@ void BinaryTree<T>::sumExternalPaths(const Position& p, int i) {
 }
 
 template <typename T>
-void BinaryTree<T>::preorderPrint(Position p) {		//root is visited first and then the subtrees as children
+void BinaryTree<T>::preorderPrint(Position& p) {		//root is visited first and then the subtrees as children
 	std::cout << *p << " ";							//are visited recursively
 	if (!p.isExternal()) {
-		preorderPrint(p.left());
-		preorderPrint(p.right());
+		preorderPrint(*&p.left());
+		preorderPrint(*&p.right());
 	}
 }
 
 template <typename T>
-void BinaryTree<T>::postorderPrint(Position p) {	//visits children of tree first, then visit the root
+void BinaryTree<T>::postorderPrint(Position& p) {	//visits children of tree first, then visit the root
 	if (!p.isExternal()) {
-		postorderPrint(p.left());
-		postorderPrint(p.right());
+		postorderPrint(*&p.left());
+		postorderPrint(*&p.right());
 	}
 	std::cout << *p << " ";
 }
 template <typename T>
-void BinaryTree<T>::inorderPrint(Position p) {	//with inorder traversal, node is visited between recursive calls
+void BinaryTree<T>::inorderPrint(Position& p) {	//with inorder traversal, node is visited between recursive calls
 	if (!p.isExternal()) {
-		inorderPrint(p.left());
+		inorderPrint(*&p.left());
 	}
 	std::cout << *p << " ";		//node visit
 	if (!p.isExternal()) {
-		inorderPrint(p.right());
+		inorderPrint(*&p.right());
 	}
 }
 /*

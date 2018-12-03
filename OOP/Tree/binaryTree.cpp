@@ -58,15 +58,18 @@ public:
 	void preorderPrint(Position p);
 	void postorderPrint(Position p);
 	void inorderPrint(Position p);
-	void externalLeft(Position p, int& i);
-	void sumPaths(Position p, int& i);
-	void sumInternalPaths(Position p, int& i);
-	void sumExternalPaths(Position p, int& i);
+	void externalLeft(Position p, int i);
+	void sumPaths(Position p, int i);
+	void sumInternalPaths(Position p, int i);
+	void sumExternalPaths(Position p, int i);
 	void eulerPrint(Position p);
 	int levelWidth(Position root, int lvl); //count width of tree lvl
 	void reflect(Position root);	//left nodes become right and right become left
 	T findMax(Position p);
-	Position find(Position root, T value); 
+	Position find(Position root, T value);
+	/*if base data type is int*/
+	int areAllHigherThen(int n, Position root) const; //return 1 if all tree's values are higher then n, 0 if not
+	int sumAllValues(Position root) const; 
 
 protected:
 	void preorder(Node* v, PositionList& pl) const;
@@ -79,6 +82,8 @@ private:
 	Node* root;	//root pointer to first node
 	int n;	//number of nodes 
 };
+
+
 
 
 
@@ -100,14 +105,8 @@ int main()
 	*(p.right().right()) = 12;
 
 
-	p = T.find(p, 695); 
-	if (*p != NULL) {
-		std::cout << *p;
-	}
-	else {
-		std::cout << "there is no souch number!\n"; 
-	}
-
+	int x = T.sumAllValues(p); 
+	std::cout << x << "\n"; 
 	return 0;
 }
 /*
@@ -332,7 +331,7 @@ counts depths of every node and adds to i
 no return value
 */
 template <typename T>
-void BinaryTree<T>::sumPaths(Position p, int& i) {
+void BinaryTree<T>::sumPaths(Position p, int i) {
 	if (p.v == NULL) {
 		return;
 	}
@@ -346,7 +345,7 @@ if internal position, add he's depth to int
 no return value
 */
 template <typename T>
-void BinaryTree<T>::sumInternalPaths(Position p, int& i) {
+void BinaryTree<T>::sumInternalPaths(Position p, int i) {
 	if (p.v == NULL) {
 		return;
 	}
@@ -362,7 +361,7 @@ if external, add he's depth to int
 no return value
 */
 template <typename T>
-void BinaryTree<T>::sumExternalPaths(Position p, int& i) {
+void BinaryTree<T>::sumExternalPaths(Position p, int i) {
 	if (p.v == NULL) {
 		return;
 	}
@@ -422,7 +421,7 @@ Algorithm for counting the number of left external nodes in a
 binary tree, using the Binary tree ADT.
 */
 template <typename T>
-void BinaryTree<T>::externalLeft(Position p, int& i) {
+void BinaryTree<T>::externalLeft(Position p, int i) {
 	if (p.v == NULL) return;
 
 	if (p.isExternal() && p.parent().left().v == p.v) {
@@ -494,8 +493,8 @@ T BinaryTree<T>::findMax(Position p) {
 /*
 2 params: root position and value
 check left/right side for argument value
-if found, return that position
-if not, return root position
+if found return that position
+if not, retur root position
 */
 template <typename T>
 typename BinaryTree<T>::Position BinaryTree<T>::find(Position p, T value) {
@@ -517,4 +516,34 @@ typename BinaryTree<T>::Position BinaryTree<T>::find(Position p, T value) {
 		}
 		return p;
 	}
+}
+/*
+2 params: n value and root position
+if every node has lower value then value n
+return 1, else return 0
+int return 
+*/
+template <typename T>
+int BinaryTree<T>::areAllHigherThen(int n, Position r) const {
+	int i = 0;
+	if (*r < n) {
+		i = 1;
+	}
+	if (!r.isExternal()) {
+		areAllHigherThen(n, r.left());
+		areAllHigherThen(n, r.right());
+	}
+	return i;
+}
+/*
+1 param: root position
+traverse whole tree and count node's value
+int return value
+*/
+template <typename T>
+int BinaryTree<T>::sumAllValues(Position p) const {
+	if (!p.isExternal()) {
+		return sumAllValues(p.left()) + sumAllValues(p.right()) + *p;
+	}
+	return *p;
 }

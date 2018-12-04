@@ -73,6 +73,22 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Circular Linked List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/circularLinkedList.cpp</td>
   </tr>
+     <tr>
+    <td>Sequence container with vector</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/vectorWithIterator.cpp</td>
+  </tr>
+   <tr>
+    <td>Doubly list inside container</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/doublyListWithIterator.cpp</td>
+  </tr>
+  <tr>
+    <td>Circular list inside container</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/circularListWithIterator.cpp</td>
+  </tr>
+  <tr>
+    <td>Singly list inside container</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/singlyListWithIterator.cpp</td>
+  </tr>
   <tr>
     <td>Stack with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackArray.cpp</td>
@@ -112,22 +128,6 @@ Robert Sedgewick and Kevin Wayne<hr>
   <tr>
     <td>Double Stack with Array</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
-  </tr>
-   <tr>
-    <td>Sequence container with vector</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/vector.cpp</td>
-  </tr>
-   <tr>
-    <td>Sequence container with doubly list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listDoubly.cpp</td>
-  </tr>
-  <tr>
-    <td>Sequence container with circular list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listCircular.cpp</td>
-  </tr>
-  <tr>
-    <td>Sequence container with singly list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Sequence/listSingly.cpp</td>
   </tr>
    <tr>
     <td>Binary tree</td>

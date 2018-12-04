@@ -139,7 +139,7 @@ Robert Sedgewick and Kevin Wayne<hr>
   </tr>
   <tr>
     <td>Priority Queue</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/prirorityQueue.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueue.cpp</td>
   </tr>
 </table>
 

@@ -138,8 +138,12 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
   </tr>
   <tr>
-    <td>Priority Queue</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueue.cpp</td>
+    <td>Priority Queue List</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueueList.cpp</td>
+  </tr>
+    <tr>
+    <td>Priority Queue Heap</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueueHeap.cpp</td>
   </tr>
 </table>
 

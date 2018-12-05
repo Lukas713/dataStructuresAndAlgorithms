@@ -11,6 +11,12 @@ public:
 	const bool operator()(const E& p, const E& q);	//compares two values
 };
 
+template <typename E>
+class isHigher {	/*comparator class*/
+public:
+	const bool operator()(const E& p, const E& q);	//compares two values
+};
+
 
 template <typename E>
 class BinaryTreeVector {
@@ -46,30 +52,50 @@ public:
 	bool isEmpty() const;	//compare size to 0
 	const E& minimum();		//invoke V.root() 
 	void insert(const E& value);
+	void insertHigher(const E& value);	//using within HeapSort
 	void removeMin();
 
 private:
 	BinaryTreeVector<E> V;	//Heap's elements inside BinaryTreeVector class
 	K isLess;		//comparator
+	K isHigher;		//reverse comparator
 	typedef typename BinaryTreeVector<E>::Position Position; //iterator on vector 
 };
 
+/*
+Heap sort
+0. phase:
+		  Reversed comparator is used that checks if one value is higher
+		  then other.   
+1. phase: 
+		  insert elements from list into heap using insertHigher() method 
+		  that inserts elements with reversed heap order property.
+		  Highest is at the top.
+2. phase: 
+		  return elements into list starting at end() of the list until begin().
+		  Interesting method is push_front(). Effect is the same. 
+*/
+template <typename E, typename K>
+void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
 
 
 int main()
 {
-	
-	PriorityQueueHeap<int, isLess<int>> H;
-	
+
+	PriorityQueueHeap<int, isHigher<int>> Q; 
+	std::list<int> field; 
+	std::cout << "unsorted: "; 
 	for (int i = 0; i < 10; i++) {
-		H.insert(rand() % 100); 
+		field.push_back(rand() % 100); 
+		std::cout << field.back() << " "; 
 	}
-	H.removeMin(); 
-	std::cout << H.minimum(); 
 
-
-
-
+	heapSort(Q, field); 
+	std::cout << "\nsorted: "; 
+	std::list<int>::iterator p; 
+	for (p = field.begin(); p != field.end(); ++p) {
+		std::cout << *p << " "; 
+	}
 
 
 
@@ -205,6 +231,15 @@ const bool isLess<E>::operator()(const E& p, const E& q) {
 	return (p < q);
 }
 /*
+2 params: const references to templated type
+return true if first is higher value then second
+return bool
+*/
+template <typename E>
+const bool isHigher<E>::operator()(const E& p, const E& q) {
+	return (p > q);
+}
+/*
 no param
 return size of Heap
 return int
@@ -285,5 +320,41 @@ void PriorityQueueHeap<E, K>::insert(const E& value) {
 			V.swap(p, u);	//swap values
 			u = p;	//set u to one lvl higher
 		}
+	}
+}
+template <typename E, typename K>
+void PriorityQueueHeap<E, K>::insertHigher(const E& value) {
+	V.addLast(value);	//add last element to vector
+	Position u = V.last();	//get last position
+	//upHeap bubbling
+	while (!V.isRoot(u)) {	//from last to root 
+		Position p = V.parent(u);	//get u's parent position
+		if (!isHigher(*u, *p)) {	//if u is not lower then parent
+			break;	//stay down
+		}
+		else {
+			V.swap(p, u);	//swap values
+			u = p;	//set u to one lvl higher
+		}
+	}
+}
+/*
+2 params: referance to heap and referance to list
+sort field using heap
+no return value
+*/
+template <typename E, typename K>
+void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
+
+	typename std::list<E>::iterator p;	//create iterator
+	//insert elements into heap with reverse heap order property
+	for (p = field.begin(); p != field.end(); ++p) {
+		heap.insertHigher(*p);	
+	}
+	field.clear();	//clear list
+	//return element into field fromright to left
+	while (!heap.isEmpty()) {	
+		field.push_front(heap.minimum());
+		heap.removeMin();	
 	}
 }

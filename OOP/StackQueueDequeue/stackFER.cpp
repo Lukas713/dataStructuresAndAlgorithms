@@ -86,7 +86,7 @@ bool check(int n);
 Stack* copySomeNumbers(Stack* original);
 Stack* combine(Stack* s1, Stack* s2);	/*zadatak 4*/
 void removeDuplicatesFromStack(Stack& s1);	/*zadatak 5*/
-void deleteNumber(Stack* fromThisStack, int n, Stack* newOne); /*zadatak 6*/
+void deleteNumber(Stack* fromThisStack, int n, Stack& newOne); /*zadatak 6*/
 
 int main()
 {
@@ -195,7 +195,9 @@ bool check(int n) {
 }
 
 Stack* copySomeNumbers(Stack* original) {
+
 	Stack* temp = new Stack;
+
 	while (!original->isEmpty()) {
 		if (check(original->peek())) {
 			temp->push(original->peek());
@@ -233,7 +235,6 @@ Stack* combine(Stack* s1, Stack* s2) {
 				temp->push(s1->peek());
 				s1->pop();
 			}
-
 		}
 	}
 	return temp;
@@ -260,24 +261,21 @@ void removeDuplicatesFromStack(Stack& s1) {
 		s1.push(*p);
 	}
 }
+
 void deleteNumber(Stack* fromThisStack, int n, Stack& newOne) {
 	std::list<int> L;
-	int counter;
+	int counter = 0;
 
 	while (!fromThisStack->isEmpty()) {
+		if (fromThisStack->peek() == n) {
+			L.push_back(counter); 
+			fromThisStack->pop(); 
+			counter++; 
+			continue; 
+		}
 		L.push_back(fromThisStack->peek());
 		fromThisStack->pop();
-	}
-
-	std::list<int>::iterator p;
-	std::list<int>::iterator p2;
-
-	counter = 0;
-	for (p = L.begin(); p != L.end(); ++p) {
-		if (*p == n) {
-			*p = counter;
-		}
-		counter++;
+		counter++; 
 	}
 
 	while (L.size() > 0) {

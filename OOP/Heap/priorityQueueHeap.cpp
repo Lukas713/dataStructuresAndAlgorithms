@@ -46,7 +46,9 @@ public:
 	void addLast(const E& value);	//add's element
 	void removeLast();	//remove element
 	void swap(const Position& p, const Position& q);	//swap node content
+	std::string lastNodeWithBinary(); 
 };
+
 
 /*priority queue implementation using heap*/
 template <typename E, typename K>
@@ -57,6 +59,7 @@ public:
 	const E& minimum();		//invoke V.root() 
 	void insert(const E& value);
 	void removeMin();
+	void displayLastAsBinary();
 
 private:
 	BinaryTreeVector<E> V;	//Heap's elements inside BinaryTreeVector class
@@ -68,11 +71,11 @@ private:
 template <typename E, typename K>
 class Adapter : public PriorityQueueHeap<E, K> {
 public:
-	const E& maximum(); 
-	void removeMax(); 
+	const E& maximum();
+	void removeMax();
 private:
-	BinaryTreeVector<E> L; 
-	K comparator; 
+	BinaryTreeVector<E> L;
+	K comparator;
 	typedef typename BinaryTreeVector<E>::Position Position; //iterator on vector 
 };
 
@@ -92,30 +95,29 @@ Heap sort in place
 template <typename E, typename K>
 void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
 
+template <typename E, typename K>
+void heapSortRegular(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
 
 int main()
 {
-	
-	Adapter<int, isHigher<int>> Q;
-	std::list<int> L;
-	std::cout << "unsorted: ";
+
+	PriorityQueueHeap<int, isHigher<int>> Q;
+	std::list<int> x; 
 	for (int i = 0; i < 10; i++) {
-		L.push_back(rand() % 100);
-		std::cout << L.back() << " ";
+		//Q.insert(rand() % 100);
+		x.push_back(rand() % 100); 
 	}
 
-	std::cout << "\n";
-
-	heapSort(Q, L);
-	std::cout << "sorted: ";
 	std::list<int>::iterator p;
-	for (p = L.begin(); p != L.end(); ++p) {
-		std::cout << *p << " ";
+	std::cout << "\n"; 
+	heapSortRegular(Q, x); 
+	for(p = x.begin(); p != x.end(); ++p) {
+		std::cout << *p << " "; 
 	}
-	
-	
 
 	
+
+
 
 	return 0;
 }
@@ -360,6 +362,17 @@ void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
 		heap.removeMin();
 	}
 }
+template <typename E, typename K>
+void heapSortRegular(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
+	while (!field.empty()) {
+		heap.insert(field.front());
+		field.pop_front();
+	}
+	while (!heap.isEmpty()) {
+		field.push_front(heap.minimum());
+		heap.removeMin();
+	}
+}
 /*
 return root value
 */
@@ -369,7 +382,7 @@ const E& Adapter<E, K>::maximum() {
 }
 /*
 no params
-remove root node 
+remove root node
 designed for Adapter class purpose
 no return value
 */
@@ -381,11 +394,9 @@ void Adapter<E, K>::removeMax() {
 		Position rot = L.root();
 		L.swap(rot, L.last());
 		L.removeLast();
-
 		while (L.hasLeft(rot)) {
 
 			Position children = L.left(rot);
-
 			if (L.hasRight(rot) && comparator(*L.right(rot), *children)) {
 				children = L.right(rot);
 			}
@@ -400,4 +411,32 @@ void Adapter<E, K>::removeMax() {
 		return;
 	}
 	L.removeLast();
+}
+/*
+Rrepresent a path from the root to a last node of a binary tree by
+means of a binary string, where 0 means “go to the left child” and 1 means
+“go to the right child.”
+*/
+template <typename E>
+std::string BinaryTreeVector<E>::lastNodeWithBinary() {
+	Position l = last();
+	Position p;
+	std::string binary;
+
+	while (!isRoot(l)) {
+		p = parent(l);
+		if (left(p) == l) {
+			binary.append("0");
+		}
+		else {
+			binary.append("1");
+		}
+		l = parent(l);
+	}
+	std::reverse(binary.begin(), binary.end());
+	return binary;
+}
+template <typename E, typename K>
+void PriorityQueueHeap<E, K>::displayLastAsBinary() {
+	std::cout << V.lastNodeWithBinary();
 }

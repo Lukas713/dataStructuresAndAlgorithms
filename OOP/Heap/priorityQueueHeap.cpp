@@ -23,7 +23,7 @@ public:
 
 
 template <typename E>
-class BinaryTreeVector {
+class BinaryHeap {
 	std::vector<E> V;	//tree elements
 
 public:
@@ -32,7 +32,7 @@ protected:
 	Position getPosition(int i); //map index on position
 	int getIndex(const Position& p); //map position on index
 public:
-	BinaryTreeVector()
+	BinaryHeap()
 		:V(1) {};
 	int size() const;	//size of three
 	Position left(const Position& ofMine);	//return position on left child
@@ -46,13 +46,13 @@ public:
 	void addLast(const E& value);	//add's element
 	void removeLast();	//remove element
 	void swap(const Position& p, const Position& q);	//swap node content
-	std::string lastNodeWithBinary(); 
+	std::string lastNodeWithBinary();
 };
 
 
 /*priority queue implementation using heap*/
 template <typename E, typename K>
-class PriorityQueueHeap {
+class PriorityQueue {
 public:
 	int size() const;	//invoke V.size()
 	bool isEmpty() const;	//compare size to 0
@@ -60,23 +60,22 @@ public:
 	void insert(const E& value);
 	void removeMin();
 	void displayLastAsBinary();
-
 private:
-	BinaryTreeVector<E> V;	//Heap's elements inside BinaryTreeVector class
+	BinaryHeap<E> V;	//Heap's elements inside BinaryHeap class
 	K isLess;		//comparator
-	typedef typename BinaryTreeVector<E>::Position Position; //iterator on vector 
+	typedef typename BinaryHeap<E>::Position Position; //iterator on vector 
 };
 
 
 template <typename E, typename K>
-class Adapter : public PriorityQueueHeap<E, K> {
+class Adapter : public PriorityQueue<E, K> {
 public:
 	const E& maximum();
 	void removeMax();
 private:
-	BinaryTreeVector<E> L;
+	BinaryHeap<E> L;
 	K comparator;
-	typedef typename BinaryTreeVector<E>::Position Position; //iterator on vector 
+	typedef typename BinaryHeap<E>::Position Position; //iterator on vector 
 };
 
 /*
@@ -93,29 +92,29 @@ Heap sort in place
 		  Interesting method is push_front(). Effect is the same.
 */
 template <typename E, typename K>
-void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
+void heapSort(PriorityQueue<E, K>& heap, std::list<E>& field);
 
 template <typename E, typename K>
-void heapSortRegular(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
+void heapSortRegular(PriorityQueue<E, K>& heap, std::list<E>& field);
 
 int main()
 {
 
-	PriorityQueueHeap<int, isHigher<int>> Q;
-	std::list<int> x; 
+	PriorityQueue<int, isHigher<int>> Q;
+	std::list<int> x;
 	for (int i = 0; i < 10; i++) {
 		//Q.insert(rand() % 100);
-		x.push_back(rand() % 100); 
+		x.push_back(rand() % 100);
 	}
 
 	std::list<int>::iterator p;
-	std::cout << "\n"; 
-	heapSortRegular(Q, x); 
-	for(p = x.begin(); p != x.end(); ++p) {
-		std::cout << *p << " "; 
+	std::cout << "\n";
+	heapSortRegular(Q, x);
+	for (p = x.begin(); p != x.end(); ++p) {
+		std::cout << *p << " ";
 	}
 
-	
+
 
 
 
@@ -126,7 +125,7 @@ int main()
 return i-th position
 */
 template <typename E>
-typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::getPosition(int i) {
+typename BinaryHeap<E>::Position BinaryHeap<E>::getPosition(int i) {
 	return (i + V.begin());
 }
 /*
@@ -134,7 +133,7 @@ typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::getPosition(int i) {
 return int as indice
 */
 template <typename E>
-int BinaryTreeVector<E>::getIndex(const Position& p) {
+int BinaryHeap<E>::getIndex(const Position& p) {
 	return (p - V.begin());
 }
 /*
@@ -143,7 +142,7 @@ return size of vector - 1
 return int
 */
 template <typename E>
-int BinaryTreeVector<E>::size() const {
+int BinaryHeap<E>::size() const {
 	return (V.size() - 1);
 }
 /*
@@ -151,7 +150,7 @@ int BinaryTreeVector<E>::size() const {
 return position on left child
 */
 template <typename E>
-typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::left(const Position& ofMine) {
+typename BinaryHeap<E>::Position BinaryHeap<E>::left(const Position& ofMine) {
 	return getPosition(2 * getIndex(ofMine));
 }
 /*
@@ -159,7 +158,7 @@ typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::left(const Position&
 return position on right child
 */
 template <typename E>
-typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::right(const Position& ofMine) {
+typename BinaryHeap<E>::Position BinaryHeap<E>::right(const Position& ofMine) {
 	return getPosition(2 * getIndex(ofMine) + 1);
 }
 /*
@@ -167,7 +166,7 @@ typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::right(const Position
 return position on parent node
 */
 template <typename E>
-typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::parent(const Position& ofMine) {
+typename BinaryHeap<E>::Position BinaryHeap<E>::parent(const Position& ofMine) {
 	return getPosition(getIndex(ofMine) / 2);
 }
 /*
@@ -175,7 +174,7 @@ typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::parent(const Positio
 return true if node has left child
 */
 template <typename E>
-bool BinaryTreeVector<E>::hasLeft(const Position& position) {
+bool BinaryHeap<E>::hasLeft(const Position& position) {
 	return ((2 * getIndex(position)) <= size());
 }
 /*
@@ -183,7 +182,7 @@ bool BinaryTreeVector<E>::hasLeft(const Position& position) {
 return true if node has right child
 */
 template <typename E>
-bool BinaryTreeVector<E>::hasRight(const Position& position) {
+bool BinaryHeap<E>::hasRight(const Position& position) {
 	return ((2 * getIndex(position) + 1) <= size());
 }
 /*
@@ -191,7 +190,7 @@ bool BinaryTreeVector<E>::hasRight(const Position& position) {
 return true if node on position is root
 */
 template <typename E>
-bool BinaryTreeVector<E>::isRoot(const Position& position) {
+bool BinaryHeap<E>::isRoot(const Position& position) {
 	return (getIndex(position) == 1);
 }
 /*
@@ -200,7 +199,7 @@ construct root position
 return position
 */
 template <typename E>
-typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::root() {
+typename BinaryHeap<E>::Position BinaryHeap<E>::root() {
 	return getPosition(1);
 }
 /*
@@ -209,7 +208,7 @@ construct last node position
 return position
 */
 template <typename E>
-typename BinaryTreeVector<E>::Position BinaryTreeVector<E>::last() {
+typename BinaryHeap<E>::Position BinaryHeap<E>::last() {
 	return getPosition(size());
 }
 /*
@@ -218,7 +217,7 @@ insert node on back of vector
 no return value
 */
 template <typename E>
-void BinaryTreeVector<E>::addLast(const E& value) {
+void BinaryHeap<E>::addLast(const E& value) {
 	V.push_back(value);
 }
 /*
@@ -227,7 +226,7 @@ remove node from back of vector
 no return value
 */
 template <typename E>
-void BinaryTreeVector<E>::removeLast() {
+void BinaryHeap<E>::removeLast() {
 	V.pop_back();
 }
 /*
@@ -236,7 +235,7 @@ swap their values
 no return value
 */
 template <typename E>
-void BinaryTreeVector<E>::swap(const Position& p, const Position& q) {
+void BinaryHeap<E>::swap(const Position& p, const Position& q) {
 	E temp = *p;
 	*p = *q;
 	*q = temp;
@@ -265,7 +264,7 @@ return size of Heap
 return int
 */
 template <typename E, typename K>
-int PriorityQueueHeap<E, K>::size() const {
+int PriorityQueue<E, K>::size() const {
 	return V.size();
 }
 /*
@@ -274,7 +273,7 @@ compare size with 0
 return bool
 */
 template <typename E, typename K>
-bool PriorityQueueHeap<E, K>::isEmpty() const {
+bool PriorityQueue<E, K>::isEmpty() const {
 	return (size() == 0);
 }
 /*
@@ -284,7 +283,7 @@ return const referance to value
 return templated E
 */
 template <typename E, typename K>
-const E& PriorityQueueHeap<E, K>::minimum() {
+const E& PriorityQueue<E, K>::minimum() {
 	return *(V.root());
 }
 /*
@@ -294,7 +293,7 @@ heap down bubble to perfect spot
 no ret value
 */
 template <typename E, typename K>
-void PriorityQueueHeap<E, K>::removeMin() {
+void PriorityQueue<E, K>::removeMin() {
 
 	if (size() != 1) {	//if root is only node in the list
 
@@ -327,7 +326,7 @@ Up heap bubbling if its necessary
 no return value
 */
 template <typename E, typename K>
-void PriorityQueueHeap<E, K>::insert(const E& value) {
+void PriorityQueue<E, K>::insert(const E& value) {
 	V.addLast(value);	//add last element to vector
 	Position u = V.last();	//get last position
 	//upHeap bubbling
@@ -348,7 +347,7 @@ sort field using heap
 no return value
 */
 template <typename E, typename K>
-void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
+void heapSort(PriorityQueue<E, K>& heap, std::list<E>& field) {
 
 	typename std::list<E>::iterator p;	//create iterator
 	//insert elements into heap with reverse heap order property
@@ -363,7 +362,7 @@ void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
 	}
 }
 template <typename E, typename K>
-void heapSortRegular(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
+void heapSortRegular(PriorityQueue<E, K>& heap, std::list<E>& field) {
 	while (!field.empty()) {
 		heap.insert(field.front());
 		field.pop_front();
@@ -418,7 +417,7 @@ means of a binary string, where 0 means “go to the left child” and 1 means
 “go to the right child.”
 */
 template <typename E>
-std::string BinaryTreeVector<E>::lastNodeWithBinary() {
+std::string BinaryHeap<E>::lastNodeWithBinary() {
 	Position l = last();
 	Position p;
 	std::string binary;
@@ -437,6 +436,6 @@ std::string BinaryTreeVector<E>::lastNodeWithBinary() {
 	return binary;
 }
 template <typename E, typename K>
-void PriorityQueueHeap<E, K>::displayLastAsBinary() {
+void PriorityQueue<E, K>::displayLastAsBinary() {
 	std::cout << V.lastNodeWithBinary();
 }

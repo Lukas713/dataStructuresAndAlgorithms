@@ -27,7 +27,7 @@ element of the list implementing P, and we add the element at the end of L
 
 
 template <typename E, typename C>
-class PriorityQueue {	
+class PriorityQueueList {
 public:
 	int size() const;	//return size of the list
 	bool isEmpty() const;	//return true if list is empty, false othervise
@@ -56,18 +56,18 @@ void selectionSort(std::vector<E>& L, std::priority_queue<E, std::vector<E>, isL
 	/*phase 1: inserting elements into priority queue*/
 	while (!L.empty()) {
 		Q.push(L.back());
-		L.pop_back(); 
+		L.pop_back();
 	}
 	/*phase 2: inserting minimum value inside list*/
 	while (!Q.empty()) {
-		L.push_back(Q.top()); 
-		Q.pop(); 
+		L.push_back(Q.top());
+		Q.pop();
 	}
 }
 
 /*insertion sort*/
 template <typename E, typename C>
-void insertionSort(std::list<E>& f, PriorityQueue<E, C>& queue) {
+void insertionSort(std::list<E>& f, PriorityQueueList<E, C>& queue) {
 	//phase 1: inserting elements into queue and finding best spot for each element
 	while (!f.empty()) {
 		queue.insert(f.front());
@@ -81,28 +81,28 @@ void insertionSort(std::list<E>& f, PriorityQueue<E, C>& queue) {
 }
 int main()
 {
-	
+
 	std::vector<int> L;
-	std::priority_queue<int, std::vector<int>, isLess<int>> Q; 
-	
+	std::priority_queue<int, std::vector<int>, isLess<int>> Q;
+
 	for (int i = 0; i < 10; i++) {
-		L.push_back(rand() % 100); 
+		L.push_back(rand() % 100);
 	}
 
-	
-	selectionSort(L, Q); 
 
-	std::vector<int>::iterator p; 
+	selectionSort(L, Q);
+
+	std::vector<int>::iterator p;
 	for (p = L.begin(); p != L.end(); ++p) {
-		std::cout << *p << " "; 
+		std::cout << *p << " ";
 	}
 
 
 
 
 
-	
-	
+
+
 
 	return 0;
 }
@@ -111,11 +111,11 @@ bool isLess<E>::operator()(const E& p, const E& q) const {
 	return (p < q);
 }
 template <typename E, typename C>
-int PriorityQueue<E, C>::size() const {	//return number of elements
+int PriorityQueueList<E, C>::size() const {	//return number of elements
 	return L.size();
 }
 template <typename E, typename C>
-bool PriorityQueue<E, C>::isEmpty() const {	//return true if list is empty
+bool PriorityQueueList<E, C>::isEmpty() const {	//return true if list is empty
 	return L.empty();
 }
 /*
@@ -125,7 +125,7 @@ insert at right position
 o return value
 */
 template <typename E, typename C>
-void PriorityQueue<E, C>::insert(const E& elem) {	//return number of elements
+void PriorityQueueList<E, C>::insert(const E& elem) {	//return number of elements
 	typename std::list<E>::iterator p = L.begin();
 	while (p != L.end() && isLess(elem, *p)) {
 		++p;
@@ -137,7 +137,7 @@ list is sorted becouse insert method
 return front element for min element
 */
 template <typename E, typename C>
-const E& PriorityQueue<E, C>::min() const {	//return number of elements
+const E& PriorityQueueList<E, C>::min() const {	//return number of elements
 	return L.front();
 }
 /*
@@ -145,6 +145,6 @@ list is sorted becouse insert method
 only front node must be removed
 */
 template <typename E, typename C>
-void PriorityQueue<E, C>::removeMin() {	//return number of elements
+void PriorityQueueList<E, C>::removeMin() {	//return number of elements
 	L.pop_front();
 }

@@ -4,6 +4,10 @@
 #include <list>
 #include <queue>
 
+/*
+Heap of height h is a complete binary tree that is, leve 0, 1, 2, 3, h - 1 of T have the maximum
+number of nodes possible. Level i has 2^i nodes.
+*/
 
 template <typename E>
 class isLess {	/*comparator class*/
@@ -52,28 +56,38 @@ public:
 	bool isEmpty() const;	//compare size to 0
 	const E& minimum();		//invoke V.root() 
 	void insert(const E& value);
-	void insertHigher(const E& value);	//using within HeapSort
 	void removeMin();
 
 private:
 	BinaryTreeVector<E> V;	//Heap's elements inside BinaryTreeVector class
 	K isLess;		//comparator
-	K isHigher;		//reverse comparator
+	typedef typename BinaryTreeVector<E>::Position Position; //iterator on vector 
+};
+
+
+template <typename E, typename K>
+class Adapter : public PriorityQueueHeap<E, K> {
+public:
+	const E& maximum(); 
+	void removeMax(); 
+private:
+	BinaryTreeVector<E> L; 
+	K comparator; 
 	typedef typename BinaryTreeVector<E>::Position Position; //iterator on vector 
 };
 
 /*
-Heap sort
+Heap sort in place
 0. phase:
 		  Reversed comparator is used that checks if one value is higher
-		  then other.   
-1. phase: 
-		  insert elements from list into heap using insertHigher() method 
-		  that inserts elements with reversed heap order property.
+		  then other.
+1. phase:
+		  insert elements from list into heap using insert() method
+		  that inserts elements with reversed heap order property (reversed comparator).
 		  Highest is at the top.
-2. phase: 
+2. phase:
 		  return elements into list starting at end() of the list until begin().
-		  Interesting method is push_front(). Effect is the same. 
+		  Interesting method is push_front(). Effect is the same.
 */
 template <typename E, typename K>
 void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
@@ -81,23 +95,27 @@ void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field);
 
 int main()
 {
-
-	PriorityQueueHeap<int, isHigher<int>> Q; 
-	std::list<int> field; 
-	std::cout << "unsorted: "; 
+	
+	Adapter<int, isHigher<int>> Q;
+	std::list<int> L;
+	std::cout << "unsorted: ";
 	for (int i = 0; i < 10; i++) {
-		field.push_back(rand() % 100); 
-		std::cout << field.back() << " "; 
+		L.push_back(rand() % 100);
+		std::cout << L.back() << " ";
 	}
 
-	heapSort(Q, field); 
-	std::cout << "\nsorted: "; 
-	std::list<int>::iterator p; 
-	for (p = field.begin(); p != field.end(); ++p) {
-		std::cout << *p << " "; 
+	std::cout << "\n";
+
+	heapSort(Q, L);
+	std::cout << "sorted: ";
+	std::list<int>::iterator p;
+	for (p = L.begin(); p != L.end(); ++p) {
+		std::cout << *p << " ";
 	}
+	
+	
 
-
+	
 
 	return 0;
 }
@@ -315,22 +333,6 @@ void PriorityQueueHeap<E, K>::insert(const E& value) {
 		Position p = V.parent(u);	//get u's parent position
 		if (!isLess(*u, *p)) {	//if u is not lower then parent
 			break;	//stay down
-		}	
-		else {
-			V.swap(p, u);	//swap values
-			u = p;	//set u to one lvl higher
-		}
-	}
-}
-template <typename E, typename K>
-void PriorityQueueHeap<E, K>::insertHigher(const E& value) {
-	V.addLast(value);	//add last element to vector
-	Position u = V.last();	//get last position
-	//upHeap bubbling
-	while (!V.isRoot(u)) {	//from last to root 
-		Position p = V.parent(u);	//get u's parent position
-		if (!isHigher(*u, *p)) {	//if u is not lower then parent
-			break;	//stay down
 		}
 		else {
 			V.swap(p, u);	//swap values
@@ -349,12 +351,53 @@ void heapSort(PriorityQueueHeap<E, K>& heap, std::list<E>& field) {
 	typename std::list<E>::iterator p;	//create iterator
 	//insert elements into heap with reverse heap order property
 	for (p = field.begin(); p != field.end(); ++p) {
-		heap.insertHigher(*p);	
+		heap.insert(*p);
 	}
 	field.clear();	//clear list
 	//return element into field fromright to left
-	while (!heap.isEmpty()) {	
+	while (!heap.isEmpty()) {
 		field.push_front(heap.minimum());
-		heap.removeMin();	
+		heap.removeMin();
 	}
+}
+/*
+return root value
+*/
+template <typename E, typename K>
+const E& Adapter<E, K>::maximum() {
+	return *(L.root());
+}
+/*
+no params
+remove root node 
+designed for Adapter class purpose
+no return value
+*/
+template <typename E, typename K>
+void Adapter<E, K>::removeMax() {
+
+	if (L.size() > 1) {
+
+		Position rot = L.root();
+		L.swap(rot, L.last());
+		L.removeLast();
+
+		while (L.hasLeft(rot)) {
+
+			Position children = L.left(rot);
+
+			if (L.hasRight(rot) && comparator(*L.right(rot), *children)) {
+				children = L.right(rot);
+			}
+			if (comparator(*children, *rot)) {
+				L.swap(children, rot);
+				rot = children;
+			}
+			else {
+				break;
+			}
+		}
+		return;
+	}
+	L.removeLast();
 }

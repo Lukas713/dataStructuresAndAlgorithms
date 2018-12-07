@@ -26,16 +26,44 @@ public:
 
 template <typename E>
 class BinaryHeap {
-	std::vector<E> V;	//tree elements
+	std::vector<E> V;	//tree element
 
 public:
 	typedef typename std::vector<E>::iterator Position; //position in the tree
 protected:
 	Position getPosition(int i); //map index on position
 	int getIndex(const Position& p); //map position on index
+	void buildHeap() {
+		for (int i = ((V.size() - 10) / 2); i > 0; --i) {
+			percolateDown(i);
+		}
+	}
 public:
 	BinaryHeap()
 		:V(1) {};
+	BinaryHeap(const std::vector<E> vector)
+		: V(vector.size() + 10) {
+		Position p; 
+		for (int i = 0; i < vector.size(); ++i)
+			V[i + 1] = vector[i];
+		buildHeap(); 
+	}
+	void percolateDown(int hole) {
+		int child; 
+		E temp = std::move(V[hole]); 
+
+		for (hole; hole * 2 <= V.size(); hole = child) {
+			child = hole * 2; 
+			if (child != V.size() && V[child] > V[child + 1])
+				++child; 
+			if (V[child] < temp)
+				V[hole] = std::move(V[child]);
+			else
+				break; 
+		}
+		V[hole] = std::move(temp); 
+	}
+
 	int size() const;	//size of three
 	Position left(const Position& ofMine);	//return position on left child
 	Position right(const Position& ofMine);		//return position on right child
@@ -48,8 +76,6 @@ public:
 	void addLast(const E& value);	//add's element
 	void removeLast();	//remove element
 	void swap(const Position& p, const Position& q);	//swap node content
-	std::string lastNodeWithBinary();
-	int checkWhichHeap(int kindOfHeap);
 };
 
 
@@ -62,11 +88,10 @@ public:
 	const E& minimum();		//invoke V.root() 
 	void insert(const E& value);
 	void removeMin();
-	void displayLastAsBinary();
-	int isItHeap(int kindOfHeap);
+
 private:
 	BinaryHeap<E> V;	//Heap's elements inside BinaryHeap class
-	K compare;		
+	K compare;
 	typedef typename BinaryHeap<E>::Position Position; //iterator on vector 
 };
 
@@ -103,16 +128,15 @@ void heapSortRegular(PriorityQueue<E, K>& heap, std::list<E>& field);
 int main()
 {
 
-	PriorityQueue<int, isLess<int>> Q;
-	
-	for (int i = 0; i < 10; i++) {
-		Q.insert(rand() % 100); 
-	}
-
-
-	std::cout <<  Q.isItHeap(12); 
+	std::vector<int> V = { 1, 2, 3, 4, 5 }; 
+	BinaryHeap<int> B(V); 
+	BinaryHeap<int>::Position p; 
+	p = B.root(); 
+	std::cout << *(++p); 
 
 	
+
+
 
 
 
@@ -300,21 +324,21 @@ void PriorityQueue<E, K>::removeMin() {
 
 		Position hole = V.root();
 		V.swap(hole, V.last());
-		V.removeLast(); 
+		V.removeLast();
 
 		while (V.hasLeft(hole)) {
-			Position child = V.left(hole); 
+			Position child = V.left(hole);
 
 			if (V.hasRight(hole) && compare(*(V.right(hole)), *child))
-				child = V.right(hole); 
+				child = V.right(hole);
 			if (!compare(*child, *hole))
-				break; 
-			V.swap(child, hole); 
-			hole = child; 
+				break;
+			V.swap(child, hole);
+			hole = child;
 		}
-		return; 
+		return;
 	}
-	V.removeLast(); 
+	V.removeLast();
 }
 /*
 1 param: const referance to templated value
@@ -324,14 +348,15 @@ no return value
 */
 template <typename E, typename K>
 void PriorityQueue<E, K>::insert(const E& value) {
-	V.addLast(value); 
-	Position newOne = V.last(); 
+	V.addLast(value);
+	Position newOne = V.last();
+	/*up heap bubling*/
 	while (!V.isRoot(newOne)) {
-		Position parent = V.parent(newOne); 
+		Position parent = V.parent(newOne);
 		if (!compare(*newOne, *parent))
-			break; 
-		V.swap(newOne, parent); 
-		newOne = parent; 
+			break;
+		V.swap(newOne, parent);
+		newOne = parent;
 	}
 }
 /*
@@ -404,61 +429,4 @@ void Adapter<E, K>::removeMax() {
 	}
 	L.removeLast();
 }
-/*
-Rrepresent a path from the root to a last node of a binary tree by
-means of a binary string, where 0 means “go to the left child” and 1 means
-“go to the right child.”
-*/
-template <typename E>
-std::string BinaryHeap<E>::lastNodeWithBinary() {
-	Position l = last();
-	Position p;
-	std::string binary;
 
-	while (!isRoot(l)) {
-		p = parent(l);
-		if (left(p) == l) {
-			binary.append("0");
-		}
-		else {
-			binary.append("1");
-		}
-		l = parent(l);
-	}
-	std::reverse(binary.begin(), binary.end());
-	return binary;
-}
-template <typename E, typename K>
-void PriorityQueue<E, K>::displayLastAsBinary() {
-	std::cout << V.lastNodeWithBinary();
-}
-/*
-problem for checking is this heap actually a heap
-if kindOfHeap == 1 (heap has to be max heap)
-else heap has to be min heap
-*/
-template <typename E, typename K>
-int PriorityQueue<E, K>::isItHeap(int kindOfHeap) {
-
-	return V.checkWhichHeap(kindOfHeap);
-}
-template <typename E>
-int BinaryHeap<E>::checkWhichHeap(int kindOfHeap) {
-	Position p = V.begin(); ++p;
-	Position end = getPosition(size() / 2);
-
-	if (kindOfHeap == 1) {
-		for (p; p != end; ++p) {
-			if (*p < *(getPosition(getIndex(p) * 2)) || *p < *(getPosition(getIndex(p) * 2 + 1)))
-				return -1;
-		}
-		return 1;
-	}
-	else {
-		for (p; p != end; ++p) {
-			if (*p > *(getPosition(getIndex(p) * 2)) || *p > *(getPosition(getIndex(p) * 2 + 1)))
-				return -1;
-		}
-		return 1;
-	}
-}

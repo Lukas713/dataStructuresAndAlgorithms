@@ -33,37 +33,12 @@ public:
 protected:
 	Position getPosition(int i); //map index on position
 	int getIndex(const Position& p); //map position on index
-	void buildHeap() {
-		for (int i = ((V.size() - 10) / 2); i > 0; --i) {
-			percolateDown(i);
-		}
-	}
+	void bottomUpHeapConstruct();
 public:
-	BinaryHeap()
-		:V(1) {};
-	BinaryHeap(const std::vector<E> vector)
-		: V(vector.size() + 10) {
-		Position p; 
-		for (int i = 0; i < vector.size(); ++i)
-			V[i + 1] = vector[i];
-		buildHeap(); 
-	}
-	void percolateDown(int hole) {
-		int child; 
-		E temp = std::move(V[hole]); 
-
-		for (hole; hole * 2 <= V.size(); hole = child) {
-			child = hole * 2; 
-			if (child != V.size() && V[child] > V[child + 1])
-				++child; 
-			if (V[child] < temp)
-				V[hole] = std::move(V[child]);
-			else
-				break; 
-		}
-		V[hole] = std::move(temp); 
-	}
-
+	BinaryHeap();
+	BinaryHeap(const std::vector<E>& vector);
+	BinaryHeap(std::vector<E>&& vector); 
+	~BinaryHeap(); 
 	int size() const;	//size of three
 	Position left(const Position& ofMine);	//return position on left child
 	Position right(const Position& ofMine);		//return position on right child
@@ -76,8 +51,9 @@ public:
 	void addLast(const E& value);	//add's element
 	void removeLast();	//remove element
 	void swap(const Position& p, const Position& q);	//swap node content
+	void percolateDown(int hole);
 };
-
+ 
 
 /*priority queue implementation using heap*/
 template <typename E, typename K>
@@ -128,11 +104,7 @@ void heapSortRegular(PriorityQueue<E, K>& heap, std::list<E>& field);
 int main()
 {
 
-	std::vector<int> V = { 1, 2, 3, 4, 5 }; 
-	BinaryHeap<int> B(V); 
-	BinaryHeap<int>::Position p; 
-	p = B.root(); 
-	std::cout << *(++p); 
+	BinaryHeap<int> A(std::vector<int> {1, 2, 3, 4, 0});
 
 	
 
@@ -143,8 +115,84 @@ int main()
 
 
 
-
 	return 0;
+}
+/*
+default constructor
+creates vector with indice 0 reserved
+*/
+template <typename E>
+BinaryHeap<E>::BinaryHeap()
+	:V(1) {};
+/*
+1 param: 
+copy constructor
+creates vector with size() spots + 1 becouse 0 indice is unused
+fill it with argumented vector
+invoke bottomUpHeapConstruct()
+*/
+template <typename E>
+BinaryHeap<E>::BinaryHeap(const std::vector<E>& vector)
+	: V(vector.size() + 1) {
+	Position p;
+	for (int i = 0; i < vector.size(); ++i)
+		V[i + 1] = vector[i];
+	bottomUpHeapConstruct();
+}
+/*
+1 param: rvalue vector
+constructor with rvalue 
+vector supports moving 
+*/
+template <typename E>
+BinaryHeap<E>::BinaryHeap(std::vector<E>&& vector)
+	: V(vector.size() + 1) {
+	for (int i = 0; i < vector.size(); ++i)
+		V[i + 1] = vector[i];
+	bottomUpHeapConstruct();
+};
+/*
+destructor
+pops every element from vector
+*/
+template <typename E>
+BinaryHeap<E>::~BinaryHeap() {
+	V.pop_back();
+}
+/*
+split vector on two halfs
+invoke percolateDown() on last parent and run loop untill root node
+*/
+template <typename E>
+void BinaryHeap<E>::bottomUpHeapConstruct() {
+	for (int i = ((V.size() - 1) / 2); i > 0; --i) {
+		percolateDown(i);
+	}
+}
+/*
+1 param: heap indice
+creates hole in heap and sets temporary that holds indice's value
+checks if hole's child (hole * 2 && hole * 2 - 1) is lower then hole
+if it is, move child's value to hole and hole to childs place 
+if it is not, put temporary value in hole
+result is completed binary heap
+no return value
+*/
+template <typename E>
+void BinaryHeap<E>::percolateDown(int hole) {
+	int child;
+	E temp = std::move(V[hole]);
+
+	for (hole; hole * 2 <= V.size(); hole = child) {
+		child = hole * 2;
+		if (child != V.size() && V[child] > V[child + 1])
+			++child;
+		if (V[child] < temp)
+			V[hole] = std::move(V[child]);
+		else
+			break;
+	}
+	V[hole] = std::move(temp);
 }
 /*
 1 param: integer
@@ -414,16 +462,14 @@ void Adapter<E, K>::removeMax() {
 		while (L.hasLeft(rot)) {
 
 			Position children = L.left(rot);
-			if (L.hasRight(rot) && comparator(*L.right(rot), *children)) {
+			if (L.hasRight(rot) && comparator(*L.right(rot), *children)) 
 				children = L.right(rot);
-			}
 			if (comparator(*children, *rot)) {
 				L.swap(children, rot);
 				rot = children;
 			}
-			else {
+			else 
 				break;
-			}
 		}
 		return;
 	}

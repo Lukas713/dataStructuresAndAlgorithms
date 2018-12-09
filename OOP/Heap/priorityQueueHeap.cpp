@@ -30,10 +30,13 @@ class BinaryHeap {
 
 public:
 	typedef typename std::vector<E>::iterator Position; //position in the tree
+
 protected:
 	Position getPosition(int i); //map index on position
 	int getIndex(const Position& p); //map position on index
 	void bottomUpHeapConstruct();
+	void percolateDown(int hole);
+
 public:
 	BinaryHeap();
 	BinaryHeap(const std::vector<E>& vector);
@@ -51,7 +54,6 @@ public:
 	void addLast(const E& value);	//add's element
 	void removeLast();	//remove element
 	void swap(const Position& p, const Position& q);	//swap node content
-	void percolateDown(int hole);
 };
  
 
@@ -62,8 +64,8 @@ public:
 	int size() const;	//invoke V.size()
 	bool isEmpty() const;	//compare size to 0
 	const E& minimum();		//invoke V.root() 
-	void insert(const E& value);
-	void removeMin();
+	void push(const E& value);
+	void pop();
 
 private:
 	BinaryHeap<E> V;	//Heap's elements inside BinaryHeap class
@@ -104,12 +106,12 @@ void heapSortRegular(PriorityQueue<E, K>& heap, std::list<E>& field);
 int main()
 {
 
-	BinaryHeap<int> A(std::vector<int> {1, 2, 3, 4, 0});
+	std::priority_queue<int, std::vector<int>, isHigher<int>> a; 
+
+
 
 	
-
-
-
+	
 
 
 
@@ -367,7 +369,7 @@ heap down bubble to perfect spot
 no return value
 */
 template <typename E, typename K>
-void PriorityQueue<E, K>::removeMin() {
+void PriorityQueue<E, K>::pop() {
 	if (V.size() > 1) {
 
 		Position hole = V.root();
@@ -395,7 +397,7 @@ Up heap bubbling if its necessary
 no return value
 */
 template <typename E, typename K>
-void PriorityQueue<E, K>::insert(const E& value) {
+void PriorityQueue<E, K>::push(const E& value) {
 	V.addLast(value);
 	Position newOne = V.last();
 	/*up heap bubling*/
@@ -417,9 +419,8 @@ void heapSort(PriorityQueue<E, K>& heap, std::list<E>& field) {
 
 	typename std::list<E>::iterator p;	//create iterator
 	//insert elements into heap with reverse heap order property
-	for (p = field.begin(); p != field.end(); ++p) {
+	for (p = field.begin(); p != field.end(); ++p)
 		heap.insert(*p);
-	}
 	field.clear();	//clear list
 	//return element into field fromright to left
 	while (!heap.isEmpty()) {
@@ -462,13 +463,13 @@ void Adapter<E, K>::removeMax() {
 		while (L.hasLeft(rot)) {
 
 			Position children = L.left(rot);
-			if (L.hasRight(rot) && comparator(*L.right(rot), *children)) 
+			if (L.hasRight(rot) && comparator(*L.right(rot), *children))
 				children = L.right(rot);
 			if (comparator(*children, *rot)) {
 				L.swap(children, rot);
 				rot = children;
 			}
-			else 
+			else
 				break;
 		}
 		return;

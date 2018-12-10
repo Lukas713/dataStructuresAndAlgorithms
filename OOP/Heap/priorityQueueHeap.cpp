@@ -61,6 +61,12 @@ public:
 template <typename E, typename K>
 class PriorityQueue {
 public:
+	PriorityQueue()
+		: V() {}; 
+	PriorityQueue(const std::vector<E>& vector)
+		: V(vector) {}; 
+	PriorityQueue(std::vector<E>&& vector)
+		: V(vector) {}; 
 	int size() const;	//invoke V.size()
 	bool isEmpty() const;	//compare size to 0
 	const E& minimum();		//invoke V.root() 
@@ -103,10 +109,15 @@ void heapSort(PriorityQueue<E, K>& heap, std::list<E>& field);
 template <typename E, typename K>
 void heapSortRegular(PriorityQueue<E, K>& heap, std::list<E>& field);
 
+template <typename E, typename K>
+void findKthCompared(const std::vector<E>& field, int k);
+
+
 int main()
 {
 
-	std::priority_queue<int, std::vector<int>, isHigher<int>> a; 
+	std::vector<int> a = { 6, 4, 2, 1, 7, 9 }; 
+	findKthCompared<int, isLess<int>>(a, 4); 
 
 
 
@@ -167,7 +178,7 @@ invoke percolateDown() on last parent and run loop untill root node
 */
 template <typename E>
 void BinaryHeap<E>::bottomUpHeapConstruct() {
-	for (int i = ((V.size() - 1) / 2); i > 0; --i) {
+	for (int i = ((V.size()) / 2); i > 0; --i) {
 		percolateDown(i);
 	}
 }
@@ -187,7 +198,7 @@ void BinaryHeap<E>::percolateDown(int hole) {
 
 	for (hole; hole * 2 <= V.size(); hole = child) {
 		child = hole * 2;
-		if (child != V.size() && V[child] > V[child + 1])
+		if (child < V.size() - 1 && V[child] > V[child + 1])
 			++child;
 		if (V[child] < temp)
 			V[hole] = std::move(V[child]);
@@ -419,8 +430,9 @@ void heapSort(PriorityQueue<E, K>& heap, std::list<E>& field) {
 
 	typename std::list<E>::iterator p;	//create iterator
 	//insert elements into heap with reverse heap order property
-	for (p = field.begin(); p != field.end(); ++p)
+	for (p = field.begin(); p != field.end(); ++p) {
 		heap.insert(*p);
+	}
 	field.clear();	//clear list
 	//return element into field fromright to left
 	while (!heap.isEmpty()) {
@@ -463,17 +475,32 @@ void Adapter<E, K>::removeMax() {
 		while (L.hasLeft(rot)) {
 
 			Position children = L.left(rot);
-			if (L.hasRight(rot) && comparator(*L.right(rot), *children))
+			if (L.hasRight(rot) && comparator(*L.right(rot), *children)) {
 				children = L.right(rot);
+			}
 			if (comparator(*children, *rot)) {
 				L.swap(children, rot);
 				rot = children;
 			}
-			else
+			else {
 				break;
+			}
 		}
 		return;
 	}
 	L.removeLast();
 }
 
+/*
+2 params: referance to vector and integer by value
+pop untill k-th element
+no return value
+*/
+template <typename E, typename K>
+void findKthCompared(const std::vector<E>& field, int k) {
+	PriorityQueue<E, K> P(field);
+	for (int i = 1; i < k; i++) {
+		P.pop();
+	}
+	std::cout << P.minimum();
+}

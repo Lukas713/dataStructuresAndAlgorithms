@@ -5,87 +5,105 @@
 #include <map>
 #include <vector>
 
-template <typename K, typename V>
-class Entry { // a (key, value) pair
-	K key; // key
-	V value; // value
-public: // public functions
-	Entry(const K& k = K(), const V& v = V()) // constructor
-		: key(k), value(v) { }
-	const K& getKey() const { return key; } // get key (read only)
-	const V& getValue() const { return value; } // get value (read only)
-	void setKey(const K& k) { key = k; } // set key
-	void setValue(const V& v) { value = v; } // set value
-};
-
-template <typename K, typename V, typename H>
-class HashMap {
-public: // public types
-	typedef Entry<const K, V> Entry; // a (key,value) pair
-	class Iterator; // a iterator/position
-public: // public functions
-	HashMap(int capacity = 100); // constructor
-	int size() const; // number of entries
-	bool empty() const; // is the map empty?
-	Iterator find(const K& k); // find entry with key k
-	Iterator put(const K& k, const V& v); // insert/replace (k,v)
-	void erase(const K& k); // remove entry with key k
-	void erase(const Iterator& p); // erase entry at p
-	Iterator begin(); // iterator to first entry
-	Iterator end(); // iterator to end entry
-protected: // protected types
-	typedef std::list<Entry> Bucket; // a bucket of entries
-	typedef std::vector<Bucket> BktArray; // a bucket array
-	Iterator finder(const K& k); // find utility
-	Iterator inserter(const Iterator& p, const Entry& e); // insert utility
-	void eraser(const Iterator& p); // remove utility
-	typedef typename BktArray::iterator BItor; // bucket iterator
-	typedef typename Bucket::iterator EItor; // entry iterator
-	static void nextEntry(Iterator& p) // bucket’s next entry
-	{
-		++p.ent;
-	}
-	static bool endOfBkt(const Iterator& p) // end of bucket?
-	{
-		return p.ent == p.bkt->end();
-	}
-private:
-	int n; // number of entries
-	H hash; // the hash comparator
-	BktArray B; // bucket array
-public: // public types
-	class Iterator { // an iterator (& position)
-	private:
-		EItor ent; // which entry
-		BItor bkt; // which bucket
-		const BktArray* ba; // which bucket array
-	public:
-		Iterator(const BktArray& a, const BItor& b, const EItor& q = EItor())
-			: ent(q), bkt(b), ba(&a) { }
-		Entry& operator*() const; // get entry
-		bool operator==(const Iterator& p) const; // are iterators equal?
-		Iterator& operator++(); // advance to next entry
-		friend class HashMap; // give HashMap access
-	};
-};
-
 template <typename K>
 class Hash {
 public:
-	size_t operator()(const std::string& key) {
-		size_t hashValue = 0;
-		for (char ch : key)
-			hashValue = 37 * hashValue + ch;
+	unsigned int operator()(const std::string& key) {
+		unsigned int hashValue = 0; 
+		for (char ch : key) {
+			hashValue = 37 * hashValue + ch; 
+		}
 		return hashValue;
 	}
 };
+
+template <typename K, typename V, typename H>
+ class HashMap {
+
+	class Node {
+	public:
+		Node(const K& k = K(), const V& v = V())
+			:	key(k), value(v) {}
+		void setKey(const K& k) { key = k;  };
+		void setValue(const V& v) { value = v;  }
+		K getKey() const { return key;  };
+		V getValue() const { return value;  };
+	private:
+		K key;
+		V value;
+	};
+	typedef typename Node Node;
+	typedef typename std::list<Node> Bucket;
+	typedef typename std::vector<Bucket> Array;
+	typedef typename Bucket::iterator bucketIterator;
+	typedef typename Array::iterator arrayIterator;
+ public:
+	 class Iterator {
+	 public:
+		 Iterator(const Array& a, const arrayIterator& ator, const bucketIterator& btor = bucketIterator())
+			 : bucketPosition(btor), arrayPosition(ator), list(&a) {};
+		 Node& operator*() const;
+		 bool operator==(const Iterator& p); 
+		 Iterator& operator++(); 
+		 friend class HashMap<K, V, H>; 
+	 private:
+		 bucketIterator bucketPosition;
+		 arrayIterator arrayPosition; 
+		 const Array* list; 
+	 };
+ public:
+	 /*public methods*/
+	 HashMap(int capacity = 101); 
+	 int size() const; 
+	 bool isEmpty() const;
+	 Iterator insert(const K& key, const V& value);
+	 void erase(const K& key);
+	 Iterator begin(); 
+	 Iterator end(); 
+	 Iterator find(const K& key); 
+private:
+	/*utility*/
+	Iterator finder(const K& key);
+	Iterator inserter(const Iterator& p, const Node& element);
+	void eraser(const Iterator& p); 
+	static bool endOfBucket(const Iterator& p); 
+	static void nextNode(Iterator& p);
+
+	int n; //number of elements
+	Hash<K> hash;		//hash composition
+	Array L; 
+};
+
+ template <typename K, typename V, typename H>
+ typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::insert(const K& key, const V& value) {
+	 Iterator position = finder(key); 
+	 if (!endOfBucket(position)) {
+		 position.bucketPosition->setValue(value);
+		 return position;
+	 }
+	 return inserter(position, Node(key, value));
+ }
+
+ template <typename K, typename V, typename H>
+ typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::inserter(const Iterator& p, const Node& element) {
+	 bucketIterator bItor = p.arrayPosition->insert(p.bucketPosition, element); 
+	 n++; 
+	 return Iterator(L, p.arrayPosition, bItor); 
+ }
+
+
+
+
+
+ 
 
 int main()
 {
 
 
-	HashMap <std::string, int, Hash<std::string>> A;
-	A.put("Lukas", 2);
+	HashMap<std::string, int, Hash<std::string>> A; 
+	A.insert("a", 5); 
+	A.insert("b", 3); 
 
 
 
@@ -97,111 +115,89 @@ int main()
 
 	return 0;
 }
-template <typename K, typename V, typename H> // get entry
-typename HashMap<K, V, H>::Entry&
-HashMap<K, V, H>::Iterator::operator*() const
-{
-	return *ent;
+
+
+template <typename K, typename V, typename H>
+HashMap<K, V, H>::HashMap(int capacity)
+	: L(capacity), n(0) {}
+
+template <typename K, typename V, typename H>
+int HashMap<K, V, H>::size() const {
+	return n;
+}
+template <typename K, typename V, typename H>
+bool HashMap<K, V, H>::isEmpty() const {
+	return (n == 0);
+}
+template <typename K, typename V, typename H>
+typename HashMap<K, V, H>::Node& HashMap<K, V, H>::Iterator::operator*() const{
+	return *bucketPosition;
 }
 
 template <typename K, typename V, typename H>
-bool HashMap<K, V, H>::Iterator::operator==(const Iterator& p) const {
-	if (ba != p.ba || bkt != p.bkt) return false; // ba or bkt differ?
-	else if (bkt == ba->end()) return true; // both at the end?
-	else return (ent == p.ent); // else use entry to decide
+void HashMap<K, V, H>::nextNode(Iterator& p) {
+	++p.bucketPosition;
+}
+
+template <typename K, typename V, typename H>
+bool HashMap<K, V, H>::Iterator::operator==(const Iterator& operand) {
+	if (list != operand.list || bucketPosition != operand.bucketPosition)
+		return false;
+	else if (arrayPosition == list->end()) 
+		return true;
+	else 
+		return (arrayPosition == operand.arrayPosition);
+}
+
+template <typename K, typename V, typename H>
+bool HashMap<K, V, H>::endOfBucket(const Iterator& p) {
+	return (p.bucketPosition == p.arrayPosition->end());
 }
 
 template <typename K, typename V, typename H>
 typename HashMap<K, V, H>::Iterator& HashMap<K, V, H>::Iterator::operator++() {
-	++ent; // next entry in bucket
-	if (endOfBkt(*this)) { // at end of bucket?
-		++bkt; // go to next bucket
-		while (bkt != ba->end() && bkt->empty()) // find nonempty bucket
-			++bkt;
-		if (bkt == ba->end()) return *this; // end of bucket array?
-		ent = bkt->begin(); // first nonempty entry
+	++bucketPosition;	//go to next bucket
+	if (endOfBucket(*this)) {	//if end is reached
+		++arrayPosition; //move to next bucket
+		while (arrayPosition != list.end() && arrayPosition->empty())
+			++arrayPosition;	//traverse untill finde nonempty bucket
+		if (arrayPosition != list->end())
+			bucketPosition = arrayPosition->begin();
+		return *this;
 	}
-	return *this; // return self
-}
-
-template <typename K, typename V, typename H>
-typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::end()
-{
-	return Iterator(B, B.end());
+	return *this;
 }
 
 template <typename K, typename V, typename H>
 typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::begin() {
-	if (empty()) return end(); // emtpty - return end
-	BItor bkt = B.begin(); // else search for an entry
-	while (bkt->empty()) ++bkt; // find nonempty bucket
-	return Iterator(B, bkt, bkt->begin()); // return first of bucket
-}
-
-template <typename K, typename V, typename H>
-HashMap<K, V, H>::HashMap(int capacity) : n(0), B(capacity) { }
-
-template <typename K, typename V, typename H>
-int HashMap<K, V, H>::size() const { return n; }
-
-template <typename K, typename V, typename H>
-bool HashMap<K, V, H>::empty() const { return size() == 0; }
-
-template <typename K, typename V, typename H>
-typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::finder(const K& k) {
-	int i = hash(k) % B.size(); // get hash index i
-	BItor bkt = B.begin() + i; // the ith bucket
-	Iterator p(B, bkt, bkt->begin()); // start of ith bucket
-	while (!endOfBkt(p) && (*p).getKey() != k) // search for k
-		nextEntry(p);
-	return p; // return final position
-}
-template <typename K, typename V, typename H>
-typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::find(const K& k) {
-	Iterator p = finder(k); // look for k
-	if (endOfBkt(p)) // didn’t find it?
-		return end(); // return end iterator
-	else
-		return p; // return its position
-}
-
-template <typename K, typename V, typename H>
-typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::inserter(const Iterator& p, const Entry& e) {
-	EItor ins = p.bkt->insert(p.ent, e); // insert before p
-	n++; // one more entry
-	return Iterator(B, p.bkt, ins); // return this position
-}
-
-template <typename K, typename V, typename H>
-typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::put(const K& k, const V& v) {
-	Iterator p = finder(k); // search for k
-	if (endOfBkt(p)) { // k not found?
-		return inserter(p, Entry(k, v)); // insert at end of bucket
+	if (!isEmpty()) {	//if list is empty
+		arrayIterator position = L.begin(); //set iterator to begining of list
+		while (position->empty())
+			++position;	//traverse untill bucket is non empty
+		return Iterator(L, position, position->begin());	//return iterator to first node in that bucket
 	}
-	else { // found it?
-		p.ent->setValue(v); // replace value with v
-		return p; // return this position
-	}
+	return end();	//return end of the list
 }
 
 template <typename K, typename V, typename H>
-void HashMap<K, V, H>::eraser(const Iterator& p) {
-	p.bkt->erase(p.ent); // remove entry from bucket
-	n--; // one fewer entry
+typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::end() {
+	return Iterator(L, L.end());
 }
 
 template <typename K, typename V, typename H>
-void HashMap<K, V, H>::erase(const Iterator& p)
-{
-	eraser(p);
+typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::finder(const K& key) {
+	int indice = hash(key) % L.size();	//get indice of arrat
+	arrayIterator aItor = L.begin() + indice;	//position on indice in array
+	Iterator p(L, aItor, aItor->begin());	//create iterator on list indice with bucket position to firsst item in bucket
+	while ((*p).getKey() != key || endOfBucket(p))
+		nextNode(p); //traverse iterators's bucket iterator
+	return p; //return that p
 }
 
 template <typename K, typename V, typename H>
-void HashMap<K, V, H>::erase(const K& k) {
-	Iterator p = finder(k); // find k
-	if (endOfBkt(p)) { // not found?
-		std::cout << "error";
-		return;
-	}
-	eraser(p); // remove it
+typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::find(const K& key) {
+	Iterator position = finder(position);
+	if (!endOfBucket(position)) //if there is no souch ke
+		return position;
+	return end();	//go one after end
 }

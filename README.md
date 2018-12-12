@@ -145,6 +145,14 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Priority Queue Heap</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueueHeap.cpp</td>
   </tr>
+  <tr>
+    <td>HashMap using separate chaining</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/separateChaining</td>
+  </tr>
+   <tr>
+    <td>HashMap using linear probing</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/linearProbing</td>
+  </tr>
 </table>
 
 

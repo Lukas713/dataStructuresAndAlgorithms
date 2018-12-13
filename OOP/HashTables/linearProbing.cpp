@@ -22,12 +22,17 @@ class HashMap {
 	struct Node {
 		K key;
 		V value;
-		Node(const K& k = K(), const V& v = V())
-			:key(k), value(v) {}
-		void setValue(const V& v) { value = v;  };
-		void setKey(const K& k) { key = k;  };
-		K getKey() { return key;  };
-		V getValue() { return value;  }
+		bool available;	//flag 
+
+		Node(const K& k = K(), const V& v = V(), bool a = true)	//flag is true at construct as default
+			:key(k), value(v), available(a) {}
+		void setValue(const V& v);
+		void setKey(const K& k);
+		K getKey();
+		V getValue();
+		bool isAvailable();	//checks flag
+	private:
+		void changeStatus();	//change flag bool
 	};
 	typedef typename Node Node; 
 	typedef typename std::vector<Node> List; 
@@ -56,13 +61,11 @@ public:
 	Iterator find(const K& key); 
 	Iterator begin(); 
 	Iterator end(); 
-	bool endOfArray(const Iterator& p) {
-		return (p.node == p.list->end()); 
-	}
 private:
 	/*utility methods*/
 	Iterator finder(const K& key);
-	Iterator inserter(const Iterator& p, const Node& n); 
+	Iterator inserter(const Iterator& p, const Node& n);
+	bool endOfArray(const Iterator& p) const;
 
 
 	/*HashMap properties*/
@@ -78,6 +81,8 @@ int main()
 	HashMap<std::string, int, Hash<std::string>>::Iterator p = a.begin(); 
 	 
 	 p = a.insert("d", 5); 
+	 p = a.insert("d", 13); 
+	 
 	 std::cout << (*p).getKey(); 
 	
 
@@ -128,6 +133,11 @@ bool HashMap<K, V, H>::Iterator::operator!=(const Iterator& p) const {
 	if (list != p.list)
 		return false;
 	return (node != p.node);
+}
+
+template <typename K, typename V, typename H>
+bool HashMap<K, V, H>::endOfArray(const Iterator& p) const {
+	return (p.node == p.list->end());
 }
 /*
 no param
@@ -208,17 +218,54 @@ return Iterator object
 template <typename K, typename V, typename H>
 typename HashMap<K, V, H>::Iterator HashMap<K, V, H>::insert(const K& key, const V& value) {
 	Iterator p = finder(key);
-		for (p.node; p.node != L.end(); ++p) {
-			if ((*p).getKey() == "")	//check flag, not string
-				return inserter(p, Node(key, value));
-			if ((*p).getKey() == key) {	//switch flag status
-				(*p).setValue(value);
-				return p;
-			}
-			if (p.node == (L.begin() + (L.size() - 1)))
-				p.node = L.begin(); 
+	for (p.node; p.node != L.end(); ++p) {
+		if (!(*p).isAvailable() && (*p).getKey() == key) {	//if key is reserved
+			(*p).setValue(value);
+			return p;
 		}
-		return p; 
+		if ((*p).isAvailable())	//if key is not reserved
+			return inserter(p, Node(key, value, false)); //construct unaviable node, insert it in the list and return Iterator object
+
+		if (p.node == (L.begin() + (L.size() - 1)))
+			p.node = L.begin(); 
+	}
+	return p; 
 }
+/*
+		void setValue(const V& v) { value = v;  };
+		void setKey(const K& k) { key = k;  };
+		K getKey() { return key;  };
+		V getValue() { return value;  }
+		bool isAvailable() { return available;  }
+	private:
+		void changeStatus() {
+			available = false;
+		}
+*/
+template <typename K, typename V, typename H>
+void HashMap<K, V, H>::Node::setValue(const V& v) {
+	this->value = v; 
+}
+template <typename K, typename V, typename H>
+void HashMap<K, V, H>::Node::setKey(const K& k) {
+	this->key = k;
+}
+template <typename K, typename V, typename H>
+V HashMap<K, V, H>::Node::getValue() {
+	return value; 
+}
+template <typename K, typename V, typename H>
+K HashMap<K, V, H>::Node::getKey() {
+	return key;
+}
+template <typename K, typename V, typename H>
+bool HashMap<K, V, H>::Node::isAvailable() {
+	return available;
+}
+template <typename K, typename V, typename H>
+void HashMap<K, V, H>::Node::changeStatus() {
+	available = !available;
+}
+
 
 

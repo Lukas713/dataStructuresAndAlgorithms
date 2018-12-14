@@ -40,8 +40,9 @@ class HashMap {
 		K getKey();
 		V getValue();
 		bool isAvailable();	//checks flag
-	private:
 		void changeStatus();	//change flag bool
+	private:
+		
 	};
 	typedef typename Node Node; 
 	typedef typename std::vector<Node> List; 
@@ -84,15 +85,17 @@ public:
 	bool isEmpty() const; 
 	iterator insert(const K& key, const V& value);
 	iterator find(const K& key);
-	const_iterator cbegin() const;
-	const_iterator cend() const;
+	iterator erase(const K& key); 
 	iterator begin();
 	iterator end();
+	const_iterator cbegin() const;
+	const_iterator cend() const;
 private:
 	/*utility methods*/
 	iterator finder(const K& key);
-	iterator inserter(const iterator& p, const Node& n);
-	bool endOfArray(const iterator& p) const;
+	iterator inserter(const iterator& position, const Node& n);
+	iterator eraser(iterator& position);
+	bool endOfArray(const iterator& position) const;
 
 
 	/*HashMap properties*/
@@ -102,11 +105,44 @@ private:
 	EqualKeys<K> testKeys; 
 };
 
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::erase(const K& key) {
+	//get indice
+
+	int i = hash(key) % L.size(); 
+	for (i; i < L.size(); (i + 1) % L.size()) {
+		if (!testKeys(L[i].getKey(), key) || L[i].isAvailable()) {	//search untill key is valid
+			continue; 
+		}	
+		iterator p(L, L.begin() + i); 
+		L[i].changeStatus(); 
+		return eraser(p); 
+	}
+	//if indice is out of bounds
+	return end(); 
+}
+
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::eraser(iterator& p) {
+	--n;
+	return iterator(L, L.erase(p.node));
+}
+
 int main()
 {
 	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>> a; 
-	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>>::const_iterator f = a.cbegin();
-	
+	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>>::iterator ca; 
+	a.insert("a", 3); 
+	a.insert("b", 4); 
+	a.insert("c", 5); 
+	a.insert("c", 7); 
+	a.erase("z"); 
+	for (ca = a.begin(); ca != a.end(); ++ca) {
+		if ((*ca).isAvailable()) {
+			continue; 
+		}
+		std::cout << (*ca).getKey() << " : " << (*ca).getValue() << "\n"; 
+	}
 
 
 
@@ -273,7 +309,7 @@ return Iterator object
 */
 template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::end() {
-	return iterator(L, L.cend());
+	return iterator(L, L.end());
 }
 /*
 no param
@@ -282,7 +318,7 @@ return const_iterator object
 */
 template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::cend() const{
-	return const_iterator(L, L.end());
+	return const_iterator(L, L.cend());
 }
 /*
 1 param: K (const referance)
@@ -328,21 +364,19 @@ typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key,
 	iterator p = finder(key);
 	int i = hash(key) % L.size();
 
-	/*
-	upcoming solution for problem, If keys are different and assigned indice in uaviable
-	if (!testKeys((*p).getKey(), key) && !(*p).isAvailable()) {
-		(*p).setValue(value);
-		(*p).setKey(key);
-	}
-	*/
 	for ( i ; i < L.size(); ((i + 1) % L.size())) {
-		if (!(*p).isAvailable() && testKeys((*p).getKey(), key)) {	//if key is reserved
+		if (!L[i].isAvailable() && testKeys(L[i].getKey(), key)) {
+			iterator p(L, L.begin() + i); 
 			(*p).setValue(value);
 			return p;
 		}
-		if ((*p).isAvailable())	//if key is not reserved
-			return inserter(p, Node(key, value, false)); //construct unaviable node, insert it in the list and return Iterator object
-	}  
+		if (L[i].isAvailable()) {
+			iterator p(L, L.begin() + i);
+			return inserter(p, Node(key, value, false));
+		}
+	} 
+	//if i is above size
+	return end(); 
 }
 /*
 Node methods declaration

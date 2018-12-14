@@ -46,12 +46,13 @@ class HashMap {
 	typedef typename Node Node; 
 	typedef typename std::vector<Node> List; 
 	typedef typename List::iterator ListIterator; 
+	typedef typename List::const_iterator constListIterator; 
 public:
 	class iterator {
 	public:
 		iterator(const List& l = List(), const ListIterator& p = ListIterator())
-			:node(p), list(&l) {}
-		Node& operator*() const; 
+			:node(p), list(&l) {};
+		Node& operator*(); 
 		iterator& operator++();
 		iterator& operator++(int); 
 		bool operator==(const iterator& p) const;
@@ -61,6 +62,20 @@ public:
 		ListIterator node; 
 		const List* list; 
 	};
+	class const_iterator {
+		public:
+			const_iterator(const List& l = List(), constListIterator p = constListIterator())
+				:node(p), list(&l) {};
+		const Node& operator*() const; 
+		const_iterator& operator++();
+		const_iterator& operator++(int);
+		bool operator==(const const_iterator& p) const;
+		bool operator!=(const const_iterator& p) const;
+		friend class HashMap<K, V, H, E>;
+	private:
+		constListIterator node; 
+		const List* list;
+	};
 public:
 	/*public methods*/
 	HashMap(int capacity = 101)
@@ -69,6 +84,8 @@ public:
 	bool isEmpty() const; 
 	iterator insert(const K& key, const V& value);
 	iterator find(const K& key);
+	const_iterator begin() const;
+	const_iterator end() const;
 	iterator begin();
 	iterator end();
 private:
@@ -87,15 +104,9 @@ private:
 
 int main()
 {
+	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>> a; 
+	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>>::const_iterator f = a.begin();
 	
-	HashMap<std::string, int, Hash<std::string>, EqualKeys<std::string>> a; 
-	HashMap<std::string, int, Hash<std::string>, EqualKeys<std::string>>::iterator p;
-	
-	
-
-
-
-
 
 	return 0;
 }
@@ -130,6 +141,18 @@ bool HashMap<K, V, H, E>::iterator::operator==(const iterator& p) const {
 	return (node == p.node);
 }
 /*
+1 param: const_iterator(const referance)
+checks if list is diferent
+and equility of iterator's nodes
+return boolean
+*/
+template <typename K, typename V, typename H, typename E>
+bool HashMap<K, V, H, E>::const_iterator::operator==(const const_iterator& p) const {
+	if (list != p.list)
+		return false;
+	return (node == p.node);
+}
+/*
 1 param: iterator (const referance)
 check inequalit of two iterators
 checks inner list and node properties
@@ -137,6 +160,18 @@ return boolean
 */
 template <typename K, typename V, typename H, typename E>
 bool HashMap<K, V, H, E>::iterator::operator!=(const iterator& p) const {
+	if (list != p.list)
+		return false;
+	return (node != p.node);
+}
+/*
+1 param: iterator (const referance)
+check inequalit of two iterators
+checks inner list and node properties
+return boolean
+*/
+template <typename K, typename V, typename H, typename E>
+bool HashMap<K, V, H, E>::const_iterator::operator!=(const const_iterator& p) const {
 	if (list != p.list)
 		return false;
 	return (node != p.node);
@@ -157,6 +192,16 @@ typename HashMap<K, V, H, E>::iterator& HashMap<K, V, H, E>::iterator::operator+
 	return *this; 
 }
 /*
+no param
+move iterator to next node
+modify pre increment operator overload
+*/
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::const_iterator& HashMap<K, V, H, E>::const_iterator::operator++() {
+	++node;
+	return *this;
+}
+/*
 no param 
 move iteratr to next node
 modify post increment operator overload
@@ -169,12 +214,32 @@ typename HashMap<K, V, H, E>::iterator& HashMap<K, V, H, E>::iterator::operator+
 }
 /*
 no param
+move iteratr to next node
+modify post increment operator overload
+*/
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::const_iterator& HashMap<K, V, H, E>::const_iterator::operator++(int) {
+	auto temp = *this;
+	++(*this);
+	return temp;
+}
+/*
+no param
 access operator overload
 access to node iterator property
 */
 template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::Node& HashMap<K, V, H, E>::iterator::operator*() const{
+typename HashMap<K, V, H, E>::Node& HashMap<K, V, H, E>::iterator::operator*(){
 	return *node;
+}
+/*
+no param
+access operator overload
+access to node iterator property
+*/
+template <typename K, typename V, typename H, typename E>
+typename const HashMap<K, V, H, E>::Node& HashMap<K, V, H, E>::const_iterator::operator*() const {
+	return *node; 
 }
 /*
 no param
@@ -187,12 +252,30 @@ typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::begin() {
 }
 /*
 no param
+construct const_Iterator with node pointer as property to begining of list
+return const_iterator object
+*/
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::begin() const{
+	return const_iterator(L, L.begin());
+}
+/*
+no param
 construct Iterator with node pointer as property to element after last 
 return Iterator object
 */
 template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::end() {
 	return iterator(L, L.end());
+}
+/*
+no param
+construct const_iterator with node pointer as property to element after last
+return const_iterator object
+*/
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::end() const{
+	return const_iterator(L, L.end());
 }
 /*
 1 param: K (const referance)

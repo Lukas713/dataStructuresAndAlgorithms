@@ -73,7 +73,7 @@ public:
 		bool operator!=(const const_iterator& p) const;
 		friend class HashMap<K, V, H, E>;
 	private:
-		constListIterator node; 
+		constListIterator node;
 		const List* list;
 	};
 public:
@@ -84,8 +84,8 @@ public:
 	bool isEmpty() const; 
 	iterator insert(const K& key, const V& value);
 	iterator find(const K& key);
-	const_iterator begin() const;
-	const_iterator end() const;
+	const_iterator cbegin() const;
+	const_iterator cend() const;
 	iterator begin();
 	iterator end();
 private:
@@ -105,8 +105,15 @@ private:
 int main()
 {
 	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>> a; 
-	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>>::const_iterator f = a.begin();
+	HashMap <std::string, int, Hash<std::string>, EqualKeys<std::string>>::const_iterator f = a.cbegin();
 	
+
+
+
+
+
+
+
 
 	return 0;
 }
@@ -239,7 +246,7 @@ access to node iterator property
 */
 template <typename K, typename V, typename H, typename E>
 typename const HashMap<K, V, H, E>::Node& HashMap<K, V, H, E>::const_iterator::operator*() const {
-	return *node; 
+	return *node;
 }
 /*
 no param
@@ -256,8 +263,8 @@ construct const_Iterator with node pointer as property to begining of list
 return const_iterator object
 */
 template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::begin() const{
-	return const_iterator(L, L.begin());
+typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::cbegin() const{
+	return const_iterator(L, L.cbegin());
 }
 /*
 no param
@@ -266,7 +273,7 @@ return Iterator object
 */
 template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::end() {
-	return iterator(L, L.end());
+	return iterator(L, L.cend());
 }
 /*
 no param
@@ -274,7 +281,7 @@ construct const_iterator with node pointer as property to element after last
 return const_iterator object
 */
 template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::end() const{
+typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::cend() const{
 	return const_iterator(L, L.end());
 }
 /*
@@ -364,6 +371,3 @@ template <typename K, typename V, typename H, typename E>
 void HashMap<K, V, H, E>::Node::changeStatus() {
 	available = !available;
 }
-
-
-

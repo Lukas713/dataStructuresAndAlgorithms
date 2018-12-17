@@ -35,14 +35,13 @@ class HashMap {
 
 		Node(const K& k = K(), const V& v = V(), bool a = true)	//flag is true at construct as default
 			:key(k), value(v), available(a) {}
+		Node(const Node& x); 
 		void setValue(const V& v);
 		void setKey(const K& k);
 		K getKey();
 		V getValue();
 		bool isAvailable();	//checks flag
 		void changeStatus();	//change flag bool
-	private:
-		
 	};
 	typedef typename Node Node; 
 	typedef typename std::vector<Node> List; 
@@ -52,7 +51,9 @@ public:
 	class iterator {
 	public:
 		iterator(const List& l = List(), const ListIterator& p = ListIterator())
-			:node(p), list(&l) {};
+			:node(p), list(&l) {}
+		iterator(const iterator& p)
+			:node(p.node), list(p.list) {}
 		Node& operator*(); 
 		iterator& operator++();
 		iterator& operator++(int); 
@@ -63,20 +64,7 @@ public:
 		ListIterator node; 
 		const List* list; 
 	};
-	class const_iterator {
-		public:
-			const_iterator(const List& l = List(), constListIterator p = constListIterator())
-				:node(p), list(&l) {};
-		const Node& operator*() const; 
-		const_iterator& operator++();
-		const_iterator& operator++(int);
-		bool operator==(const const_iterator& p) const;
-		bool operator!=(const const_iterator& p) const;
-		friend class HashMap<K, V, H, E>;
-	private:
-		constListIterator node;
-		const List* list;
-	};
+
 public:
 	/*public methods*/
 	HashMap(int capacity = 101)
@@ -85,17 +73,20 @@ public:
 	bool isEmpty() const; 
 	iterator insert(const K& key, const V& value);
 	iterator find(const K& key);
-	iterator erase(const K& key); 
+	void erase(const K& key); 
 	iterator begin();
 	iterator end();
-	const_iterator cbegin() const;
-	const_iterator cend() const;
+	void display() {	//print whole table
+		for (int i = 0; i < L.size(); i++) {
+			std::cout << i + 1 << ". " << L[i].getKey() << " : " << L[i].getValue() << " : " << L[i].available << " \n"; 
+		}
+	}
 private:
 	/*utility methods*/
 	iterator finder(const K& key);
-	iterator inserter(const iterator& position, const Node& n);
-	iterator eraser(iterator& position);
+	void eraser(iterator& position);
 	bool endOfArray(const iterator& position) const;
+	void resize(int capacity);
 
 
 	/*HashMap properties*/
@@ -105,28 +96,6 @@ private:
 	EqualKeys<K> testKeys; 
 };
 
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::erase(const K& key) {
-	//get indice
-
-	int i = hash(key) % L.size(); 
-	for (i; i < L.size(); (i + 1) % L.size()) {
-		if (!testKeys(L[i].getKey(), key) || L[i].isAvailable()) {	//search untill key is valid
-			continue; 
-		}	
-		iterator p(L, L.begin() + i); 
-		L[i].changeStatus(); 
-		return eraser(p); 
-	}
-	//if indice is out of bounds
-	return end(); 
-}
-
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::eraser(iterator& p) {
-	--n;
-	return iterator(L, L.erase(p.node));
-}
 
 int main()
 {
@@ -136,14 +105,17 @@ int main()
 	a.insert("b", 4); 
 	a.insert("c", 5); 
 	a.insert("c", 7); 
-	a.erase("z"); 
-	for (ca = a.begin(); ca != a.end(); ++ca) {
-		if ((*ca).isAvailable()) {
-			continue; 
-		}
-		std::cout << (*ca).getKey() << " : " << (*ca).getValue() << "\n"; 
-	}
+	a.erase("b"); 
+	a.erase("a"); 
+	a.insert("a", 5);
+	a.insert("a", 6); 
+	a.insert("jk", 81); 
+	a.insert("c", 991); 
 
+	
+	a.display(); 
+
+	
 
 
 
@@ -183,18 +155,7 @@ bool HashMap<K, V, H, E>::iterator::operator==(const iterator& p) const {
 		return false;
 	return (node == p.node);
 }
-/*
-1 param: const_iterator(const referance)
-checks if list is diferent
-and equility of iterator's nodes
-return boolean
-*/
-template <typename K, typename V, typename H, typename E>
-bool HashMap<K, V, H, E>::const_iterator::operator==(const const_iterator& p) const {
-	if (list != p.list)
-		return false;
-	return (node == p.node);
-}
+
 /*
 1 param: iterator (const referance)
 check inequalit of two iterators
@@ -203,18 +164,6 @@ return boolean
 */
 template <typename K, typename V, typename H, typename E>
 bool HashMap<K, V, H, E>::iterator::operator!=(const iterator& p) const {
-	if (list != p.list)
-		return false;
-	return (node != p.node);
-}
-/*
-1 param: iterator (const referance)
-check inequalit of two iterators
-checks inner list and node properties
-return boolean
-*/
-template <typename K, typename V, typename H, typename E>
-bool HashMap<K, V, H, E>::const_iterator::operator!=(const const_iterator& p) const {
 	if (list != p.list)
 		return false;
 	return (node != p.node);
@@ -234,16 +183,7 @@ typename HashMap<K, V, H, E>::iterator& HashMap<K, V, H, E>::iterator::operator+
 	++node;
 	return *this; 
 }
-/*
-no param
-move iterator to next node
-modify pre increment operator overload
-*/
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::const_iterator& HashMap<K, V, H, E>::const_iterator::operator++() {
-	++node;
-	return *this;
-}
+
 /*
 no param 
 move iteratr to next node
@@ -255,17 +195,7 @@ typename HashMap<K, V, H, E>::iterator& HashMap<K, V, H, E>::iterator::operator+
 	++(*this); 
 	return temp; 
 }
-/*
-no param
-move iteratr to next node
-modify post increment operator overload
-*/
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::const_iterator& HashMap<K, V, H, E>::const_iterator::operator++(int) {
-	auto temp = *this;
-	++(*this);
-	return temp;
-}
+
 /*
 no param
 access operator overload
@@ -275,15 +205,7 @@ template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::Node& HashMap<K, V, H, E>::iterator::operator*(){
 	return *node;
 }
-/*
-no param
-access operator overload
-access to node iterator property
-*/
-template <typename K, typename V, typename H, typename E>
-typename const HashMap<K, V, H, E>::Node& HashMap<K, V, H, E>::const_iterator::operator*() const {
-	return *node;
-}
+
 /*
 no param
 construct Iterator with node pointer as property to begining of list
@@ -293,15 +215,7 @@ template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::begin() {
 	return iterator(L, L.begin());
 }
-/*
-no param
-construct const_Iterator with node pointer as property to begining of list
-return const_iterator object
-*/
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::cbegin() const{
-	return const_iterator(L, L.cbegin());
-}
+
 /*
 no param
 construct Iterator with node pointer as property to element after last 
@@ -311,27 +225,52 @@ template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::end() {
 	return iterator(L, L.end());
 }
+
+
 /*
-no param
-construct const_iterator with node pointer as property to element after last
-return const_iterator object
+2 params: key nad value (constant references)
+construct iterator and inserts new node
+return iterator object
 */
 template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::const_iterator HashMap<K, V, H, E>::cend() const{
-	return const_iterator(L, L.cend());
+typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key, const V& value) {
+	if (n > (L.size() / 2)) {	//if half of vector is full
+		resize(L.size() * 2);
+	}
+	
+	int i = hash(key) % L.size();
+	for ( i ; i < L.size(); ((i + 1) % size())) {
+		if (!L[i].isAvailable() && testKeys(L[i].getKey(), key)) { //node with key and value is already inserted
+			iterator p(L, L.begin() + i); 
+			(*p).setValue(value);
+			return p;
+		}
+		if (L[i].isAvailable()) {	//find spot that is available
+			Node temp = Node(key, value, false); 
+			L[i] = temp; 
+			iterator p(L, L.begin() + i);
+			n++; 
+			return p;
+		}
+	} 
+	return end(); 
 }
 /*
-1 param: K (const referance)
-invoke finder()
-checks if key exists
-return Iterator object
+1 param: int
+dinamic alocation of new HashMap
+inserts elements from first array into second one
+no return value
 */
 template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::find(const K& key) {
-	iterator p = finder(key);
-	if (!endOfArray(p)); 
-		return p;
-	return end();
+void HashMap<K, V, H, E>::resize(int capacity) {
+	HashMap* newHashMap = new HashMap(capacity);
+
+	for (int i = 0; i < n; i++) {
+		if (L[i].isAvailable())
+			continue;
+		newHashMap->insert(L[i].getKey(), L[i].getValue());
+	}
+	newHashMap->n = n;
 }
 /*
 1 param: K (const referance)
@@ -344,40 +283,63 @@ typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::finder(const K& key)
 	int indice = hash(key) % L.size();
 	ListIterator node = L.begin() + indice;
 	iterator p(L, node);
-	return p;
+	for (p; !(*p).isAvailable(); ++p) {
+		if ((*p).getKey() != key)
+			continue;
+		return p;
+	}
+	return end();
 }
-/*
-2 params: iterator and node
-inserts element at 
-*/
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::inserter(const iterator& p, const Node& x) {
-	return iterator(L, L.insert(p.node, x));
-}
-/*
-2 params: key nad value (constant references)
-construct iterator and inserts new node
-return Iterator object
-*/
-template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key, const V& value) {
-	iterator p = finder(key);
-	int i = hash(key) % L.size();
 
-	for ( i ; i < L.size(); ((i + 1) % L.size())) {
-		if (!L[i].isAvailable() && testKeys(L[i].getKey(), key)) {
-			iterator p(L, L.begin() + i); 
-			(*p).setValue(value);
-			return p;
-		}
-		if (L[i].isAvailable()) {
-			iterator p(L, L.begin() + i);
-			return inserter(p, Node(key, value, false));
-		}
-	} 
-	//if i is above size
-	return end(); 
+template <typename K, typename V, typename H, typename E>
+typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::find(const K& key) {
+	iterator p = finder(key);
+	if (!endOfArray(p)) {
+		return p;
+	}
+	std::cout << "\nNo element\n";
+	return end();
 }
+
+/*
+1 param: key const referance
+if no in array, error occur
+no return value
+*/
+template <typename K, typename V, typename H, typename E>
+void HashMap<K, V, H, E>::erase(const K& key) {
+	iterator p = finder(key);
+	if (!endOfArray(p)) {
+		return eraser(p);
+	}
+	std::cout << "Element not found \n";
+}
+/*
+1 param: iterator position
+erase element
+reinserts rest of cluster
+no return value
+*/
+template <typename K, typename V, typename H, typename E>
+void HashMap<K, V, H, E>::eraser(iterator& position) {
+	iterator p(position);	//create iterator on position 
+	++p;	//move to next node
+	*position.node = Node(); //reconstruct node at given position
+	while (!(*p).isAvailable()) {	//while next node's are in cluster
+		K key = (*p).getKey();	//take values
+		V value = (*p).getValue();
+		iterator temp(p); //construct temporary iterator
+		++p; //move to next one
+		*temp.node = Node(); //reconstruct temporary
+		n--;
+		insert(key, value); //insert node with values
+	}
+	n--;
+	if (n > 0 && n <= (L.size() / 8)) {
+		resize(L.size() / 2);
+	}
+}
+
 /*
 Node methods declaration
 */
@@ -405,3 +367,8 @@ template <typename K, typename V, typename H, typename E>
 void HashMap<K, V, H, E>::Node::changeStatus() {
 	available = !available;
 }
+
+template <typename K, typename V, typename H, typename E>
+HashMap<K, V, H, E>::Node::Node(const Node& x)
+	: value(x.value), key(x.key), available(x.available) {}
+

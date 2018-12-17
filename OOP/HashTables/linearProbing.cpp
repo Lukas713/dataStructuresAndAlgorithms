@@ -4,7 +4,6 @@
 #include <list>
 #include <map>
 #include <vector>
-#include <unordered_map>
 
 
 template <typename K>
@@ -53,7 +52,6 @@ class HashMap {
 	typedef typename Node Node;
 	typedef typename std::vector<Node> List;
 	typedef typename List::iterator ListIterator;
-	typedef typename List::const_iterator constListIterator;
 public:
 	class iterator {
 	public:
@@ -76,6 +74,11 @@ public:
 	/*public methods*/
 	HashMap(int capacity = 101)
 		: L(capacity), n(0) {}
+	HashMap(const HashMap& x)
+		: n(x.n), L(std::move(x.L)) {}
+	HashMap(HashMap&& x)
+		: n(x.n), L(std::move(x.L)) {}
+	~HashMap(); 
 	int size() const;
 	bool isEmpty() const;
 	iterator insert(const K& key, const V& value);
@@ -102,31 +105,30 @@ private:
 	Hash<K> hash;
 	EqualKeys<K> testKeys;
 };
-
 /*find next prime number for resize()*/
 bool isPrime(int x);
 
 int nextPrime(int n);
 
-int prevPrime(int n); 
+int prevPrime(int n);
 
 int main()
 {
-	
+
 	
 	HashMap <int, int, Hash<int>, EqualKeys<int>> a;
 
 	for (int i = 0; i < 200; i++) {
 		if (a.size() == 51) {
-			std::cout << "da"; 
+			std::cout << "da";
 		}
 		a.insert(rand() % 1000, rand() % 100);
 
 	}
-
-	a.display(); 
-	std::cout << "\n" << a.size(); 
-
+	HashMap <int, int, Hash<int>, EqualKeys<int>> z(a);
+	
+	z.display(); 
+	
 
 	
 
@@ -134,11 +136,17 @@ int main()
 
 
 
-	
 
-	 
+
+
+
 
 	return 0;
+}
+template <typename K, typename V, typename H, typename E>
+HashMap<K, V, H, E>::~HashMap(){
+	L.clear(); 
+	n(0); 
 }
 /*
 no param
@@ -254,7 +262,7 @@ typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key,
 	}
 
 	int i = hash(key) % L.size();
-	for (i; i < L.size(); ((i += 1) % L.size())) {
+	for (i; i < L.size(); (i += 1) % L.size()) {
 		if (!L[i].isAvailable() && testKeys(L[i].getKey(), key)) { //node with key and value is already inserted
 			iterator p(L, L.begin() + i);
 			(*p).setValue(value);
@@ -278,7 +286,7 @@ no return value
 */
 template <typename K, typename V, typename H, typename E>
 void HashMap<K, V, H, E>::resize(int capacity) {
-	L.resize(capacity); 
+	L.resize(capacity);
 }
 /*
 1 param: K (const referance)
@@ -392,10 +400,10 @@ int nextPrime(int n) {
 }
 
 int prevPrime(int n) {
-	int x = n; 
+	int x = n;
 	while (!isPrime(--x));
 	if (x < 3) {
-		return n; 
+		return n;
 	}
 	return x;
 }

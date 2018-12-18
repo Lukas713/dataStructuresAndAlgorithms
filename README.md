@@ -153,9 +153,13 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>HashMap using linear probing</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/linearProbing.cpp</td>
   </tr>
-     <tr>
+   <tr>
     <td>HashMap using quadratic probing</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/quadraticProbing.cpp</td>
+  </tr>
+   <tr>
+    <td>HashMap using double hashing</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/doubleHashing.cpp</td>
   </tr>
 </table>
 

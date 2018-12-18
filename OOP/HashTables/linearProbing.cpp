@@ -78,7 +78,7 @@ public:
 		: n(x.n), L(std::move(x.L)) {}
 	HashMap(HashMap&& x)
 		: n(x.n), L(std::move(x.L)) {}
-	~HashMap(); 
+	~HashMap();
 	int size() const;
 	bool isEmpty() const;
 	iterator insert(const K& key, const V& value);
@@ -115,7 +115,7 @@ int prevPrime(int n);
 int main()
 {
 
-	
+
 	HashMap <int, int, Hash<int>, EqualKeys<int>> a;
 
 	for (int i = 0; i < 200; i++) {
@@ -126,11 +126,11 @@ int main()
 
 	}
 	HashMap <int, int, Hash<int>, EqualKeys<int>> z(a);
-	
-	z.display(); 
-	
 
-	
+	z.display();
+
+
+
 
 
 
@@ -144,9 +144,9 @@ int main()
 	return 0;
 }
 template <typename K, typename V, typename H, typename E>
-HashMap<K, V, H, E>::~HashMap(){
-	L.clear(); 
-	n(0); 
+HashMap<K, V, H, E>::~HashMap() {
+	L.clear();
+	n(0);
 }
 /*
 no param
@@ -352,7 +352,7 @@ void HashMap<K, V, H, E>::eraser(iterator& position) {
 	}
 	n--;
 	if (n > 0 && n <= (L.size() / 8)) {
-		resize(prevPrime(L.size()));
+		resize(prevPrime(L.size() * 2));	//next prime that is twice as large 
 	}
 }
 

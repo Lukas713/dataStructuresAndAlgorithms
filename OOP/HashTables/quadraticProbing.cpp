@@ -3,6 +3,13 @@
 #include <string>
 #include <vector>
 
+/*
+search : O(1)	- worst O(N)
+insert : O(1)	- worst O(N)
+delete : O(1)	- worst O(N)
+
+space : O(N)
+*/
 
 template <typename K>
 class Hash {
@@ -34,11 +41,11 @@ template <typename K, typename V, typename H, typename E>
 class HashTable {
 
 	enum Status { ACTIVE, DELETED, EMPTY };
-	
+
 	struct Node {
-		K key; 
-		V value; 
-		Status type; 
+		K key;
+		V value;
+		Status type;
 
 		Node(const K& k = K(), const V& val = V(), Status t = EMPTY)
 			: key(k), value(val), type(t) {}
@@ -47,24 +54,27 @@ class HashTable {
 	};
 public:
 	HashTable(int capacity = 101);
-	bool contains(const K& key) const; 
-	void clear(); 
+	HashTable(const HashTable& x); 
+	~HashTable(); 
+	bool contains(const K& key) const;
+	void clear();
 	void insert(const K& key, const V& value);
-	void remove(const K& key); 
+	void remove(const K& key);
+	void search(const K& key);
 	void display() {	//check hash table
 		for (int i = 0; i < elements; i++) {
-			std::cout << i + 1 << ". "<< List[i].key << " : " << List[i].value << "\n"; 
+			std::cout << i + 1 << ". " << List[i].key << " : " << List[i].value << "\n";
 		}
 	}
 private:
-	bool isActive(int currentPosition) const; 
+	bool isActive(int currentPosition) const;
 	int findPosition(const K& key);
 	void resize();
-	
-	int elements; 
+
+	int elements;
 	std::vector<Node> List;
-	Hash<K> hash; 
-	EqualKeys<K> areEqual; 
+	Hash<K> hash;
+	EqualKeys<K> areEqual;
 };
 
 
@@ -77,20 +87,20 @@ int nextPrime(int n);
 int main()
 {
 
-	HashTable<int, int, Hash<int>, EqualKeys<int>> a; 
-	
+	HashTable<int, int, Hash<int>, EqualKeys<int>> a;
+
 
 	for (int i = 0; i < 50; i++) {
-		a.insert(rand() % 100, i + 1); 
+		a.insert(rand() % 100, i + 1);
 	}
 
-	a.display(); 
+	a.search(35);
 
 
 
 
 
-	
+
 
 	return 0;
 }
@@ -102,6 +112,18 @@ init List
 template <typename K, typename V, typename H, typename E>
 HashTable<K, V, H, E>::HashTable(int capacity)
 	: List(capacity), elements(0) {}
+
+template <typename K, typename V, typename H, typename E>
+HashTable<K, V, H, E>::HashTable(const HashTable& x)
+	: elements(x.elements) {
+	List = std::move(x.List); 
+}
+
+template <typename K, typename V, typename H, typename E>
+HashTable<K, V, H, E>::~HashTable() {
+	clear();
+	elements = 0
+}
 /*
 no param
 check all nodes as empty
@@ -173,7 +195,6 @@ void HashTable<K, V, H, E>::insert(const K& key, const V& value) {
 			resize();
 		return;
 	}
-	std::cout << "Node is not empty.";
 }
 /*
 1 param: const referance to Key object
@@ -191,6 +212,16 @@ void HashTable<K, V, H, E>::remove(const K& key) {
 	}
 	List[currentPosition].type = DELETED;
 }
+/*
+1 param: const referance to Key object
+finds and cout Node info
+no return value
+*/
+template <typename K, typename V, typename H, typename E>
+void HashTable<K, V, H, E>::search(const K& key) {
+	int indice = findPosition(key);
+	std::cout << List[indice].key << " : " << List[indice].value;
+}
 
 /*
 no param
@@ -199,7 +230,7 @@ no return value
 */
 template <typename K, typename V, typename H, typename E>
 void HashTable<K, V, H, E>::resize() {
-	List.resize(nextPrime(List.size()));
+	List.resize(nextPrime(List.size() * 2));
 }
 
 bool isPrime(int x) {

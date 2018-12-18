@@ -81,7 +81,7 @@ private:
 	int elements;
 	std::vector<Node> List;
 	Hash<K> hash;
-	secondHash<K> secHash; 
+	secondHash<K> secHash;
 	EqualKeys<K> areEqual;
 };
 
@@ -98,16 +98,13 @@ int main()
 {
 
 	HashTable<int, int, Hash<int>, EqualKeys<int>> a;
-	for (int i = 0; i < 200; i++) {
-		if (i == 20) {
-			std::cout << "bugg"; 
-		}
-		a.insert(rand() % 100, rand() % 10); 
+	for (int i = 0; i < 500; i++) {
+		a.insert(rand() % 1000, rand() % 10);
 	}
 
-	a.display(); 
+	a.display();
 
-	
+
 
 
 
@@ -145,16 +142,17 @@ return int
 template <typename K, typename V, typename H, typename E>
 int HashTable<K, V, H, E>::findPosition(const K& key) {
 
-	int indice = hash(key) % List.size();
-	int i = 1; 
+	int indice = hash(key) % List.size();	//first h(x)
+	int i = 1;
 	while (List[indice].type != EMPTY && List[indice].key != key) {
-		indice = secHash(prevPrime(List.size()), indice) * i; /*DOUBLE HASH*/
-		i++; 
+		indice += secHash(prevPrime(List.size()), indice) * i; 
+		indice %= List.size();	// h(k, i) = (h1(x) + h2(x)*i) % size()  
+		i++;
 		if (indice < List.size())
-			continue; 
-		indice -= List.size(); 
+			continue;
+		indice -= List.size();
 	}
-	return indice; 
+	return indice;
 }
 /*
 1 param: const referance to Key object
@@ -234,7 +232,7 @@ template <typename K>
 unsigned int secondHash<K>::operator()(int prevPrime, int x) {
 	// R - (x % R) where R is prime number lower then table size
 	unsigned int hashValue = prevPrime - (x % prevPrime);
-	return hashValue; 
+	return hashValue;
 }
 
 bool isPrime(int x) {

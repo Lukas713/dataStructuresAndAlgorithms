@@ -161,6 +161,10 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>HashMap using double hashing</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/doubleHashing.cpp</td>
   </tr>
+     <tr>
+    <td>HashMap using cockoo hashing</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/doubleHashing.cpp</td>
+  </tr>
 </table>
 
 

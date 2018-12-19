@@ -180,6 +180,10 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Bubble sort</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/bubbleSort.cpp</td>
   </tr>
+    <tr>
+    <td>Binary search</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/binarySearch.cpp</td>
+  </tr>
 </table>
 
 

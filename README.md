@@ -15,7 +15,7 @@ Robert Sedgewick and Kevin Wayne<hr>
 <table>
 	<tr>
 		<th>Principle</th>
-		<th>Linked</th>
+		<th>Link</th>
 	</tr>
 	<tr>
 		<td>Basic matrix</td>
@@ -164,6 +164,21 @@ Robert Sedgewick and Kevin Wayne<hr>
      <tr>
     <td>HashMap using cockoo hashing</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/cockooHashing.cpp</td>
+  </tr>
+</table>
+<h3>Algorithms</h3>
+<table>
+  <tr>
+    <th>Algorithm</th>
+    <th>Link</th>
+  </tr>
+  <tr>
+    <td>Selection sort</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/selectionSort.cpp</td>
+  </tr>
+  <tr>
+    <td>Bubble sort</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/bubbleSort.cpp</td>
   </tr>
 </table>
 

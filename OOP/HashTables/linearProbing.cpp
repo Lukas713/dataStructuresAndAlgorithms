@@ -86,11 +86,7 @@ public:
 	void erase(const K& key);
 	iterator begin();
 	iterator end();
-	void display() {	//print whole table
-		for (int i = 0; i < L.size(); i++) {
-			std::cout << i + 1 << ". " << L[i].getKey() << " : " << L[i].getValue() << " : " << L[i].available << " \n";
-		}
-	}
+	void display();
 private:
 	/*utility methods*/
 	iterator finder(const K& key);
@@ -98,13 +94,13 @@ private:
 	bool endOfArray(const iterator& position) const;
 	void resize(int capacity);
 
-
 	/*HashMap properties*/
 	std::vector<Node> L;
 	int n;	//number of elements in the list
 	Hash<K> hash;
 	EqualKeys<K> testKeys;
 };
+
 /*find next prime number for resize()*/
 bool isPrime(int x);
 
@@ -118,16 +114,13 @@ int main()
 
 	HashMap <int, int, Hash<int>, EqualKeys<int>> a;
 
-	for (int i = 0; i < 200; i++) {
-		if (a.size() == 51) {
-			std::cout << "da";
-		}
-		a.insert(rand() % 1000, rand() % 100);
-
+	for (int i = 0; i < 10; i++) {
+		a.insert(rand() % 100, rand() % 100); 
 	}
-	HashMap <int, int, Hash<int>, EqualKeys<int>> z(a);
-
-	z.display();
+	
+	
+	
+	a.display(); 
 
 
 
@@ -145,8 +138,8 @@ int main()
 }
 template <typename K, typename V, typename H, typename E>
 HashMap<K, V, H, E>::~HashMap() {
-	L.clear();
-	n(0);
+	L.clear(); 
+	n = 0; 
 }
 /*
 no param
@@ -258,10 +251,10 @@ return iterator object
 template <typename K, typename V, typename H, typename E>
 typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key, const V& value) {
 	if (n > (L.size() / 2)) {	//if half of vector is full
-		resize(nextPrime(L.size()));
+		resize(nextPrime(L.size() * 2));	//set to next prime that is twice as big as last one
 	}
 
-	int i = hash(key) % L.size();
+	unsigned int i = hash(key) % L.size();
 	for (i; i < L.size(); (i += 1) % L.size()) {
 		if (!L[i].isAvailable() && testKeys(L[i].getKey(), key)) { //node with key and value is already inserted
 			iterator p(L, L.begin() + i);
@@ -352,7 +345,14 @@ void HashMap<K, V, H, E>::eraser(iterator& position) {
 	}
 	n--;
 	if (n > 0 && n <= (L.size() / 8)) {
-		resize(prevPrime(L.size() * 2));	//next prime that is twice as large 
+		resize(prevPrime(L.size()));	//next prime that is twice as large 
+	}
+}
+template <typename K, typename V, typename H, typename E>
+void HashMap<K, V, H, E>::display() {	//print whole table
+	for (unsigned int i = 0; i < L.size(); i++) {
+		if (!L[i].isAvailable())
+			std::cout << i + 1 << ". " << L[i].getKey() << " : " << L[i].getValue() << " \n";
 	}
 }
 

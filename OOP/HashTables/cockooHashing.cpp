@@ -6,7 +6,7 @@
 
 
 /*
-COCKOO HASHING 
+COCKOO HASHING
 
 insert : O(1)
 delete : O(1)
@@ -17,8 +17,8 @@ template <typename K>
 class HashOne {
 public:
 	size_t operator()(K key) {
-		std::hash<K> a; 
-		return a(key); 
+		std::hash<K> a;
+		return a(key);
 	}
 };
 
@@ -31,91 +31,108 @@ public:
 			hashValue = 37 * hashValue + ch;
 		return hashValue;
 	}
+
+	unsigned int operator()(unsigned int key) {
+		key = ((key >> 16) ^ key) * 0x45d9f3b;
+		key = ((key >> 16) ^ key) * 0x45d9f3b;
+		key = (key >> 16) ^ key;
+		return key;
+	}
 };
 
 template <typename K, typename V, typename H1, typename H2>
 class HashTable {
-	enum status { ACTIVE, DELETED, EMPTY }; 
+	enum status { ACTIVE, DELETED, EMPTY };
 
 	struct Node {
-		K key; 
-		V value; 
-		status current; 
+		K key;
+		V value;
+		status current;
 
-		Node( K k = K(), V val = V(), status c = EMPTY)
+		Node(K k = K(), V val = V(), status c = EMPTY)
 			:key(k), value(val), current(c) {}
 	};
 
 public:
 	HashTable(int capacity = 7)
 		:A(capacity), B(capacity), n(0) {}
-
-	void insert(K key, V value); 
-	void erase(K key); 
-	void display() {	/*checker*/
-		for (int i = 0; i < A.size(); i++) {
-			std::cout << i + 1 << ". " << A[i].key << " : " << A[i].value; 
-			std::cout << "\n"; 
-		}
-		std::cout << "\n"; 
-		for (int i = 0; i < B.size(); i++) {
-			std::cout << i + 1 << ". " << B[i].key << " : " << B[i].value;
-			std::cout << "\n";
-		}
-	}
+	~HashTable();
+	void insert(K key, V value);
+	void erase(K key);
+	void display();
+	int find(const K& key); 
 
 private:
-	int findPosition(const K& key); 
+
 	void rehash();
 
-	static const int MAX_LOOP = 5; 
-	HashOne<K> hashOne; 
+	static const int MAX_LOOP = 5;
+	HashOne<K> hashOne;
 	HashTwo<K> hashTwo;
-	std::vector<Node> A; 
-	std::vector<Node> B; 
-	int n; 
+	std::vector<Node> A;
+	std::vector<Node> B;
+	int n;
 };
 
+int nextPrime(int n);
 
-
+bool isPrime(int x);
 
 
 int main()
 {
- 
 
 
-	HashTable <std::string, int, HashOne<std::string>, HashTwo<std::string>> A; 
-	A.insert("a", 3); 
-	A.insert("x", 6); 
-	A.insert("b", 12); 
-	A.insert("c", 15); 
-	A.insert("s", 19); 
-	A.insert("r", 41); 
-	A.insert("n", 1); 
+	HashTable <int, int, HashOne<int>, HashTwo<int>> A;
+	for (int i = 0; i < 10; i++) {
+		A.insert(rand() % 100, rand() % 100); 
+	}
+
+
 	A.display(); 
-
-
 
 
 	return 0;
 }
 template <typename K, typename V, typename H1, typename H2>
-int HashTable<K, V, H1, H2>::findPosition(const K& key) {
-	unsigned int indice = hashOne(key) % A.size();
-	if (A[indice].current != EMPTY && A[indice].key != key) {
-		indice = hashTwo(key) % B.size();
+HashTable<K, V, H1, H2>::~HashTable() {
+	B.clear(); 
+	A.clear(); 
+}
+/*
+1 param: Key object
+check in first table
+check in second table
+return -1 if not found
+*/
+template <typename K, typename V, typename H1, typename H2>
+int HashTable<K, V, H1, H2>::find(const K& key) {
+	
+	unsigned int indice = hashOne(key) % A.size();	//indice within first table
+
+	if (A[indice].current != EMPTY && A[indice].key != key) {	//if keys are diferent
+
+		indice = hashTwo(key) % B.size();	//go to second table
 		if (B[indice].current != EMPTY && B[indice].key != key)
-			return -1;
+			return -1;	//return -1 if not found
+
+		std::cout << B[indice].key << " : " << B[indice].value; 
 		return indice;
 	}
+	std::cout << A[indice].key << " : " << A[indice].value;
 	return indice;
 }
-
+/*
+1 param: Key objet
+check in both tables
+delete if find
+no return value
+*/
 template <typename K, typename V, typename H1, typename H2>
 void HashTable<K, V, H1, H2>::erase(K key) {
 
 	if (A[hashOne(key) % A.size()].key != key) {
+
 		if (B[hashOne(key) % B.size()].key != key) {
 			std::cout << "ELEMENT NOT FOUND";
 			return;
@@ -128,39 +145,46 @@ void HashTable<K, V, H1, H2>::erase(K key) {
 
 template <typename K, typename V, typename H1, typename H2>
 void HashTable<K, V, H1, H2>::insert(K key, V value) {
-
 	int i = MAX_LOOP;
 	while (i > 0) {
-		if (A[hashOne(key) % A.size()].current == EMPTY) {
+		if (A[hashOne(key) % A.size()].current != ACTIVE) {	//if element in left side is empty
+			/*insert there and return*/
 			A[hashOne(key) % A.size()].key = key;
 			A[hashOne(key) % A.size()].value = value;
 			A[hashOne(key) % A.size()].current = ACTIVE;
 			return;
 		}
-		key = A[hashOne(key) % A.size()].key;
-		value = A[hashOne(key) % A.size()].value;
+		std::swap(key, A[hashOne(key) % A.size()].key);
+		std::swap(value, A[hashOne(key) % A.size()].value);
 
-		if (B[hashOne(key) % B.size()].current == EMPTY) {
+		if (B[hashOne(key) % B.size()].current != ACTIVE) {//if element in right side is empty
+			/*insert there and return*/
 			B[hashOne(key) % B.size()].key = key;
 			B[hashOne(key) % B.size()].value = value;
 			B[hashOne(key) % B.size()].current = ACTIVE;
 			return;
 		}
-		key = B[hashOne(key) % B.size()].key;
-		value = B[hashOne(key) % B.size()].value;
+		std::swap(key, B[hashOne(key) % B.size()].key);
+		std::swap(value, B[hashOne(key) % B.size()].value);
+
+		++n; --i; 
 	}
 	rehash();
 	insert(key, value);
 }
 
-bool isPrime(int x);
-
-int nextPrime(int n);
-
 template <typename K, typename V, typename H1, typename H2>
 void HashTable<K, V, H1, H2>::rehash() {
 	A.resize(nextPrime(A.size() * 2));
 	B.resize(nextPrime(B.size() * 2));
+}
+
+template <typename K, typename V, typename H1, typename H2>
+void HashTable<K, V, H1, H2>::display() {	/*display tables*/
+	for (int i = 0; i < A.size(); i++) {
+		std::cout << "\n" << A[i].key << " : " << A[i].value << "   |   " << B[i].key << " : " << B[i].value << "\n";
+	}
+
 }
 
 bool isPrime(int x) {

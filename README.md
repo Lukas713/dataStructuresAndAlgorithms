@@ -163,7 +163,7 @@ Robert Sedgewick and Kevin Wayne<hr>
   </tr>
      <tr>
     <td>HashMap using cockoo hashing</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/doubleHashing.cpp</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/cockooHashing.cpp</td>
   </tr>
 </table>
 

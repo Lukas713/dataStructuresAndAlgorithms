@@ -40,8 +40,8 @@ protected:
 public:
 	BinaryHeap();
 	BinaryHeap(const std::vector<E>& vector);
-	BinaryHeap(std::vector<E>&& vector); 
-	~BinaryHeap(); 
+	BinaryHeap(std::vector<E>&& vector);
+	~BinaryHeap();
 	int size() const;	//size of three
 	Position left(const Position& ofMine);	//return position on left child
 	Position right(const Position& ofMine);		//return position on right child
@@ -55,18 +55,18 @@ public:
 	void removeLast();	//remove element
 	void swap(const Position& p, const Position& q);	//swap node content
 };
- 
+
 
 /*priority queue implementation using heap*/
 template <typename E, typename K>
 class PriorityQueue {
 public:
 	PriorityQueue()
-		: V() {}; 
+		: V() {};
 	PriorityQueue(const std::vector<E>& vector)
-		: V(vector) {}; 
+		: V(vector) {};
 	PriorityQueue(std::vector<E>&& vector)
-		: V(vector) {}; 
+		: V(vector) {};
 	int size() const;	//invoke V.size()
 	bool isEmpty() const;	//compare size to 0
 	const E& minimum();		//invoke V.root() 
@@ -116,13 +116,13 @@ void findKthCompared(const std::vector<E>& field, int k);
 int main()
 {
 
-	std::vector<int> a = { 6, 4, 2, 1, 7, 9 }; 
-	findKthCompared<int, isLess<int>>(a, 4); 
+	std::vector<int> a = { 6, 4, 2, 1, 7, 9 };
+	findKthCompared<int, isLess<int>>(a, 4);
 
 
 
-	
-	
+
+
 
 
 
@@ -138,7 +138,7 @@ template <typename E>
 BinaryHeap<E>::BinaryHeap()
 	:V(1) {};
 /*
-1 param: 
+1 param:
 copy constructor
 creates vector with size() spots + 1 becouse 0 indice is unused
 fill it with argumented vector
@@ -154,8 +154,8 @@ BinaryHeap<E>::BinaryHeap(const std::vector<E>& vector)
 }
 /*
 1 param: rvalue vector
-constructor with rvalue 
-vector supports moving 
+constructor with rvalue
+vector supports moving
 */
 template <typename E>
 BinaryHeap<E>::BinaryHeap(std::vector<E>&& vector)
@@ -170,7 +170,7 @@ pops every element from vector
 */
 template <typename E>
 BinaryHeap<E>::~BinaryHeap() {
-	V.pop_back();
+	V.clear(); 
 }
 /*
 split vector on two halfs
@@ -186,7 +186,7 @@ void BinaryHeap<E>::bottomUpHeapConstruct() {
 1 param: heap indice
 creates hole in heap and sets temporary that holds indice's value
 checks if hole's child (hole * 2 && hole * 2 - 1) is lower then hole
-if it is, move child's value to hole and hole to childs place 
+if it is, move child's value to hole and hole to childs place
 if it is not, put temporary value in hole
 result is completed binary heap
 no return value

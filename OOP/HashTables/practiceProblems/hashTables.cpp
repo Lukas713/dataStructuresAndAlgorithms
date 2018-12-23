@@ -2,23 +2,18 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <map>
 
 /*
-1)
-	You have been given an integer array A and a number K.
-	Now, you need to find out whether any two different elements of the array A sum to the number K. 
-	Two elements are considered to be different if they lie at different positions in the array. 
-	If there exists such a pair of numbers, print "YES" (without quotes), else print "NO" without quotes.
-	
-	Input Format:
-	The first line consists of two integers N, denoting the size of array A and K.
-	The next line consists of N space separated integers denoting the elements of the array A.
-	
-	Output Format:
-	Print the required answer on a single line.
+1) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/pair-sums/
 */
 
 bool pairSum(int* field, int k, int size);
+
+/*
+2) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/frequency-of-students/
+*/
+void FrequencyofStudents(int n); 
 
 int main()
 {
@@ -49,10 +44,9 @@ bool pairSum(int* field, int k, int size) {
 	std::unordered_map<int, bool> a(size);
 
 	//insert elements into map
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < size; i++)
 		a.insert(std::make_pair(field[i], false));
-	}
-
+		
 	//traverse witin map, if finds missing operand, return true else continue
 	std::unordered_map<int, bool>::iterator p;
 	for (p = a.begin(); p != a.end(); ++p) {
@@ -63,4 +57,32 @@ bool pairSum(int* field, int k, int size) {
 	}
 	std::cout << "No";
 	return false;
+}
+/*
+@param int
+1) ceates map
+2) inserts string names as keys with int values
+3) if finds name, increment integer value by one 
+	else insert element
+4) display map wit iterator
+*/
+void FrequencyofStudents(int n) {
+
+	std::map<std::string, int> map; 
+	std::map<std::string, int>::iterator p; 
+	std::string name; 
+
+	for (int i = 0; i < n; ++i) {
+		std::cout << "enter name: "; 
+		std::cin >> name; 
+		if (map.find(name) != map.end()) {
+			p = map.find(name); 
+			p->second += 1; 
+			continue; 
+		}
+		map.insert(std::pair<std::string, int>(name, 1)); 
+	}
+
+	for (p = map.begin(); p != map.end(); ++p) 
+		std::cout << p->first << " : " << p->second << "\n"; 
 }

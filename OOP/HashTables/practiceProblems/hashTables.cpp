@@ -7,13 +7,19 @@
 /*
 1) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/pair-sums/
 */
-
 bool pairSum(int* field, int k, int size);
 
 /*
 2) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/frequency-of-students/
 */
-void FrequencyofStudents(int n); 
+void FrequencyofStudents(int n);
+
+/*
+3) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/notebook-pages-dbad75a5/
+*/ 
+void SimilarChocolates(int n);
+
+int numberOfDivisors(int x);
 
 int main()
 {
@@ -85,4 +91,32 @@ void FrequencyofStudents(int n) {
 
 	for (p = map.begin(); p != map.end(); ++p) 
 		std::cout << p->first << " : " << p->second << "\n"; 
+}
+/*
+@param int
+create's hash table
+fill it with numbers as key and divisors as value
+display table
+*/
+void SimilarChocolates(int n) {
+
+	std::unordered_map<int, int> map;
+	int x;
+
+	for (int i = 0; i < n; i++) {
+		std::cin >> x;
+		map.insert(std::make_pair(x, numberOfDivisors(x)));
+	}
+
+	std::unordered_map<int, int>::iterator p;
+	for (p = map.begin(); p != map.end(); ++p)
+		std::cout << "\n" << (*p).first << " : " << (*p).second;
+}
+int numberOfDivisors(int x) {
+	int n = 0;
+	for (int i = 1; i <= x; i++) {
+		if (x % i == 0)
+		n++;
+	}
+	return n;
 }

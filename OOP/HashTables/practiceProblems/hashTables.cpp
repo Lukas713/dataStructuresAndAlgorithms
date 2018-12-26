@@ -21,6 +21,13 @@ void SimilarChocolates(int n);
 
 int numberOfDivisors(int x);
 
+/*
+4) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/cricket-balls/
+*/
+void cricketBalls(int testCases, int k);
+
+
+
 int main()
 {
 	
@@ -119,4 +126,34 @@ int numberOfDivisors(int x) {
 		n++;
 	}
 	return n;
+}
+void cricketBalls(int testCases, int k) {
+
+	int counter = 0;
+
+	while (testCases > 0) {
+
+		int n; 
+		
+
+		std::cout << "Enter number of boxes "; 
+		std::cin >> n; 
+		std::unordered_map<int, bool> map(n); 
+		std::unordered_map<int, bool>::iterator p; 
+
+		for (int i = 0; i < n; i++) {
+
+			int x; 
+
+			std::cin >> x; 
+			
+			p = map.find(k - x); 
+			if (map.find(k - x) != map.end()) {
+				counter++; 
+			}
+			map.insert(std::make_pair(x, false)); 
+		}
+		std::cout << counter; 
+		--testCases;
+	}
 }

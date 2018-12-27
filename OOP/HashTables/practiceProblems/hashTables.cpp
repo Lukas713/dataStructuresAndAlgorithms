@@ -127,12 +127,16 @@ int numberOfDivisors(int x) {
 	}
 	return n;
 }
+/*
+2 @params: integers
+open test case, create's map and iterator
+user inserts element into map, if there is equal complement, increment counter by one 
+*/
 void cricketBalls(int testCases, int k) {
 
-	int counter = 0;
-
 	while (testCases > 0) {
-
+		
+		int counter = 0;	
 		int n; 
 		
 
@@ -142,15 +146,13 @@ void cricketBalls(int testCases, int k) {
 		std::unordered_map<int, bool>::iterator p; 
 
 		for (int i = 0; i < n; i++) {
-
 			int x; 
 
 			std::cin >> x; 
-			
 			p = map.find(k - x); 
-			if (map.find(k - x) != map.end()) {
+			
+			if (map.find(k - x) != map.end())
 				counter++; 
-			}
 			map.insert(std::make_pair(x, false)); 
 		}
 		std::cout << counter; 

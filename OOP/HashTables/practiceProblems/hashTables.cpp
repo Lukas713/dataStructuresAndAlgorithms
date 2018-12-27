@@ -31,6 +31,10 @@ void cricketBalls(int testCases, int k);
 */
 void allVowels(int n);
 
+/*
+6) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/n-co-ordinates-map-practice/
+*/
+void NCoCOrdinates(int n);
 
 int main()
 {
@@ -189,4 +193,34 @@ void allVowels(int n) {
 		return; 
 	}
 	std::cout << "YES"; 
+}
+
+/*
+@param integer
+n times insert coordinates (x, y)
+creates map and inserts coordinates into map with key as pair 
+and value as number of ocurences
+print table
+no return value
+*/
+void NCoCOrdinates(int n) {
+
+	std::map<std::pair<int, int>, int> map;
+
+	for (int i = 0; i < n; ++i) {
+
+		int x, y;
+		std::cin >> x;
+		std::cin >> y;
+
+		if (map.find(std::make_pair(x, y)) != map.end()) {
+			(*map.find(std::make_pair(x, y))).second += 1;
+			continue;
+		}
+		map.insert(std::make_pair(std::make_pair(x, y), 1)); //creates pair of pairs of int's and int
+	}
+
+	std::map<std::pair<int, int>, int>::iterator p;
+	for (p = map.begin(); p != map.end(); ++p)
+		std::cout << p->first.first << " " << p->first.second << " " << p->second << "\n";
 }

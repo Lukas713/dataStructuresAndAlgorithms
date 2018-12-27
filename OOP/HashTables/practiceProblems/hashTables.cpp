@@ -26,6 +26,10 @@ int numberOfDivisors(int x);
 */
 void cricketBalls(int testCases, int k);
 
+/*
+5) https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/practice-problems/algorithm/all-vowels-2/
+*/
+void allVowels(int n);
 
 
 int main()
@@ -158,4 +162,31 @@ void cricketBalls(int testCases, int k) {
 		std::cout << counter; 
 		--testCases;
 	}
+}
+/*
+@param : integer
+cout YES if string contains all vowels
+NO otherwise
+no return value
+*/
+void allVowels(int n) {
+	std::string word; 
+	std::cin >> word; 
+	std::unordered_map<char, int> map; 
+
+	for (char a : word) {
+		if (a == 'a' || a == 'e' || a == 'i' || a == 'o' || a == 'u') {
+			if (map.find(a) != map.end()) {
+				(*map.find(a)).second += 1; 
+				continue; 
+			}
+			map.insert(std::make_pair(a, 1)); 
+		}
+	}
+
+	if (map.size() < 5) {
+		std::cout << "NO"; 
+		return; 
+	}
+	std::cout << "YES"; 
 }

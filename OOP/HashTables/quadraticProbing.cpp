@@ -54,17 +54,18 @@ class HashTable {
 	};
 public:
 	HashTable(int capacity = 101);
-	HashTable(const HashTable& x); 
-	~HashTable(); 
+	HashTable(const HashTable& x);
+	~HashTable();
 	bool contains(const K& key) const;
 	void clear();
 	void insert(const K& key, const V& value);
 	void remove(const K& key);
 	void search(const K& key);
 	void display() {	//check hash table
-		for (int i = 0; i < elements; i++) {
+		for (int i = 0; i < elements; i++)
 			std::cout << i + 1 << ". " << List[i].key << " : " << List[i].value << "\n";
-		}
+
+		std::cout << "colisions: " << colisions << "\n"; 
 	}
 private:
 	bool isActive(int currentPosition) const;
@@ -75,6 +76,7 @@ private:
 	std::vector<Node> List;
 	Hash<K> hash;
 	EqualKeys<K> areEqual;
+	int colisions; 
 };
 
 
@@ -94,7 +96,7 @@ int main()
 		a.insert(rand() % 100, i + 1);
 	}
 
-	a.search(35);
+	a.display(); 
 
 
 
@@ -111,18 +113,18 @@ init List
 */
 template <typename K, typename V, typename H, typename E>
 HashTable<K, V, H, E>::HashTable(int capacity)
-	: List(capacity), elements(0) {}
+	: List(capacity), elements(0), colisions(0) {}
 
 template <typename K, typename V, typename H, typename E>
 HashTable<K, V, H, E>::HashTable(const HashTable& x)
 	: elements(x.elements) {
-	List = std::move(x.List); 
+	List = std::move(x.List);
 }
 
 template <typename K, typename V, typename H, typename E>
 HashTable<K, V, H, E>::~HashTable() {
 	clear();
-	elements = 0
+	elements = 0;
 }
 /*
 no param
@@ -132,7 +134,7 @@ no return value
 template <typename K, typename V, typename H, typename E>
 void HashTable<K, V, H, E>::clear() {
 	for (auto& node : List)
-		node.status = EMPTY;
+		node.type = EMPTY;
 	elements = 0;
 }
 
@@ -148,6 +150,7 @@ int HashTable<K, V, H, E>::findPosition(const K& key) {
 	int indice = hash(key) % List.size();
 	/* search while List indice is not EMPTY and while keys are not the same */
 	while (List[indice].type != EMPTY && List[indice].key != key) {
+		++colisions; 
 		/* quadratic resolution: f(i) = f(i - 1) + 2i - 1*/
 		indice += offset;
 		offset += 2;

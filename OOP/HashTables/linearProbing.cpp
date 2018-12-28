@@ -73,11 +73,11 @@ public:
 public:
 	/*public methods*/
 	HashMap(int capacity = 101)
-		: L(capacity), n(0) {}
+		: L(capacity), n(0), colisions(0) {}
 	HashMap(const HashMap& x)
-		: n(x.n), L(std::move(x.L)) {}
+		: n(x.n), L(std::move(x.L)), colisions(0) {}
 	HashMap(HashMap&& x)
-		: n(x.n), L(std::move(x.L)) {}
+		: n(x.n), L(std::move(x.L)), colisions(0) {}
 	~HashMap();
 	int size() const;
 	bool isEmpty() const;
@@ -99,6 +99,7 @@ private:
 	int n;	//number of elements in the list
 	Hash<K> hash;
 	EqualKeys<K> testKeys;
+	int colisions; 
 };
 
 /*find next prime number for resize()*/
@@ -114,13 +115,13 @@ int main()
 
 	HashMap <int, int, Hash<int>, EqualKeys<int>> a;
 
-	for (int i = 0; i < 10; i++) {
-		a.insert(rand() % 100, rand() % 100); 
+	for (int i = 0; i < 100; i++) {
+		a.insert(rand() % 100, rand() % 100);
 	}
-	
-	
-	
-	a.display(); 
+
+
+
+	a.display();
 
 
 
@@ -138,8 +139,8 @@ int main()
 }
 template <typename K, typename V, typename H, typename E>
 HashMap<K, V, H, E>::~HashMap() {
-	L.clear(); 
-	n = 0; 
+	L.clear();
+	n = 0;
 }
 /*
 no param
@@ -249,12 +250,16 @@ construct iterator and inserts new node
 return iterator object
 */
 template <typename K, typename V, typename H, typename E>
-typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key, const V& value) {
+typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key, const V& value) { 
 	if (n > (L.size() / 2)) {	//if half of vector is full
 		resize(nextPrime(L.size() * 2));	//set to next prime that is twice as big as last one
 	}
 
 	unsigned int i = hash(key) % L.size();
+	if (!L[i].isAvailable() && !testKeys(L[i].getKey(), key)) {
+		++colisions; 
+	}
+
 	for (i; i < L.size(); (i += 1) % L.size()) {
 		if (!L[i].isAvailable() && testKeys(L[i].getKey(), key)) { //node with key and value is already inserted
 			iterator p(L, L.begin() + i);
@@ -269,6 +274,7 @@ typename HashMap<K, V, H, E>::iterator HashMap<K, V, H, E>::insert(const K& key,
 			return p;
 		}
 	}
+	 
 	return end();
 }
 /*
@@ -354,6 +360,8 @@ void HashMap<K, V, H, E>::display() {	//print whole table
 		if (!L[i].isAvailable())
 			std::cout << i + 1 << ". " << L[i].getKey() << " : " << L[i].getValue() << " \n";
 	}
+
+	std::cout << "colisions: " << colisions << "\n"; 
 }
 
 /*
@@ -407,3 +415,4 @@ int prevPrime(int n) {
 	}
 	return x;
 }
+

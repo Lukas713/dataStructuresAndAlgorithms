@@ -82,10 +82,10 @@ public:
 public:
 	Entry(const K& k = K(), const V& v = V())
 		:key(k), value(v) {}
-	const K& getKey() { return key;  }
-	const V& getValue() { return value;  }
+	const K& getKey() { return key; }
+	const V& getValue() { return value; }
 	void setKey(const K& k) { key = k; }
-	void setValue(const V& v) { value = v;  }
+	void setValue(const V& v) { value = v; }
 private:
 	K key;
 	V value;
@@ -94,54 +94,76 @@ private:
 template <typename E>
 class SearchTree {
 public:
-	typedef typename E::Key K; 
-	typedef typename E::Value V; 
-	class Iterator; 
+	typedef typename E::Key K;
+	typedef typename E::Value V;
+	class Iterator;
 public:
-	SearchTree(); 
-	int size() const; 
-	bool isEmpty() const; 
-	Iterator find(const K& key); 
-	Iterator insert(const K& key, const V& value); 
-	void erase(const K& key); 
-	void erase(const Iterator& p); 
-	Iterator begin(); 
-	Iterator end(); 
+	SearchTree();
+	int size() const;
+	bool isEmpty() const;
+	Iterator find(const K& key);
+	Iterator insert(const K& key, const V& value);
+	void erase(const K& key);
+	void erase(const Iterator& p);
+	Iterator begin();
+	Iterator end();
 protected:
 	/*utilityes*/
-	typedef BinaryTree<E> BinaryTree; 
-	typedef typename BinaryTree::Position TreePosition; 
-	TreePosition root() const; 
-	TreePosition finder(const K& key, const V& value); 
-	TreePosition inserter(const K& key, const V& value); 
+	typedef BinaryTree<E> BinaryTree;
+	typedef typename BinaryTree::Position TreePosition;
+	TreePosition root() const;
+	TreePosition finder(const K& key, const TreePosition& p);
+	TreePosition inserter(const K& key, const V& value);
 	TreePosition eraser(TreePosition& p);
-	TreePosition restructure(const TreePosition& p); 
+	TreePosition restructure(const TreePosition& p);
 private:
-	BinaryTree T; 
-	int n; 
+	BinaryTree T;
+	int n;
 public:
 	class Iterator {
 	private:
-		TreePosition p; 
+		TreePosition p;
 	public:
 		Iterator(const TreePosition& v)
 			: p(v) {}
-		const E& operator*() const { return *p;  }
-		E& operator*() { return *p;  }
-		bool operator==(const Iterator& other) const { return p == other.p;  }
-		Iterator& operator++(); 
-		friend class SearchTree; 
+		const E& operator*() const { return *p; }
+		E& operator*() { return *p; }
+		bool operator==(const Iterator& other) const { return p == other.p; }
+		Iterator& operator++();
+		friend class SearchTree<E>;
 	};
 };
 
+template <typename E>
+typename SearchTree<E>::Iterator SearchTree<E>::find(const K& key) {
+	TreePosition p = finder(key, root()); //BinaryTree::Position
+	if (!p.isExternal())	//if its external node
+		return Iterator(p); 
+	return end(); //return super root 
+}
+
+template <typename E>
+typename SearchTree<E>::TreePosition SearchTree<E>::finder(const K& key, const TreePosition& p) {
+	if (p.isExternal()) {
+		return p; 
+	}
+	if (key < p.getKey())
+		return finder(key, p.left());
+
+	else if (key > p.getKey())
+		return finder(key, p.right()); 
+
+	else 
+		return p; 
+}
 
 
 
 int main()
 {
 
-	BinaryTree<int> a; 
-	
+	BinaryTree<int> a;
+
 
 
 
@@ -617,7 +639,7 @@ increment position at inorder succesor
 */
 template <typename E>
 typename SearchTree<E>::Iterator& SearchTree<E>::Iterator::operator++() {
-	TreePosition w = p.right();	
+	TreePosition w = p.right();
 
 	if (!w.isExternal()) {
 		do {
@@ -647,3 +669,5 @@ typename SearchTree<E>::Iterator SearchTree<E>::begin() {
 		p = p.left();
 	return Iterator(p.parent()); //return parent of unused leaf node
 }
+
+

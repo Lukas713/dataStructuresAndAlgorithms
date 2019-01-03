@@ -137,6 +137,10 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Binary search tree</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
   </tr>
+    <tr>
+    <td>AVL tree</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/treeAVL.cpp</td>
+  </tr>
   <tr>
     <td>Priority Queue List</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueueList.cpp</td>

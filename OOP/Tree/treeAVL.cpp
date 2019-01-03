@@ -26,6 +26,9 @@ public:
 	void insert(const K& key, const V& value); 
 	void remove(const K& key); 
 	bool contains(const K& key) const;
+	void getSize() {
+		std::cout << n;
+	}
 
 private:
 	/*utility methods*/
@@ -41,6 +44,7 @@ private:
 	int height(Node* spot) const;
 
 
+
 	static const int ALOWED_IMBALANCE = 1; 
 	Node* root; 
 	int n; 
@@ -52,9 +56,14 @@ int main()
 
 	
 	Tree<int, int> A; 
-	for (int i = 0; i < 100; i++) {
-		A.insert(rand() % 100, i + 1); 
+	for (int i = 0; i < 105; ++i) {
+		A.insert(i + 1, i + 1); 
 	}
+
+
+	 A.getSize(); 
+
+	
 
 
 
@@ -78,7 +87,7 @@ void Tree<K, V>::remove(const K& key) {
 
 template <typename K, typename V>
 bool Tree<K, V>::contains(const K& key) const {
-	contains(key, root);
+	return contains(key, root);
 }
 /*
 @params: key, value, node
@@ -87,16 +96,15 @@ inserts new Node
 */
 template <typename K, typename V>
 void Tree<K, V>::insert(const K& key, const V& value, Node*& spot) {
-	if (spot != nullptr) {
-		if (key > spot->key)
-			insert(key, value, spot->right);
-		else if (key < spot->key)
-			insert(key, value, spot->left);
-		else
-			return;
+	if (spot == nullptr) {
+		++n;
+		spot = new Node(key, value, nullptr, nullptr);
 	}
-	++n; 
-	spot = new Node(key, value, nullptr, nullptr);
+	else if (key > spot->key)
+		insert(key, value, spot->right);
+	else if (key < spot->key)
+		insert(key, value, spot->left); 
+			
 	balance(spot); 
 }
 /*
@@ -177,6 +185,7 @@ void Tree<K, V>::balance(Node*& spot) {
 					doubleWithRightChild(spot);
 			}
 		}
+		spot->height = std::max(height(spot->left), height(spot->right)) + 1; 
 	}
 }
 

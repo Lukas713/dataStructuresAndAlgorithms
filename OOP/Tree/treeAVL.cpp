@@ -18,9 +18,7 @@ class Tree {
 
 		Node(const K& k, const V& val, Node* lft, Node* rgt, int h = 0)
 			:key(k), value(val), left(lft), right(rgt), height(h) {}
-		int getHeight(Node* spot) const {
-			return (spot == nullptr) ? -1 : spot->height; 
-		}
+
 	};
 
 public:
@@ -34,14 +32,13 @@ private:
 	void insert(const K& key, const V& value, Node*& spot); 
 	void remove(const K& key, Node*& spot); 
 	bool contains(const K& key, Node* root) const; 
-	Node* findMin(Node*& root) const; 
-	void balance(Node*& spot) {
-		if (spot == nullptr) {
-			return; 
-		}
-
-		
-	}
+	Node* findMin(Node*& root) const;
+	void rotateWithLeftChild(Node*& spot); 
+	void rotateWithRightChild(Node*& spot);
+	void doubleWithLeftChild(Node*& spot); 
+	void doubleWithRightChild(Node*& spot); 
+	void balance(Node*& spot);
+	int height(Node* spot) const;
 
 
 	static const int ALOWED_IMBALANCE = 1; 
@@ -50,20 +47,14 @@ private:
 };
 
 
-
-
-
-
-
-
 int main()
 {
 
 	
 	Tree<int, int> A; 
-	A.insert(1, 2); 
-	A.insert(5, 1); 
-	A.remove(5); 
+	for (int i = 0; i < 100; i++) {
+		A.insert(rand() % 100, i + 1); 
+	}
 
 
 
@@ -152,6 +143,7 @@ void Tree<K, V>::remove(const K& key, Node*& spot) {
 		delete oldNode;
 	}
 
+	balance(spot); 
 }
 
 template <typename K, typename V>
@@ -160,4 +152,92 @@ typename Tree<K, V>::Node* Tree<K, V>::findMin(Node*& spot) const {
 		return spot;
 	}
 	return findMin(spot->left);
+}
+
+/*
+@param: referance to Node pointer
+cheks where is violation
+calls propertly rotation method
+no return value
+*/
+template <typename K, typename V>
+void Tree<K, V>::balance(Node*& spot) {
+	if (spot != nullptr) {
+		if (height(spot->left) - height(spot->right) > ALOWED_IMBALANCE) { //if violation is on left child
+			if (height(spot->left->left) >= height(spot->left->right))	//left-left violation
+				rotateWithLeftChild(spot);
+			else  //left-right violation
+				doubleWithLeftChild(spot);
+		}
+		else {
+			if (height(spot->right) - height(spot->left) > ALOWED_IMBALANCE) { //if violation is on right child	
+				if (height(spot->right->right) >= height(spot->right->left))//right-right violation
+					rotateWithRightChild(spot);
+				else  //right-left violation
+					doubleWithRightChild(spot);
+			}
+		}
+	}
+}
+
+/*
+@param: pointer to Node
+return -1 if spot is nullptr and return height if not
+return int
+*/
+template <typename K, typename V>
+int Tree<K, V>::height(Node* spot) const {
+	return (spot == nullptr) ? -1 : spot->height;
+}
+/*
+@param referance to Node pointer
+creates Node and rotates it with root node
+root node's left becomes temps right
+temp's right becomes root node
+*/
+template <typename K, typename V>
+void Tree<K, V>::rotateWithLeftChild(Node*& spot) {
+	Node* temp = spot->left;
+	spot->left = temp->right;
+	temp->right = spot;
+	spot->height = std::max(height(spot->left), height(spot->right)) + 1;
+	temp->height = std::max(height(temp->left), height(spot)) + 1;
+	spot = temp;
+}
+/*
+@param referance to Node pointer
+creates Node and rotates it with root node
+root node's right becomes temps left
+temp's left becomes root node
+*/
+template <typename K, typename V>
+void Tree<K, V>::rotateWithRightChild(Node*& spot) {
+	Node* temp = spot->right;
+	spot->right = temp->left;
+	temp->left = spot;
+	spot->height = std::max(height(spot->right), height(spot->left)) + 1;
+	temp->height = std::max(height(temp->right), height(spot)) + 1;
+	spot = temp;
+}
+/*
+@param: referance to Node pointer
+first right rotation 
+then left rotation
+no return value
+*/
+template <typename K, typename V>
+void Tree<K, V>::doubleWithLeftChild(Node*& spot) {
+	rotateWithRightChild(spot->left); 
+	rotateWithLeftChild(spot); 
+}
+/*
+@param: referance to Node pointer
+first left rotation
+then right rotation
+no return value
+*/
+template <typename K, typename V>
+void Tree<K, V>::doubleWithRightChild(Node*& spot) {
+	rotateWithLeftChild(spot->right); 
+	rotateWithRightChild(spot); 
 }

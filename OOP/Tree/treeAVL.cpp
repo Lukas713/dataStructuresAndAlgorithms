@@ -9,11 +9,11 @@
 template <typename K, typename V>
 class Tree {
 	struct Node {
-		K key; 
-		V value; 
-		int height; 
+		K key;
+		V value;
+		int height;
 
-		Node* left; 
+		Node* left;
 		Node* right;
 
 		Node(const K& k, const V& val, Node* lft, Node* rgt, int h = 0)
@@ -23,47 +23,47 @@ class Tree {
 
 public:
 	Tree();
-	void insert(const K& key, const V& value); 
-	void remove(const K& key); 
+	void insert(const K& key, const V& value);
+	void remove(const K& key);
 	bool contains(const K& key) const;
-	void getSize() {
-		std::cout << n;
+	void preorder() {
+		preorder(root); 
 	}
 
 private:
 	/*utility methods*/
-	void insert(const K& key, const V& value, Node*& spot); 
-	void remove(const K& key, Node*& spot); 
-	bool contains(const K& key, Node* root) const; 
+	void insert(const K& key, const V& value, Node*& spot);
+	void remove(const K& key, Node*& spot);
+	bool contains(const K& key, Node* root) const;
 	Node* findMin(Node*& root) const;
-	void rotateWithLeftChild(Node*& spot); 
+	void rotateWithLeftChild(Node*& spot);
 	void rotateWithRightChild(Node*& spot);
-	void doubleWithLeftChild(Node*& spot); 
-	void doubleWithRightChild(Node*& spot); 
+	void doubleWithLeftChild(Node*& spot);
+	void doubleWithRightChild(Node*& spot);
 	void balance(Node*& spot);
 	int height(Node* spot) const;
+	void preorder(Node* root);
 
 
 
-	static const int ALOWED_IMBALANCE = 1; 
-	Node* root; 
-	int n; 
+	static const int ALOWED_IMBALANCE = 1;
+	Node* root;
+	int n;
 };
+
 
 
 int main()
 {
 
-	
-	Tree<int, int> A; 
-	for (int i = 0; i < 105; ++i) {
-		A.insert(i + 1, i + 1); 
-	}
 
-
-	 A.getSize(); 
-
-	
+	Tree<int, int> A;
+	A.insert(9, 1);
+	A.insert(7, 3); 
+	A.insert(5, 6); 
+	A.insert(1, 34); 
+	A.insert(2, 0); 
+	A.preorder(); 
 
 
 
@@ -103,9 +103,9 @@ void Tree<K, V>::insert(const K& key, const V& value, Node*& spot) {
 	else if (key > spot->key)
 		insert(key, value, spot->right);
 	else if (key < spot->key)
-		insert(key, value, spot->left); 
-			
-	balance(spot); 
+		insert(key, value, spot->left);
+
+	balance(spot);
 }
 /*
 @params: key, node
@@ -134,31 +134,33 @@ remove minimum from subtree
 */
 template <typename K, typename V>
 void Tree<K, V>::remove(const K& key, Node*& spot) {
-	if (spot == nullptr) {
+	if (spot == nullptr) 
 		return;
-	}
+	
 	if (spot->key < key)
 		remove(key, spot->right);
+
 	else if (spot->key > key)
 		remove(key, spot->left);
+
 	else if (spot->left != nullptr && spot->right != nullptr) {
 		spot->value = findMin(spot->right)->value;
 		remove(spot->value, spot->right);
 	}
+
 	else {
 		Node* oldNode = spot;
 		spot = (spot->left != nullptr) ? spot->right : spot->left;
 		delete oldNode;
 	}
-
-	balance(spot); 
+	balance(spot);
 }
 
 template <typename K, typename V>
 typename Tree<K, V>::Node* Tree<K, V>::findMin(Node*& spot) const {
-	if (spot->left == nullptr) {
+	if (spot->left == nullptr) 
 		return spot;
-	}
+	
 	return findMin(spot->left);
 }
 
@@ -185,7 +187,7 @@ void Tree<K, V>::balance(Node*& spot) {
 					doubleWithRightChild(spot);
 			}
 		}
-		spot->height = std::max(height(spot->left), height(spot->right)) + 1; 
+		spot->height = std::max(height(spot->left), height(spot->right)) + 1;
 	}
 }
 
@@ -230,14 +232,14 @@ void Tree<K, V>::rotateWithRightChild(Node*& spot) {
 }
 /*
 @param: referance to Node pointer
-first right rotation 
+first right rotation
 then left rotation
 no return value
 */
 template <typename K, typename V>
 void Tree<K, V>::doubleWithLeftChild(Node*& spot) {
-	rotateWithRightChild(spot->left); 
-	rotateWithLeftChild(spot); 
+	rotateWithRightChild(spot->left);
+	rotateWithLeftChild(spot);
 }
 /*
 @param: referance to Node pointer
@@ -247,6 +249,20 @@ no return value
 */
 template <typename K, typename V>
 void Tree<K, V>::doubleWithRightChild(Node*& spot) {
-	rotateWithLeftChild(spot->right); 
-	rotateWithRightChild(spot); 
+	rotateWithLeftChild(spot->right);
+	rotateWithRightChild(spot);
+}
+/*
+@param: root node
+preorder traversal
+traverses root first, then next node's
+no return value
+*/
+template <typename K, typename V>
+void Tree<K, V>::preorder(Node* p) {
+	if (p == nullptr)
+		return;
+	std::cout << p->key << " : " << p->value << "\n";
+	preorder(p->left);
+	preorder(p->right);
 }

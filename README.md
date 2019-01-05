@@ -193,6 +193,16 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Binary search</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/binarySearch.cpp</td>
   </tr>
+    </tr>
+    <tr>
+    <td>Quick sort</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/quickSort.cpp</td>
+  </tr>
+      </tr>
+    <tr>
+    <td>Merge sort</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/mergeSort.cpp</td>
+  </tr>
 </table>
 
 

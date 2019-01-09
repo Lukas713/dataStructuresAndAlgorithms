@@ -5,11 +5,12 @@
 #include <list>
 #include <unordered_map>
 
-template <typename T>
+
+template <typename T>	//generic data type
 class Graph {
 
 public:
-	Graph(int n = 10)
+	Graph(int n = 10)	//default constructor
 		:Vertices(n) {}
 
 	void addVertice(T data); 
@@ -17,7 +18,7 @@ public:
 	void print(); 
 
 private:
-	std::unordered_map<T, std::list<T>> Vertices; 
+	std::unordered_map<T, std::list<T>> Vertices; 	//map with T value as key and list as adjacency list
 };
 
 template <typename T>
@@ -60,24 +61,25 @@ int main()
 }
 template <typename T>
 void Graph<T>::addVertice(T data) {
+	//dont allow duplicate vertice's
 	if (Vertices.find(data) != Vertices.end()) {
 		throw std::runtime_error("Vertice already exists");
 		return;
 	}
-
+	//create new list, insert argument into map as key and  new adjacency list as data value
 	std::list<T> adjList;
 	Vertices.insert(std::make_pair(data, adjList));
 }
 
 template <typename T>
 void Graph<T>::addEdge(T from, T to) {
-
+	//check if there is origin and destination verices
 	if (Vertices.find(from) != Vertices.end() && Vertices.find(to) != Vertices.end()) {
-
-		typename std::unordered_map<T, std::list<T>>::iterator p;
-		p = Vertices.find(from);
-		p->second.push_back(to);
+		
+		typename std::unordered_map<T, std::list<T>>::iterator p;	//create pointer
+		p = Vertices.find(from);	//find position where to push new edge
+		p->second.push_back(to);	//push destination edge into adjacency list
 		return;
 	}
-	throw std::runtime_error("Origin or destination does not eists");
+	throw std::runtime_error("Origin or destination does not eists");	//error if one of arguments does not exists
 }

@@ -2,66 +2,82 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 #include <unordered_map>
 
-
-
-
+template <typename T>
 class Graph {
-	class Vertex {
-		std::vector<std::string> adjList; 
-	public:
-		Vertex(int size = 10)
-			:adjList(size) {}
-		friend class Graph;
-	};
+
 public:
 	Graph(int n = 10)
-		:Vertices(n), size(n) {}
-	void addEdge(std::string origin, std::string destination); 
-	void addVertice(std::string); 
+		:Vertices(n) {}
+
+	void addVertice(T data); 
+	void addEdge(T origin, T destination); 
+	void print(); 
 
 private:
-	std::unordered_map<std::string, Vertex> Vertices; //every position has list of vertices that connects with ith vertice
-	int size; 
+	std::unordered_map<T, std::list<T>> Vertices; 
 };
 
+template <typename T>
+void Graph<T>::print() {
+	
+	typename std::unordered_map<T, std::list<T>>::iterator p; 
+	typename std::list<T>::iterator t;
 
-
-
-void Graph::addEdge(std::string origin, std::string dest) {
-	if (Vertices.find(origin) != Vertices.end()) {
-		std::unordered_map<std::string, Vertex>::iterator p = Vertices.find(origin); 
-		p->second.adjList.push_back(dest); 
-		return; 
+	for (p = Vertices.begin(); p != Vertices.end(); ++p) {
+		std::cout << (*p).first << ": "; 
+		
+		for (t = (*p).second.begin(); t != (*p).second.end(); ++t)
+			std::cout << *t << "--->"; 
+		std::cout << "null \n";
 	}
-	std::cout << "No souch vertice"; 
 }
-
-void Graph::addVertice(std::string key){
-	if (Vertices.find(key) != Vertices.end()) {
-		std::cout << "Vertice already exists \n"; 
-		return; 
-	}
-	Vertex newVertex(size*(size - 1)); 
-	Vertices.insert(std::make_pair(key, newVertex)); 
-}
-
 
 
 int main()
 {
+	
+ 
+	Graph<int> A; 
+	A.addVertice(5); 
+	A.addVertice(4);
+	A.addVertice(3);
+	A.addVertice(2);
+	A.addVertice(1);
+	A.addEdge(5, 1); 
+	A.addEdge(5, 2); 
+	A.addEdge(5, 3); 
+	A.addEdge(1, 5); 
+	A.addEdge(1, 4); 
+	A.print(); 
 
-	Graph A; 
-	A.addVertice("lukas"); 
-	A.addVertice("lea"); 
-	A.addVertice("dubravka");
-	A.addVertice("goranka"); 
-	
-	
 
 
 
 	return 0;
 }
+template <typename T>
+void Graph<T>::addVertice(T data) {
+	if (Vertices.find(data) != Vertices.end()) {
+		throw std::runtime_error("Vertice already exists");
+		return;
+	}
 
+	std::list<T> adjList;
+	Vertices.insert(std::make_pair(data, adjList));
+}
+
+template <typename T>
+void Graph<T>::addEdge(T from, T to) {
+
+	if (Vertices.find(from) != Vertices.end() && Vertices.find(to) != Vertices.end()) {
+
+		typename std::unordered_map<T, std::list<T>>::iterator p;
+		p = Vertices.find(from);
+		p->second.push_back(to);
+		return;
+	}
+	throw std::runtime_error("Origin or destination does not eists");
+}

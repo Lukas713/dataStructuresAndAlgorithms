@@ -2,55 +2,104 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <list>
 #include <unordered_map>
+#include <queue>
 
 
 template <typename T>	//generic data type
 class Graph {
 
+	struct Vertex {
+		T destination; 
+
+		Vertex(const T& value)
+			: destination(value) {}
+		T getDestination() { return destination; }
+	};
+
 public:
 	Graph(int n = 10)	//default constructor
-		:Vertices(n), adjListSize(n*(n-1)) {}
+		:Vertices(n), adjListSize(n*(n - 1)) {}
 
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination);
 	void print();
+	void topSort(); 
 
 private:
-	std::unordered_map<T, std::vector<T>> Vertices; 	//map with T value as key and list as adjacency list 
-	int adjListSize; 
+	void topSort(std::unordered_map<T, int> map); 
+
+	std::unordered_map<T, std::vector<Vertex*>> Vertices; 	//map with T value as key and list as adjacency list
+	std::unordered_map<T, int> Box; //box that holds indegree of every vertice
+
+	int adjListSize;
 };
+template <typename T>
+void Graph<T>::topSort() {
+	topSort(Box); 
+}
+
+template <typename T>
+void Graph<T>::topSort(std::unordered_map<T, int> box) {
+	if (box.empty()) {
+		return; 
+	}
+
+	std::queue<T> q; //holds vertices with 0 incidents
+
+	typename std::unordered_map<T, int>::iterator p; 
+	for (p = box.begin(); p != box.end(); ++p) {
+
+		if ((*p).second > 0)	//if vertice is incident
+			continue;	//skip
+
+		q.push((*p).first);		//else push element into q 
+		std::cout << (*p).first << " "; 
+	}
 
 
+
+
+	while (!q.empty()) {
+
+		typename std::vector<Vertex*>::iterator pV;
+
+		pV = (*Vertices.find(q.front())).second.begin();
+		while (pV != (*Vertices.find(q.front())).second.end()) {
+
+			(*box.find((*pV)->destination)).second -= 1;
+			++pV;
+		}
+		box.erase(q.front()); 
+		q.pop();
+	}
+
+	topSort(box); 
+}
 
 
 int main()
 {
-
-	/*
-	std::vector<int> A; 
-	A.emplace(A.end(), 2); 
-
-	std::vector<int>::iterator p; 
-	for (p = A.begin(); p != A.end(); ++p)
-		std::cout << *p << " "; 
-	*/
-
 	Graph<int> A;
-	A.addVertice(5);
-	A.addVertice(4);
-	A.addVertice(3);
-	A.addVertice(2);
+
+	A.addVertice(0);
 	A.addVertice(1);
-	A.addEdge(5, 1);
-	A.addEdge(5, 2);
-	A.addEdge(5, 3);
-	A.addEdge(1, 5);
-	A.addEdge(1, 4);
-	A.print();
+	A.addVertice(2);
+	A.addVertice(3);
+	A.addVertice(4);
+	A.addVertice(5); 
+	A.addVertice(6); 
+	A.addVertice(7); 
 
+	A.addEdge(0, 1);
+	A.addEdge(0, 3);
+	A.addEdge(2, 5);
+	A.addEdge(5, 7);
+	A.addEdge(3, 7);
+	A.addEdge(6, 7);
+	A.addEdge(4, 6);
 
+	A.topSort(); 
 
 	return 0;
 }
@@ -68,8 +117,9 @@ void Graph<T>::addVertice(const T& data) {
 		return;
 	}
 	//create new list, insert argument into map as key and  new adjacency list as data value
-	std::vector<T> adjList;
+	std::vector<Vertex*> adjList;
 	Vertices.insert(std::make_pair(data, adjList));
+	Box.insert(std::make_pair(data, 0)); 
 }
 
 /*
@@ -83,14 +133,18 @@ template <typename T>
 void Graph<T>::addEdge(const T& origin, const T& destination) {
 	//check if there is origin and destination verices
 	if (Vertices.find(origin) != Vertices.end() && Vertices.find(destination) != Vertices.end()) {
-		typename std::unordered_map<T, std::vector<T>>::iterator p = Vertices.find(origin);	//create iterator that points to vertice
-		
+		typename std::unordered_map<T, std::vector<Vertex*>>::iterator p = Vertices.find(origin);	//create iterator that points to vertice
+
 		if (p->second.size() < adjListSize) {
-			p->second.emplace(p->second.end(), destination); //push destination edge into adjacency list
-			return; 
+			Vertex* adjVertice = new Vertex(destination); 
+			p->second.emplace(p->second.end(), adjVertice); //push destination edge into adjacency list
+
+			//add element into indegree box
+			(*Box.find(destination)).second += 1; 
+			return;
 		}
 		throw std::runtime_error("Adjacency list is full");
-		return; 
+		return;
 	}
 	throw std::runtime_error("Origin or destination does not exists");	//error if one of arguments does not exists
 }
@@ -102,14 +156,15 @@ no return value
 template <typename T>
 void Graph<T>::print() {
 
-	typename std::unordered_map<T, std::vector<T>>::iterator p;
-	typename std::vector<T>::iterator t;
+	typename std::unordered_map<T, std::vector<Vertex*>>::iterator p;
+	typename std::vector<Vertex*>::iterator t;
 
 	for (p = Vertices.begin(); p != Vertices.end(); ++p) {
 		std::cout << (*p).first << ": ";
 
 		for (t = (*p).second.begin(); t != (*p).second.end(); ++t)
-			std::cout << *t << ", ";
+			std::cout << (*t)->destination << ", ";
 		std::cout << "\n";
 	}
 }
+

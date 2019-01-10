@@ -24,7 +24,7 @@ public:
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination);
 	void print();
-	void topSort(); 
+	void topSort(); //invoke utility topSort(Box)
 
 private:
 	void topSort(std::unordered_map<T, int> map); 
@@ -34,48 +34,10 @@ private:
 
 	int adjListSize;
 };
-template <typename T>
-void Graph<T>::topSort() {
-	topSort(Box); 
-}
-
-template <typename T>
-void Graph<T>::topSort(std::unordered_map<T, int> box) {
-	if (box.empty()) {
-		return; 
-	}
-
-	std::queue<T> q; //holds vertices with 0 incidents
-
-	typename std::unordered_map<T, int>::iterator p; 
-	for (p = box.begin(); p != box.end(); ++p) {
-
-		if ((*p).second > 0)	//if vertice is incident
-			continue;	//skip
-
-		q.push((*p).first);		//else push element into q 
-		std::cout << (*p).first << " "; 
-	}
 
 
 
 
-	while (!q.empty()) {
-
-		typename std::vector<Vertex*>::iterator pV;
-
-		pV = (*Vertices.find(q.front())).second.begin();
-		while (pV != (*Vertices.find(q.front())).second.end()) {
-
-			(*box.find((*pV)->destination)).second -= 1;
-			++pV;
-		}
-		box.erase(q.front()); 
-		q.pop();
-	}
-
-	topSort(box); 
-}
 
 
 int main()
@@ -166,5 +128,48 @@ void Graph<T>::print() {
 			std::cout << (*t)->destination << ", ";
 		std::cout << "\n";
 	}
+}
+
+template <typename T>
+void Graph<T>::topSort() {
+	topSort(Box);
+}
+/*
+@param: copyed unordered map by value
+insert elements that has 0 indegree into queue
+remove's 1 indegree from every vertice inside adjacency list inside that element with 0 indegree
+recursive call for minimizes box
+no return value
+*/
+template <typename T>
+void Graph<T>::topSort(std::unordered_map<T, int> box) {
+	if (box.empty())
+		return;
+
+	std::queue<T> q; //holds vertices with 0 incidents
+
+	typename std::unordered_map<T, int>::iterator p;
+	for (p = box.begin(); p != box.end(); ++p) {	//iterate over indegree box
+
+		if ((*p).second > 0)	//if vertice is incident
+			continue;	//skip
+
+		q.push((*p).first);		//else push element into queue
+	}
+
+	//untill queue has elements
+	while (!q.empty()) {
+
+		typename std::vector<Vertex*>::iterator pV;
+		pV = (*Vertices.find(q.front())).second.begin();	//adjacency list of vertice that has same key as queue's top element
+
+		while (pV != (*Vertices.find(q.front())).second.end()) //traverse untill end of the adjacency list
+			(*box.find((*pV++)->destination)).second -= 1;	//remove's edges from vertice
+
+		box.erase(q.front()); //totaly remove that vertice from box
+		std::cout << q.front() << " ";
+		q.pop();	//remove it from queue
+	}
+	topSort(box); //recursive call on same box without verticies that are checked
 }
 

@@ -5,9 +5,8 @@
 #include <unordered_map>
 #include <queue>
 
-
 template <typename T>	//generic data type
-class Graph {
+class Graph  {
 
 	struct Vertex {
 		T destination; 
@@ -35,11 +34,6 @@ private:
 	int adjListSize;
 };
 
-
-
-
-
-
 int main()
 {
 	Graph<int> A;
@@ -59,7 +53,9 @@ int main()
 	A.addEdge(5, 7);
 	A.addEdge(3, 7);
 	A.addEdge(6, 7);
-	A.addEdge(4, 6);
+	A.addEdge(4, 6); 
+	//A.addEdge(7, 2);	//uncomment if want cyclic graph 
+	
 
 	A.topSort(); 
 
@@ -117,7 +113,6 @@ no return value
 */
 template <typename T>
 void Graph<T>::print() {
-
 	typename std::unordered_map<T, std::vector<Vertex*>>::iterator p;
 	typename std::vector<Vertex*>::iterator t;
 
@@ -138,7 +133,7 @@ void Graph<T>::topSort() {
 @param: copyed unordered map by value
 insert elements that has 0 indegree into queue
 remove's 1 indegree from every vertice inside adjacency list inside that element with 0 indegree
-recursive call for minimizes box
+recursive call for minimizing the box
 no return value
 */
 template <typename T>
@@ -157,6 +152,11 @@ void Graph<T>::topSort(std::unordered_map<T, int> box) {
 		q.push((*p).first);		//else push element into queue
 	}
 
+	if (q.empty()) {
+		std::cout << "\nGraph is not acyclic"; 
+		return; 
+	}
+
 	//untill queue has elements
 	while (!q.empty()) {
 
@@ -167,6 +167,7 @@ void Graph<T>::topSort(std::unordered_map<T, int> box) {
 			(*box.find((*pV++)->destination)).second -= 1;	//remove's edges from vertice
 
 		box.erase(q.front()); //totaly remove that vertice from box
+
 		std::cout << q.front() << " ";
 		q.pop();	//remove it from queue
 	}

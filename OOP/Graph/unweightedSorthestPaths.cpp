@@ -17,6 +17,15 @@ class Graph  {
 			: destination(value), weight(w) {}
 	};
 
+	struct Vertex {
+		int distance; 
+		bool visited; 
+		T origin; 
+
+		Vertex()
+			:distance(infinity), visited(false), origin(0) {}
+	};
+
 public:
 	Graph(int n = 10)	//default constructor
 		:Vertices(n), adjListSize(n*(n - 1)), size(0) {}
@@ -24,65 +33,22 @@ public:
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination, int cost);
 	void BFS(T origin); //breath-first search
+	//void fasterBFS(T origin); 
 	void print();
 
 private:
+	/*utility*/
+	void BFS(T origin, std::unordered_map<T, Vertex*> box); //breath-first search
+	//void fasterBFS(T origin, std::unordered_map<T, std::tuple<int, bool, T>> box);
+
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
-	std::unordered_map<T, std::tuple<int, bool, T>> Box;	//box that holds:  distance, visited, origin tuples
+	std::unordered_map<T, Vertex*> Box;	//box that holds:  distance, visited, origin tuples
 
 	static const int infinity = 1000000; 
 	int adjListSize;
 	int size; 
 };
 
-/*
-@param: generic type value
-
-*/
-template<typename T>
-void Graph<T>::BFS(T origin) {
-	
-	typename std::unordered_map<T, std::tuple<int, bool, T>>::iterator p; 
-
-	p = Box.find(origin);
-
-	if (p != Box.end()) {
-		std::get<0>((*p).second) = 0;
-
-		//iterate over distances
-		for (int curDistance = 0; curDistance < size; ++curDistance) {
-			//iterate over every vertice inside box
-			for (p = Box.begin(); p != Box.end(); ++p) {
-				//if its not visited AND its on i-th distance
-				if (!std::get<1>((*p).second) && std::get<0>((*p).second) == curDistance) {
-					//visit that vertice
-					std::get<1>((*p).second) = true;
-					//go to adjacent verticies
-
-					//adjacency list iterator
-					typename std::vector<Edge*>::iterator pV;
-					pV = (*Vertices.find((*p).first)).second.begin();
-					//iterate over elements inside adjacency list
-					for (pV; pV != (*Vertices.find((*p).first)).second.end(); ++pV) {
-
-						//take distance from tuple inside box
-						int x = std::get<0>((*Box.find((*pV)->destination)).second);
-
-						if (x == infinity) {
-							std::get<0>((*Box.find((*pV)->destination)).second) = (curDistance + 1); //distance from origin
-							std::get<2>((*Box.find((*pV)->destination)).second) = (*p).first;
-						}
-					}
-				}
-			}
-		}
-
-		for (p = Box.begin(); p != Box.end(); ++p)
-			std::cout << (*p).first << " : " << std::get<0>((*p).second) << "\n";
-	}
-	
-	//there is no souch origin
-}
 
 
 
@@ -113,7 +79,7 @@ int main()
 	A.addEdge(5, 7, 150);
 	A.addEdge(7, 6, 150);
 	//A.addEdge(7, 2);	//uncomment if want cyclic graph 
-	A.BFS(2); 
+	A.BFS(3); 
 
 	return 0;
 }
@@ -133,7 +99,9 @@ void Graph<T>::addVertice(const T& data) {
 	//create new list, insert argument into map as key and  new adjacency list as data value
 	std::vector<Edge*> adjList;
 	Vertices.insert(std::make_pair(data, adjList));
-	Box.insert(std::make_pair(data, std::make_tuple(infinity, false, T()))); 
+
+	Vertex* temp = new Vertex; 
+	Box.insert(std::make_pair(data, temp)); 
 	++size; 
 }
 
@@ -179,3 +147,57 @@ void Graph<T>::print() {
 		std::cout << "\n";
 	}
 }
+template<typename T>
+void Graph<T>::BFS(T origin) {
+	BFS(origin, Box); 
+}
+/*
+@param: generic type value
+iterate over verties and assign distance between
+no return value
+
+expensive version O(V^2)
+*/
+template<typename T>
+void Graph<T>::BFS(T origin, std::unordered_map<T, Vertex*> box) {
+
+	typename std::unordered_map<T, Vertex*>::iterator p;
+	p = box.find(origin);
+
+	if (p != box.end()) {
+		(*p).second->distance = 0; 
+		//iterate over distances
+		for (int curDistance = 0; curDistance < size; ++curDistance) {
+			//iterate over every vertice inside box
+			for (p = box.begin(); p != box.end(); ++p) {
+				//if its not visited AND its on i-th distance
+				if (!(*p).second->visited && (*p).second->distance == curDistance) {
+					//visit that vertice
+					(*p).second->visited = true;
+					//go to adjacent verticies
+
+					//adjacency list iterator
+					typename std::vector<Edge*>::iterator pV;
+					pV = (*Vertices.find((*p).first)).second.begin();
+					//iterate over elements inside adjacency list
+					for (pV; pV != (*Vertices.find((*p).first)).second.end(); ++pV) {
+
+						//take distance from tuple inside box
+						int x = (*box.find((*pV)->destination)).second->distance;
+
+						if (x == infinity) {
+							(*box.find((*pV)->destination)).second->distance = (curDistance + 1); //distance from origin
+							(*box.find((*pV)->destination)).second->origin = (*p).first;
+						}
+					}
+				}
+			}
+		}
+		for (p = box.begin(); p != box.end(); ++p)
+			std::cout << (*p).first << " : " << (*p).second->distance << "\n";
+		return; 
+	}
+	std::cout << "No souch origin \n";
+}
+
+

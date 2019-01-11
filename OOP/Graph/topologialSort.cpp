@@ -8,12 +8,12 @@
 template <typename T>	//generic data type
 class Graph  {
 
-	struct Vertex {
+	struct Edge {
 		T destination; 
+		int weight; 
 
-		Vertex(const T& value)
-			: destination(value) {}
-		T getDestination() { return destination; }
+		Edge(const T& value, int w = 0)
+			: destination(value), weight(w) {}
 	};
 
 public:
@@ -21,14 +21,14 @@ public:
 		:Vertices(n), adjListSize(n*(n - 1)) {}
 
 	void addVertice(const T& data);
-	void addEdge(const T& origin, const T& destination);
+	void addEdge(const T& origin, const T& destination, int cost);
 	void print();
 	void topSort(); //invoke utility topSort(Box)
 
 private:
 	void topSort(std::unordered_map<T, int> map); 
 
-	std::unordered_map<T, std::vector<Vertex*>> Vertices; 	//map with T value as key and list as adjacency list
+	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list
 	std::unordered_map<T, int> Box; //box that holds indegree of every vertice
 
 	int adjListSize;
@@ -47,17 +47,18 @@ int main()
 	A.addVertice(6); 
 	A.addVertice(7); 
 
-	A.addEdge(0, 1);
-	A.addEdge(0, 3);
-	A.addEdge(2, 5);
-	A.addEdge(5, 7);
-	A.addEdge(3, 7);
-	A.addEdge(6, 7);
-	A.addEdge(4, 6); 
+	
+	A.addEdge(0, 1, 100);
+	A.addEdge(0, 3, 200);
+	A.addEdge(2, 5, 300);
+	A.addEdge(5, 7, 250);
+	A.addEdge(3, 7, 50);
+	A.addEdge(6, 7, 200);
+	A.addEdge(4, 6, 150); 
 	//A.addEdge(7, 2);	//uncomment if want cyclic graph 
 	
 
-	A.topSort(); 
+	A.print(); 
 
 	return 0;
 }
@@ -75,7 +76,7 @@ void Graph<T>::addVertice(const T& data) {
 		return;
 	}
 	//create new list, insert argument into map as key and  new adjacency list as data value
-	std::vector<Vertex*> adjList;
+	std::vector<Edge*> adjList;
 	Vertices.insert(std::make_pair(data, adjList));
 	Box.insert(std::make_pair(data, 0)); 
 }
@@ -88,13 +89,13 @@ throw exeption if origin or destination does not exists
 no return value
 */
 template <typename T>
-void Graph<T>::addEdge(const T& origin, const T& destination) {
+void Graph<T>::addEdge(const T& origin, const T& destination, int cost) {
 	//check if there is origin and destination verices
 	if (Vertices.find(origin) != Vertices.end() && Vertices.find(destination) != Vertices.end()) {
-		typename std::unordered_map<T, std::vector<Vertex*>>::iterator p = Vertices.find(origin);	//create iterator that points to vertice
+		typename std::unordered_map<T, std::vector<Edge*>>::iterator p = Vertices.find(origin);	//create iterator that points to vertice
 
 		if (p->second.size() < adjListSize) {
-			Vertex* adjVertice = new Vertex(destination); 
+			Edge* adjVertice = new Edge(destination, cost);
 			p->second.emplace(p->second.end(), adjVertice); //push destination edge into adjacency list
 
 			//add element into indegree box
@@ -113,14 +114,14 @@ no return value
 */
 template <typename T>
 void Graph<T>::print() {
-	typename std::unordered_map<T, std::vector<Vertex*>>::iterator p;
-	typename std::vector<Vertex*>::iterator t;
+	typename std::unordered_map<T, std::vector<Edge*>>::iterator p;
+	typename std::vector<Edge*>::iterator t;
 
 	for (p = Vertices.begin(); p != Vertices.end(); ++p) {
 		std::cout << (*p).first << ": ";
 
 		for (t = (*p).second.begin(); t != (*p).second.end(); ++t)
-			std::cout << (*t)->destination << ", ";
+			std::cout << " (" << (*t)->weight << ") " << (*t)->destination << ", ";
 		std::cout << "\n";
 	}
 }
@@ -160,7 +161,7 @@ void Graph<T>::topSort(std::unordered_map<T, int> box) {
 	//untill queue has elements
 	while (!q.empty()) {
 
-		typename std::vector<Vertex*>::iterator pV;
+		typename std::vector<Edge*>::iterator pV;
 		pV = (*Vertices.find(q.front())).second.begin();	//adjacency list of vertice that has same key as queue's top element
 
 		while (pV != (*Vertices.find(q.front())).second.end()) //traverse untill end of the adjacency list

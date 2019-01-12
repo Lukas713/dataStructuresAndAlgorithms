@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <queue>
+#include <limits>
 
 
 template <typename T>	//generic data type
@@ -46,7 +47,7 @@ private:
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
 	std::unordered_map<T, Vertex*> Box;	//box that holds:  distance, visited, origin tuples
 
-	static const int infinity = 1000000; 
+	static const int infinity = std::numeric_limits<int>::max(); 
 	int adjListSize;
 	int size; 
 };
@@ -75,10 +76,10 @@ int main()
 	A.addEdge(4, 7, 150);
 	A.addEdge(5, 7, 150);
 	A.addEdge(7, 6, 150);
-	//A.addEdge(7, 2);	//uncomment if want cyclic graph 
-	A.fasterBFS(3); 
+	A.addEdge(6, 3, 200);	//uncomment if want cyclic graph 
+	A.fasterBFS(5); 
 	std::cout << "\n"; 
-	A.BFS(3); 
+	A.BFS(5); 
 
 	return 0;
 }

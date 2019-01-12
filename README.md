@@ -178,8 +178,12 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Set/mergingTwoSets.cpp</td>
   </tr>
   <tr>
-    <td>Graph using adjacent list</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/adjacentList.cpp</td>
+    <td>Graph: topological sort</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/topologialSort.cpp</td>
+  </tr>
+  <tr>
+    <td>Graph: unweighted shortest path</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/unweightedSorthestPaths.cpp</td>
   </tr>
 </table>
 <hr>

@@ -18,12 +18,13 @@ class Graph  {
 	};
 
 	struct Vertex {
+		T key; 
 		int distance; 
 		bool visited; 
 		T origin; 
 
-		Vertex()
-			:distance(infinity), visited(false), origin(0) {}
+		Vertex(T val)
+			:key(val), distance(infinity), visited(false), origin(T()) {}
 	};
 
 public:
@@ -33,13 +34,15 @@ public:
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination, int cost);
 	void BFS(T origin); //breath-first search
-	//void fasterBFS(T origin); 
+	void fasterBFS(T origin); 
 	void print();
+	typename typedef std::vector<Edge*>::iterator adjItor; 
 
 private:
 	/*utility*/
 	void BFS(T origin, std::unordered_map<T, Vertex*> box); //breath-first search
-	//void fasterBFS(T origin, std::unordered_map<T, std::tuple<int, bool, T>> box);
+	void fasterBFS(T origin, std::unordered_map<T, Vertex*> box);
+	adjItor adjacencyListIterator(T key);
 
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
 	std::unordered_map<T, Vertex*> Box;	//box that holds:  distance, visited, origin tuples
@@ -48,10 +51,6 @@ private:
 	int adjListSize;
 	int size; 
 };
-
-
-
-
 
 int main()
 {
@@ -65,7 +64,6 @@ int main()
 	A.addVertice(6); 
 	A.addVertice(7); 
 
-	
 	A.addEdge(1, 2, 100);
 	A.addEdge(1, 4, 200);
 	A.addEdge(2, 5, 300);
@@ -79,7 +77,8 @@ int main()
 	A.addEdge(5, 7, 150);
 	A.addEdge(7, 6, 150);
 	//A.addEdge(7, 2);	//uncomment if want cyclic graph 
-	A.BFS(3); 
+	A.fasterBFS(3); 
+	//A.BFS(3); 
 
 	return 0;
 }
@@ -100,7 +99,7 @@ void Graph<T>::addVertice(const T& data) {
 	std::vector<Edge*> adjList;
 	Vertices.insert(std::make_pair(data, adjList));
 
-	Vertex* temp = new Vertex; 
+	Vertex* temp = new Vertex(data); 
 	Box.insert(std::make_pair(data, temp)); 
 	++size; 
 }
@@ -200,4 +199,62 @@ void Graph<T>::BFS(T origin, std::unordered_map<T, Vertex*> box) {
 	std::cout << "No souch origin \n";
 }
 
+/*
+@param: generic type key
+return iterator on first adjacency list Vertice
+*/
+template <typename T>
+typename Graph<T>::adjItor Graph<T>::adjacencyListIterator(T key) {
+	return (*Vertices.find(key)).second.begin();
+}
 
+/*
+@param: generic type and private member Box
+create's Vertex as key x and distance 0
+push it on queue
+Traverse it's adjacency list vertices
+change distance to distance of key vertice + 1
+set path to key vertice
+push adjacency vertice on queue
+no return value
+*/
+template <typename T>
+void Graph<T>::fasterBFS(T x, std::unordered_map<T, Vertex*> box) {
+
+	std::queue<Vertex*> q; //queue for holding distance and distance + 1
+	//create Vertex from origin, set its distance to 0 and push it into q
+	Vertex* first = new Vertex(x);
+	first->distance = 0;
+	q.push(first);
+
+	while (!q.empty()) {
+		//take front queue element
+		Vertex* temp = q.front();
+		q.pop();
+
+		//traverse he's adjacency list
+		typename std::vector<Edge*>::iterator p;
+		p = adjacencyListIterator((*temp).key);
+		for (p; p != (*Vertices.find((*temp).key)).second.end(); ++p) {
+			//if Vertex from adjacecny list has infinity distance (default)
+			typename std::unordered_map<T, Vertex*>::iterator pBx;
+			pBx = Box.find((*p)->destination);
+
+			if ((*pBx).second->distance != infinity)
+				continue;
+			//set distance to vertice that holds him + 1
+			(*pBx).second->distance = (*temp).distance + 1;
+			(*pBx).second->origin = (*temp).key; //set path
+			q.push((*pBx).second);	//set vertice of lvl 1 into queue
+		}
+	}
+
+	typename std::unordered_map<T, Vertex*>::iterator p;
+	for (p = box.begin(); p != box.end(); ++p)
+		std::cout << (*p).first << " : " << (*p).second->distance << "\n";
+}
+
+template <typename T>
+void Graph<T>::fasterBFS(T origin) {
+	fasterBFS(origin, Box);
+}

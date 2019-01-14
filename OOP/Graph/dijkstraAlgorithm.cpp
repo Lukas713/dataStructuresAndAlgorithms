@@ -20,7 +20,7 @@ class Graph {
 		bool visited;
 		T origin;
 		Vertex(T val)
-			:key(val), distance(infinity), visited(false), origin(T()) {}
+			:key(val), distance(infinity), visited(false), origin(NOT_VERTICE) {}
 	};
 
 public:
@@ -29,7 +29,7 @@ public:
 
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination, int cost);
-	void dijkstra(const T& data);
+	void dijkstra(const T& data, const T& finish);
 	void print();
 
 	typename typedef std::vector<Edge*>::iterator adjItor;
@@ -40,16 +40,21 @@ private:
 	adjItor adjEnd(T key);
 	Vertex* minAdjacent(std::unordered_map<T, Vertex*>& box);
 	bool visitedBoxVertice(T key, const std::unordered_map<T, Vertex*>& box);
-	void dijkstra(const T& data, std::unordered_map<T, Vertex*> box);
+	void dijkstra(const T& data, const T& finish, std::unordered_map<T, Vertex*> box);
 	void printBox(const T& origin, std::unordered_map<T, Vertex*>& box);
+	void printPath(const T& origin, std::unordered_map<T, Vertex*>& box);
+	
 
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
 	std::unordered_map<T, Vertex*> Box;	//box that holds:  distance, visited, origin tuples
 
 	static const int infinity = std::numeric_limits<int>::max();
+	static const int NOT_VERTICE = std::numeric_limits<int>::min();
 	int adjListSize;
 	int size;
 };
+
+
 
 int main()
 {
@@ -76,7 +81,7 @@ int main()
 	A.addEdge(5, 7, 6);
 	A.addEdge(7, 6, 1);
 	//A.addEdge(6, 3, 200);	//uncomment if want cyclic graph 
-	A.dijkstra(1);
+	A.dijkstra(5, 1);
 
 	return 0;
 }
@@ -145,8 +150,8 @@ void Graph<T>::print() {
 }
 
 template <typename T>
-void Graph<T>::dijkstra(const T& data) {
-	dijkstra(data, Box);
+void Graph<T>::dijkstra(const T& data, const T& finish) {
+	dijkstra(data, finish, Box);
 }
 
 /*
@@ -188,7 +193,7 @@ while( there is an unknown distance vertex )
 no return value
 */
 template <typename T>
-void Graph<T>::dijkstra(const T& origin, std::unordered_map<T, Vertex*> box) {
+void Graph<T>::dijkstra(const T& origin, const T& finish, std::unordered_map<T, Vertex*> box) {
 
 	if (box.find(origin) != box.end()) {
 		//set chosen vertice's distance to 0
@@ -222,11 +227,14 @@ void Graph<T>::dijkstra(const T& origin, std::unordered_map<T, Vertex*> box) {
 			}
 		}
 		printBox(origin, box); 
+		std::cout << "\npath:\n"; 
+		printPath(finish, box); 
 		return;
 	}
 	std::cout << "\nNo souch vertice!\n";
 }
 /*
+sequentialy
 @param: referance to unordered map
 finds smallest unvisited element in box
 return pointer to Verte as data type
@@ -238,11 +246,11 @@ typename Graph<T>::Vertex* Graph<T>::minAdjacent(std::unordered_map<T, typename 
 	typename std::unordered_map<T, typename Graph<T>::Vertex*>::iterator min = box.begin();
 
 	for (p; p != box.end(); ++p) {
-		if (!visitedBoxVertice((*min).first, box)) {
-			if ((*min).second->distance < (*p).second->distance)
-				continue;
+		if ((*p).second->visited) 
+			continue; 
+		if ((*min).second->distance > (*p).second->distance || (*min).second->visited) {
+			min = p; 
 		}
-		min = p;
 	}
 	return (*min).second;
 }
@@ -253,7 +261,7 @@ return boolean
 */
 template <typename T>
 bool Graph<T>::visitedBoxVertice(T key, const std::unordered_map<T, Vertex*>& box) {
-	return (*box.find(key)).second->visited == true;
+	return (*box.find(key)).second->visited;
 }
 
 template <typename T>
@@ -264,4 +272,18 @@ void Graph<T>::printBox(const T& origin, std::unordered_map<T, Vertex*>& box) {
 			std::cout << "o: ";
 		std::cout << (*x).first << " " << (*x).second->distance << "\n";
 	}
+}
+
+/*
+@param: generic data type, box referance
+recursively print path from finish to begining
+no return value
+*/
+template <typename T>
+void Graph<T>::printPath(const T& from, std::unordered_map<T, Vertex*>& box) {
+	if ((*box.find(from)).second->origin != NOT_VERTICE) {
+		printPath((*box.find(from)).second->origin, box);
+		std::cout << " to ";
+	}
+	std::cout << (*box.find(from)).first << " ";
 }

@@ -81,7 +81,7 @@ int main()
 	A.addEdge(5, 7, 6);
 	A.addEdge(7, 6, 1);
 	//A.addEdge(6, 3, 200);	//uncomment if want cyclic graph 
-	A.dijkstra(5, 1);
+	A.dijkstra(2, 1);
 
 	return 0;
 }
@@ -217,8 +217,11 @@ void Graph<T>::dijkstra(const T& origin, const T& finish, std::unordered_map<T, 
 						T cOA = (*t)->weight;
 						if ((*box.find((*temp).key)).second->distance + cOA < (*box.find((*t)->destination)).second->distance) {
 
-							(*box.find((*t)->destination)).second->distance = (*box.find((*temp).key)).second->distance + cOA;
-							(*box.find((*t)->destination)).second->origin = (*temp).key;
+							if ((*box.find((*temp).key)).second->distance != infinity) {
+
+								(*box.find((*t)->destination)).second->distance = (*box.find((*temp).key)).second->distance + cOA;
+								(*box.find((*t)->destination)).second->origin = (*temp).key;
+							}
 						}
 
 					}
@@ -268,6 +271,10 @@ template <typename T>
 void Graph<T>::printBox(const T& origin, std::unordered_map<T, Vertex*>& box) {
 	typename std::unordered_map<T, Vertex*>::iterator x;
 	for (x = box.begin(); x != box.end(); ++x) {
+		if ((*x).second->distance == NOT_VERTICE || (*x).second->distance == infinity) {
+			std::cout << (*x).first << " " << " not a path" << "\n";
+			continue; 
+		}
 		if ((*x).first == origin)
 			std::cout << "o: ";
 		std::cout << (*x).first << " " << (*x).second->distance << "\n";

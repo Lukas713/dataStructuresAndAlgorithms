@@ -154,8 +154,23 @@ void Graph<T>::BFS(T origin) {
 @param: generic type value
 iterate over verties and assign distance between
 no return value
-
 expensive version O(V^2)
+Algorithm:
+	s.dist = 0;
+	for(int currDist = 0; currDist < NUM_VERTICES; currDist++ ){
+		for each Vertex v{
+			if( !v.known && v.dist == currDist )
+			{
+				v.known = true;
+				for each Vertex w adjacent to v
+					if( w.dist == INFINITY )
+					{
+					w.dist = currDist + 1;
+					w.path = v;
+					}
+			}
+		}
+	}
 */
 template<typename T>
 void Graph<T>::BFS(T origin, std::unordered_map<T, Vertex*> box) {
@@ -226,8 +241,21 @@ change distance to distance of key vertice + 1
 set path to key vertice
 push adjacency vertice on queue
 no return value
-
 time complexity: O(V + E)
+Algorithm: 
+Queue<Vertex> q;
+	q.enqueue( s );
+	while( !q.isEmpty())
+	{
+		Vertex v = q.dequeue();
+		for each Vertex w adjacent to v
+		
+	if(w.dist == INFINITY)
+	{
+		w.dist = v.dist + 1;
+		w.path = v;
+		q.enqueue( w );
+	}
 */
 template <typename T>
 void Graph<T>::fasterBFS(T x, std::unordered_map<T, Vertex*> box) {

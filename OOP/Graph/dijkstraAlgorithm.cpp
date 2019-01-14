@@ -38,9 +38,10 @@ private:
 	/*utility*/
 	adjItor adjBegin(T key);
 	adjItor adjEnd(T key);
-	bool visitedBox(T key, const std::unordered_map<T, Vertex*>& box);
+	Vertex* minAdjacent(std::unordered_map<T, Vertex*>& box);
+	bool visitedBoxVertice(T key, const std::unordered_map<T, Vertex*>& box);
 	void dijkstra(const T& data, std::unordered_map<T, Vertex*> box);
-	Vertex* minAdjacent(std::unordered_map<T, Vertex*>& box) const;
+	void printBox(const T& origin, std::unordered_map<T, Vertex*>& box);
 
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
 	std::unordered_map<T, Vertex*> Box;	//box that holds:  distance, visited, origin tuples
@@ -49,76 +50,6 @@ private:
 	int adjListSize;
 	int size;
 };
-
-
-
-
-
-template <typename T>
-void Graph<T>::dijkstra(const T& origin, std::unordered_map<T, Vertex*> box) {
-
-	if (box.find(origin) != box.end()) {
-		//set chosen vertice's distance to 0
-		(*box.find(origin)).second->distance = 0;
-		//loop V times
-		for (int i = 0; i < size; ++i) {
-			//find unVisited vertice with smalles value
-			Vertex* temp = minAdjacent(box);
-			if ((*temp).visited != true) {
-				//set chosen vertise to visited
-				(*temp).visited = true;
-				(*box.find((*temp).key)).second->visited = true; 
-				
-				//go to adjacent vertices of temp
-				typename std::vector<Edge*>::iterator t = adjBegin((*temp).key);
-				for (t; t != adjEnd((*temp).key); ++t) {
-					//if box in element is not visited
-					if (!visitedBox((*t)->destination, box)) {
-
-						//take weight of edge from origin to adjacent
-						T cOA = (*t)->weight;
-						if ((*box.find((*temp).key)).second->distance + cOA < (*box.find((*t)->destination)).second->distance) {
-
-							(*box.find((*t)->destination)).second->distance = (*box.find((*temp).key)).second->distance + cOA;
-							(*box.find((*t)->destination)).second->origin = (*temp).key;
-						}
-
-					}
-
-				}
-			}
-		}
-		typename std::unordered_map<T, Vertex*>::iterator x;
-		for (x = box.begin(); x != box.end(); ++x) {
-			if ((*x).first == origin) {
-				std::cout << "o: ";
-			}
-			std::cout << (*x).first << " " << (*x).second->distance << "\n";
-		}
-		return;
-	}
-	std::cout << "\nNo souch vertice!\n";
-}
-
-template <typename T>
-typename Graph<T>::Vertex* Graph<T>::minAdjacent(std::unordered_map<T, typename Graph<T>::Vertex*>& box) const{
-
-	typename std::unordered_map<T, typename Graph<T>::Vertex*>::iterator p;
-	typename std::unordered_map<T, typename Graph<T>::Vertex*>::iterator min = box.begin();
-
-	for (p = box.begin(); p != box.end(); ++p) {
-
-		if ((*p).second->distance >= (*min).second->distance && (*p).second->visited == false)
-			min = p;
-		continue;
-	}
-	return (*min).second;
-}
-
-template <typename T>
-bool Graph<T>::visitedBox(T key, const std::unordered_map<T, Vertex*>& box) {
-	return (*box.find(key)).second->visited == true;
-}
 
 int main()
 {
@@ -235,4 +166,102 @@ template <typename T>
 typename Graph<T>::adjItor Graph<T>::adjEnd(T key) {
 	return (*Vertices.find(key)).second.end();
 }
+/*
+@param: const genery type as origin, copy of unordered map
+Algorithm (slow for sparse graph) - (V^2):
+s.dist = 0;
+while( there is an unknown distance vertex )
+{
+		Vertex v = smallest unknown distance vertex;
+		v.known = true;
+		for each Vertex w adjacent to v
+		if( !w.known )
+	{
+		DistType cvw = cost of edge from v to w;
+		if( v.dist + cvw < w.dist )
+		{
+			decrease( w.dist to v.dist + cvw );
+			w.path = v;
+		}
+	}
+}
+no return value
+*/
+template <typename T>
+void Graph<T>::dijkstra(const T& origin, std::unordered_map<T, Vertex*> box) {
 
+	if (box.find(origin) != box.end()) {
+		//set chosen vertice's distance to 0
+		(*box.find(origin)).second->distance = 0;
+		//loop V times
+		for (int i = 0; i < size; ++i) {
+			//find unVisited vertice with smalles value
+			Vertex* temp = minAdjacent(box);
+			if (!(*temp).visited) {
+				//set chosen vertise to visited
+				(*temp).visited = true;
+				(*box.find((*temp).key)).second->visited = true;
+
+				//go to adjacent vertices of temp
+				typename std::vector<Edge*>::iterator t = adjBegin((*temp).key);
+				for (t; t != adjEnd((*temp).key); ++t) {
+					//if box in element is not visited
+					if (!visitedBoxVertice((*t)->destination, box)) {
+
+						//take weight of edge from origin to adjacent
+						T cOA = (*t)->weight;
+						if ((*box.find((*temp).key)).second->distance + cOA < (*box.find((*t)->destination)).second->distance) {
+
+							(*box.find((*t)->destination)).second->distance = (*box.find((*temp).key)).second->distance + cOA;
+							(*box.find((*t)->destination)).second->origin = (*temp).key;
+						}
+
+					}
+
+				}
+			}
+		}
+		printBox(origin, box); 
+		return;
+	}
+	std::cout << "\nNo souch vertice!\n";
+}
+/*
+@param: referance to unordered map
+finds smallest unvisited element in box
+return pointer to Verte as data type
+*/
+template <typename T>
+typename Graph<T>::Vertex* Graph<T>::minAdjacent(std::unordered_map<T, typename Graph<T>::Vertex*>& box) {
+
+	typename std::unordered_map<T, typename Graph<T>::Vertex*>::iterator p = box.begin()++;
+	typename std::unordered_map<T, typename Graph<T>::Vertex*>::iterator min = box.begin();
+
+	for (p; p != box.end(); ++p) {
+		if (!visitedBoxVertice((*min).first, box)) {
+			if ((*min).second->distance < (*p).second->distance)
+				continue;
+		}
+		min = p;
+	}
+	return (*min).second;
+}
+/*
+@params: generic data type, referance to box
+checks if element is already visited inside box
+return boolean
+*/
+template <typename T>
+bool Graph<T>::visitedBoxVertice(T key, const std::unordered_map<T, Vertex*>& box) {
+	return (*box.find(key)).second->visited == true;
+}
+
+template <typename T>
+void Graph<T>::printBox(const T& origin, std::unordered_map<T, Vertex*>& box) {
+	typename std::unordered_map<T, Vertex*>::iterator x;
+	for (x = box.begin(); x != box.end(); ++x) {
+		if ((*x).first == origin)
+			std::cout << "o: ";
+		std::cout << (*x).first << " " << (*x).second->distance << "\n";
+	}
+}

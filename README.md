@@ -185,6 +185,10 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Graph: unweighted shortest path</td>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/unweightedSorthestPaths.cpp</td>
   </tr>
+    <tr>
+    <td>Graph: dijkstra algorithm</td>
+    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/dijkstraAlgorithm.cpp</td>
+  </tr>
 </table>
 <hr>
 <h3>Algorithms</h3>
@@ -214,5 +218,3 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/mergeSort.cpp</td>
   </tr>
 </table>
-
-

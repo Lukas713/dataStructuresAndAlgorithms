@@ -1,4 +1,4 @@
-# dataStruturesAndAlgorithms
+# DataStructuresAndAlgorithms
 
 <hr>
 <h3>OOP reporisotry</h3>
@@ -19,39 +19,39 @@ Robert Sedgewick and Kevin Wayne<hr>
 	</tr>
 	<tr>
 		<td>Basic matrix</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/Matrix.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/Matrix.cpp</td>
 	</tr>
 	<tr>
 		<td>Iheritance, polymorphism with progression</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/Progressions.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/Progressions.cpp</td>
 	</tr>
 	<tr>
 		<td>Inheritance, polymorphism with polygons</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/polygonInterface.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/polygonInterface.cpp</td>
 	</tr>
 	<tr>
 		<td>Array operations</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/arayOperations.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/arayOperations.cpp</td>
 	</tr>
 	<tr>
 		<td>Exeptions</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/catchExeption.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/catchExeption.cpp</td>
 	</tr>
 	<tr>
 		<td>Templated class</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/classTemplate.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/classTemplate.cpp</td>
 	</tr>
 	<tr>
 		<td>Vector operations</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/vectorBegining.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/vectorBegining.cpp</td>
 	</tr>
 	<tr>
 		<td>Recursion problems</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/recursion.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/recursion.cpp</td>
 	</tr>
 	<tr>
 		<td>Tic-Tac-Toe</td>
-		<td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Principles/ticTacToe.cpp</td>
+		<td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Principles/ticTacToe.cpp</td>
 	</tr>
 </table>
 <hr>
@@ -63,131 +63,131 @@ Robert Sedgewick and Kevin Wayne<hr>
   </tr>
   <tr>
     <td>Singly Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/singlyLinkedListGeneric.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/singlyLinkedListGeneric.cpp</td>
   </tr>
   <tr>
     <td>Doubly Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/doublyLinkedListGeneric.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/doublyLinkedListGeneric.cpp</td>
   </tr>
   <tr>
     <td>Circular Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/circularLinkedList.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/circularLinkedList.cpp</td>
   </tr>
      <tr>
     <td>Sequence container with vector</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/vectorWithIterator.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/vectorWithIterator.cpp</td>
   </tr>
    <tr>
     <td>Doubly list inside container</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/doublyListWithIterator.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/doublyListWithIterator.cpp</td>
   </tr>
   <tr>
     <td>Circular list inside container</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/circularListWithIterator.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/circularListWithIterator.cpp</td>
   </tr>
   <tr>
     <td>Singly list inside container</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/LinkedList/singlyListWithIterator.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/LinkedList/singlyListWithIterator.cpp</td>
   </tr>
   <tr>
     <td>Stack with Array</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackArray.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackArray.cpp</td>
   </tr>
    <tr>
     <td>Stack with STL Vector</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackVectorSTL.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackVectorSTL.cpp</td>
   </tr>
   <tr>
     <td>Stack with Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackLinkedListGeneric.cpp</td>
   </tr>
     <tr>
     <td>PostFix notation with Stack</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/postFixNotation.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/postFixNotation.cpp</td>
   </tr>
   <tr>
     <td>Stack adapter with Vector functions</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackAdapterVectorFunctions.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/stackAdapterVectorFunctions.cpp</td>
   </tr>
    <tr>
     <td>Queue with Array</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueArray.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueArray.cpp</td>
   </tr>
    <tr>
     <td>Queue with Circular Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularLinkedList.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/queueCircularLinkedList.cpp</td>
   </tr>
    <tr>
     <td>Deque with Array</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeArray.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeArray.cpp</td>
   </tr>
    <tr>
     <td>Deque with Doubly Linked List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeDoublyLinkedList.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/dequeDoublyLinkedList.cpp</td>
   </tr>
   <tr>
     <td>Double Stack with Array</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
   </tr>
    <tr>
     <td>Binary tree</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binaryTree.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Tree/binaryTree.cpp</td>
   </tr>
   <tr>
     <td>Binary search tree</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
   </tr>
     <tr>
     <td>AVL tree</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Tree/treeAVL.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Tree/treeAVL.cpp</td>
   </tr>
   <tr>
     <td>Priority Queue List</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueueList.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Heap/priorityQueueList.cpp</td>
   </tr>
     <tr>
     <td>Priority Queue Heap</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Heap/priorityQueueHeap.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Heap/priorityQueueHeap.cpp</td>
   </tr>
   <tr>
     <td>HashMap using separate chaining</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/separateChaining.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/HashTables/separateChaining.cpp</td>
   </tr>
    <tr>
     <td>HashMap using linear probing</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/linearProbing.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/HashTables/linearProbing.cpp</td>
   </tr>
    <tr>
     <td>HashMap using quadratic probing</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/quadraticProbing.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/HashTables/quadraticProbing.cpp</td>
   </tr>
    <tr>
     <td>HashMap using double hashing</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/doubleHashing.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/HashTables/doubleHashing.cpp</td>
   </tr>
     <tr>
     <td>HashMap using cockoo hashing</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/cockooHashing.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/HashTables/cockooHashing.cpp</td>
   </tr>
   <tr>
     <td>Dictionary</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/HashTables/dictionary.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/HashTables/dictionary.cpp</td>
   </tr>
   <tr>
     <td>Set</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Set/mergingTwoSets.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Set/mergingTwoSets.cpp</td>
   </tr>
   <tr>
     <td>Graph: topological sort</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/topologialSort.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Graph/topologialSort.cpp</td>
   </tr>
   <tr>
     <td>Graph: unweighted shortest path</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/unweightedSorthestPaths.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Graph/unweightedSorthestPaths.cpp</td>
   </tr>
     <tr>
     <td>Graph: dijkstra algorithm</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Graph/dijkstraAlgorithm.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Graph/dijkstraAlgorithm.cpp</td>
   </tr>
 </table>
 <hr>
@@ -199,22 +199,22 @@ Robert Sedgewick and Kevin Wayne<hr>
   </tr>
   <tr>
     <td>Selection sort</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/selectionSort.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Algorithms/selectionSort.cpp</td>
   </tr>
   <tr>
     <td>Bubble sort</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/bubbleSort.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Algorithms/bubbleSort.cpp</td>
   </tr>
     <tr>
     <td>Binary search</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/binarySearch.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Algorithms/binarySearch.cpp</td>
   </tr>
     <tr>
     <td>Quick sort</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/quickSort.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Algorithms/quickSort.cpp</td>
   </tr>
     <tr>
     <td>Merge sort</td>
-    <td>https://github.com/Lukas713/dataStruturesAndAlgorithms/blob/master/OOP/Algorithms/mergeSort.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Algorithms/mergeSort.cpp</td>
   </tr>
 </table>

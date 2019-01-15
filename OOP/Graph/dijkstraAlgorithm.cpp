@@ -5,9 +5,9 @@
 #include <queue>
 #include <limits>
 
+
 template <typename T>	//generic data type
 class Graph {
-
 	struct Edge {
 		T destination;
 		int weight;
@@ -22,7 +22,11 @@ class Graph {
 		Vertex(T val)
 			:key(val), distance(infinity), visited(false), origin(NOT_VERTICE) {}
 	};
-
+	struct isLess {
+		bool operator()(const Graph<T>::Vertex* a, const Graph<T>::Vertex* b) const{
+			return (a->distance > b->distance); 
+		}
+	};
 public:
 	Graph(int n = 10)	//default constructor
 		:Vertices(n), adjListSize(n*(n - 1)), size(0) {}
@@ -30,6 +34,7 @@ public:
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination, int cost);
 	void dijkstra(const T& data, const T& finish);
+	void dijkstraPQ(const T& data, const T& finish);
 	void print();
 
 	typename typedef std::vector<Edge*>::iterator adjItor;
@@ -39,11 +44,10 @@ private:
 	adjItor adjBegin(T key);
 	adjItor adjEnd(T key);
 	Vertex* minAdjacent(std::unordered_map<T, Vertex*>& box);
-	bool visitedBoxVertice(T key, const std::unordered_map<T, Vertex*>& box);
-	void dijkstra(const T& data, const T& finish, std::unordered_map<T, Vertex*> box);
+	void dijkstra(const T& origin, const T& finish, std::unordered_map<T, Vertex*> box);
+	void dijkstraPQ(const T& origin, const T& finish, std::unordered_map<T, Vertex*> box);
 	void printBox(const T& origin, std::unordered_map<T, Vertex*>& box);
-	void printPath(const T& origin, std::unordered_map<T, Vertex*>& box);
-	
+	void printPath(const T& origin, std::unordered_map<T, Vertex*>& box); 
 
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
 	std::unordered_map<T, Vertex*> Box;	//box that holds:  distance, visited, origin tuples
@@ -53,8 +57,6 @@ private:
 	int adjListSize;
 	int size;
 };
-
-
 
 int main()
 {
@@ -81,7 +83,8 @@ int main()
 	A.addEdge(5, 7, 6);
 	A.addEdge(7, 6, 1);
 	//A.addEdge(6, 3, 200);	//uncomment if want cyclic graph 
-	A.dijkstra(2, 1);
+	A.dijkstraPQ(6, 1); 
+ 
 
 	return 0;
 }
@@ -149,11 +152,6 @@ void Graph<T>::print() {
 	}
 }
 
-template <typename T>
-void Graph<T>::dijkstra(const T& data, const T& finish) {
-	dijkstra(data, finish, Box);
-}
-
 /*
 @param: generic type key
 return iterator on first adjacency list Vertice
@@ -170,6 +168,15 @@ return iterator on first adjacency list Vertice
 template <typename T>
 typename Graph<T>::adjItor Graph<T>::adjEnd(T key) {
 	return (*Vertices.find(key)).second.end();
+}
+
+template <typename T>
+void Graph<T>::dijkstra(const T& data, const T& finish) {
+	if (Box.find(data) != Box.end() && Box.find(finish) != Box.end()) {
+		dijkstra(data, finish, Box);
+		return;
+	}
+	std::cout << "origin or finish does not exists!";
 }
 /*
 @param: const genery type as origin, copy of unordered map
@@ -195,7 +202,6 @@ no return value
 template <typename T>
 void Graph<T>::dijkstra(const T& origin, const T& finish, std::unordered_map<T, Vertex*> box) {
 
-	if (box.find(origin) != box.end()) {
 		//set chosen vertice's distance to 0
 		(*box.find(origin)).second->distance = 0;
 		//loop V times
@@ -211,7 +217,7 @@ void Graph<T>::dijkstra(const T& origin, const T& finish, std::unordered_map<T, 
 				typename std::vector<Edge*>::iterator t = adjBegin((*temp).key);
 				for (t; t != adjEnd((*temp).key); ++t) {
 					//if box in element is not visited
-					if (!visitedBoxVertice((*t)->destination, box)) {
+					if (!(*box.find((*t)->destination)).second->visited) {
 
 						//take weight of edge from origin to adjacent
 						T cOA = (*t)->weight;
@@ -223,18 +229,13 @@ void Graph<T>::dijkstra(const T& origin, const T& finish, std::unordered_map<T, 
 								(*box.find((*t)->destination)).second->origin = (*temp).key;
 							}
 						}
-
 					}
-
 				}
 			}
 		}
-		printBox(origin, box); 
+		printBox(origin, box);
 		std::cout << "\npath:\n"; 
-		printPath(finish, box); 
 		return;
-	}
-	std::cout << "\nNo souch vertice!\n";
 }
 /*
 sequentialy
@@ -257,27 +258,93 @@ typename Graph<T>::Vertex* Graph<T>::minAdjacent(std::unordered_map<T, typename 
 	}
 	return (*min).second;
 }
+
+
+
 /*
-@params: generic data type, referance to box
-checks if element is already visited inside box
-return boolean
+@params: two generic data types, starating and ending vertice
+invoke utility djikstraPQ()
+no return value
 */
 template <typename T>
-bool Graph<T>::visitedBoxVertice(T key, const std::unordered_map<T, Vertex*>& box) {
-	return (*box.find(key)).second->visited;
+void Graph<T>::dijkstraPQ(const T& data, const T& finish) {
+	if (Box.find(data) != Box.end() && Box.find(finish) != Box.end()) {
+		dijkstraPQ(data, finish, Box);
+		return;
+	}
+	std::cout << "origin or finish does not exists!"; 
 }
 
+/*
+Djikstra using priorit queue: O(|E| log |V|)
+Algorithm:
+void dijsktra(data){
+
+	PriorityQueue PQ;
+	vertice[data].distance = 0;
+	PQ.push(vertice[data]);
+
+	while(!PQ.empty()){
+		Vertice u = PQ.extractMin();
+
+		for(each adjacent v to u){
+			int newDistance = u.distance + weight(u, v);
+			if(newDistance < v.distance){
+				v.distance = newDistance;
+				v.origin = u;
+				PQ.push(v);
+			}
+		}
+	}
+}
+*/
+template <typename T>
+void Graph<T>::dijkstraPQ(const T& data, const T& finish, std::unordered_map<T, Vertex*> box) {
+	//initialize priorty queue with less comparator
+	std::priority_queue<Vertex*, std::vector<Vertex*>, isLess> PQ;
+	(*box.find(data)).second->distance = 0;	//set origins distance to 0
+	PQ.push((*box.find(data)).second); //push origin into priority queue
+
+	while (!PQ.empty()) {
+		Vertex* temp = PQ.top();	//take vertice with min distance 
+		PQ.pop();
+
+		typename std::vector<Edge*>::iterator p;
+		for (p = adjBegin(temp->key); p != adjEnd(temp->key); ++p) {	//check he's adjacent verticies
+			//if sum of origins distance and weight till destination is less then adjacent verticie's distance(infinity if unvisited)
+			int newDistance = temp->distance + (*p)->weight;
+			if (newDistance < (*box.find((*p)->destination)).second->distance) {
+				//change infinity distance into sum of: origins distance and weight from origin till destination
+				(*box.find((*p)->destination)).second->distance = newDistance;
+				(*box.find((*p)->destination)).second->origin = (*temp).key; //set path to origin
+				PQ.push((*box.find((*p)->destination)).second); //push modified vertice into queue
+			}
+		}
+	}
+
+	printBox(data, box);
+	std::cout << "\npath: ";
+	printPath(finish, box);
+}
+/*
+utility
+@param: starting vertice and box
+cout whole box and he's distances
+*/
 template <typename T>
 void Graph<T>::printBox(const T& origin, std::unordered_map<T, Vertex*>& box) {
 	typename std::unordered_map<T, Vertex*>::iterator x;
 	for (x = box.begin(); x != box.end(); ++x) {
-		if ((*x).second->distance == NOT_VERTICE || (*x).second->distance == infinity) {
-			std::cout << (*x).first << " " << " not a path" << "\n";
-			continue; 
-		}
-		if ((*x).first == origin)
+		if ((*x).second->distance != infinity) {
+			if ((*x).first != origin) {
+				std::cout << (*x).first << " " << (*x).second->distance << "\n";
+				continue;
+			}
 			std::cout << "o: ";
-		std::cout << (*x).first << " " << (*x).second->distance << "\n";
+			std::cout << (*x).first << " " << (*x).second->distance << "\n";
+			continue;
+		}
+		std::cout << (*x).first << " no path" << "\n";
 	}
 }
 

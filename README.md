@@ -186,8 +186,12 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Graph/unweightedSorthestPaths.cpp</td>
   </tr>
     <tr>
-    <td>Graph: dijkstra algorithm</td>
+    <td>Graph: Dijkstra algorithm</td>
     <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Graph/dijkstraAlgorithm.cpp</td>
+  </tr>
+      <tr>
+    <td>Graph: Bellman, Ford & Moore algorithm</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Graph/bellmanFordAlgorithm.cpp</td>
   </tr>
 </table>
 <hr>

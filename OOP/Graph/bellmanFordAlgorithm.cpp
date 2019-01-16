@@ -23,8 +23,8 @@ class Graph {
 			:key(val), distance(infinity), visited(false), origin(NOT_VERTICE) {}
 	};
 	struct isLess {
-		bool operator()(const Graph<T>::Vertex* a, const Graph<T>::Vertex* b) const{
-			return (a->distance > b->distance); 
+		bool operator()(const Graph<T>::Vertex* a, const Graph<T>::Vertex* b) const {
+			return (a->distance > b->distance);
 		}
 	};
 public:
@@ -33,7 +33,7 @@ public:
 
 	void addVertice(const T& data);
 	void addEdge(const T& origin, const T& destination, int cost);
-	void bellmanFord(const T& origin, const T& finish); 
+	void bellmanFord(const T& origin, const T& finish);
 	void print();
 
 	typename typedef std::vector<Edge*>::iterator adjItor;
@@ -44,13 +44,13 @@ private:
 	adjItor adjEnd(T key);
 	Vertex* minAdjacent(std::unordered_map<T, Vertex*>& box);
 	void printBox(const T& origin, std::unordered_map<T, Vertex*>& box);
-	void printPath(const T& origin, std::unordered_map<T, Vertex*>& box); 
+	void printPath(const T& origin, std::unordered_map<T, Vertex*>& box);
 	void bellmanFord(const T& start, const T& finish, std::unordered_map<T, Vertex*> box);
 	int getDistance(const T& origin, const std::unordered_map<T, Vertex*>& box) {
-		return (*box.find(origin)).second->distance; 
+		return (*box.find(origin)).second->distance;
 	}
 	void setDistance(int newDistance, const T& origin, std::unordered_map<T, Vertex*>& box) {
-		(*box.find(origin)).second->distance = newDistance; 
+		(*box.find(origin)).second->distance = newDistance;
 	}
 
 	std::unordered_map<T, std::vector<Edge*>> Vertices; 	//map with T value as key and list as adjacency list 
@@ -61,59 +61,6 @@ private:
 	int adjListSize;
 	int size;
 };
-template<typename T>
-void Graph<T>::bellmanFord(const T& origin, const T& finish) {
-	bellmanFord(origin, finish, Box); 
-}
-/*
-distance[S] <- 0
-for each vertex V in G
-		for each edge (U,V) in G
-			tempDistance <- distance[U] + edge_weight(U, V)
-			if tempDistance < distance[V]
-			   distance[V] <- tempDistance
-			   previous[V] <- U
-
-for each edge (U,V) in G
-	If distance[U] + edge_weight(U, V) < distance[V]
-		Error: Negative Cycle Exists
-
-	return distance[], previous[]
-*/
-template<typename T>
-void Graph<T>::bellmanFord(const T& origin, const T& finish, std::unordered_map<T, Vertex*> box) {
-
-	(*box.find(origin)).second->distance = 0; //set distance of origin
-
-	typename std::unordered_map<T, Vertex*>::iterator p; 
-	for (p = box.begin(); p != box.end(); ++p) {	//for each vertex in graph
-
-		typename std::vector<Edge*>::iterator t;
-		for (t = adjBegin((*p).first); t != adjEnd((*p).first); ++t) {	//for each adjacent vertice 
-
-			int newDistance = getDistance((*t)->destination, box) + (*t)->weight; 
-			if (getDistance((*t)->destination, box) != infinity && newDistance < getDistance((*p).first, box)) {
-
-				setDistance(newDistance, (*p).first, box);
-				(*box.find((*p).first)).second->origin = (*t)->destination;
-			}
-		}
-	}
-	/*for each edge in graph*/
-	for (p = box.begin(); p != box.end(); ++p) {
-
-		typename std::vector<Edge*>::iterator t;
-
-		for (t = adjBegin((*p).first); t != adjEnd((*p).first); ++t) {
-			if (getDistance((*t)->destination, box) + (*t)->weight < getDistance((*p).first, box)) {
-				std::cout << "Error, negative cycle found!";
-				return;
-			}
-		}
-	}
-
-	printBox(finish, box); 
-}
 
 int main()
 {
@@ -133,9 +80,9 @@ int main()
 	A.addEdge(3, 2, 1);
 	A.addEdge(3, 4, 4);
 	A.addEdge(3, 5, 5);
-	A.addEdge(5, 4, -5); 
+	A.addEdge(5, 4, -5);
 	//A.addEdge(6, 3, 200);	//uncomment if want cyclic graph 
-	A.bellmanFord(1, 6); 
+	A.bellmanFord(1, 2);
 
 	return 0;
 }
@@ -233,10 +180,10 @@ typename Graph<T>::Vertex* Graph<T>::minAdjacent(std::unordered_map<T, typename 
 	typename std::unordered_map<T, typename Graph<T>::Vertex*>::iterator min = box.begin();
 
 	for (p; p != box.end(); ++p) {
-		if ((*p).second->visited) 
-			continue; 
+		if ((*p).second->visited)
+			continue;
 		if ((*min).second->distance > (*p).second->distance || (*min).second->visited) {
-			min = p; 
+			min = p;
 		}
 	}
 	return (*min).second;
@@ -252,11 +199,6 @@ void Graph<T>::printBox(const T& origin, std::unordered_map<T, Vertex*>& box) {
 	typename std::unordered_map<T, Vertex*>::iterator x;
 	for (x = box.begin(); x != box.end(); ++x) {
 		if ((*x).second->distance != infinity) {
-			if ((*x).first != origin) {
-				std::cout << (*x).first << " " << (*x).second->distance << "\n";
-				continue;
-			}
-			std::cout << "o: ";
 			std::cout << (*x).first << " " << (*x).second->distance << "\n";
 			continue;
 		}
@@ -276,4 +218,64 @@ void Graph<T>::printPath(const T& from, std::unordered_map<T, Vertex*>& box) {
 		std::cout << " to ";
 	}
 	std::cout << (*box.find(from)).first << " ";
+}
+
+template<typename T>
+void Graph<T>::bellmanFord(const T& origin, const T& finish) {
+	bellmanFord(origin, finish, Box);
+}
+/*
+distance[S] <- 0
+for each vertex V in G
+		for each edge (U,V) in G
+			tempDistance <- distance[U] + edge_weight(U, V)
+			if tempDistance < distance[V]
+			   distance[V] <- tempDistance
+			   previous[V] <- U
+
+for each edge (U,V) in G
+	If distance[U] + edge_weight(U, V) < distance[V]
+		Error: Negative Cycle Exists
+
+	return distance[], previous[]
+*/
+template<typename T>
+void Graph<T>::bellmanFord(const T& origin, const T& finish, std::unordered_map<T, Vertex*> box) {
+
+	/*initialize graph: step 0*/
+	setDistance(0, origin, box);
+
+	/*relax all edges V - 1 times: step 2*/
+	for (int i = 1; i < size; ++i) {
+		typename std::unordered_map<T, Vertex*>::iterator p;
+		for (p = box.begin(); p != box.end(); ++p) {	//for each vertex in graph
+
+			typename std::vector<Edge*>::iterator t;
+			for (t = adjBegin((*p).first); t != adjEnd((*p).first); ++t) {	//for each adjacent vertice 
+
+				//relaxation
+				int distance = getDistance((*p).first, box) + (*t)->weight;
+				if (getDistance((*p).first, box) != infinity && getDistance((*t)->destination, box) > distance) {
+
+					setDistance(distance, (*t)->destination, box);
+					(*box.find((*t)->destination)).second->origin = (*p).first;
+				}
+			}
+		}
+	}
+	/*check if there is cycle with negative weight : step 3*/
+	typename std::unordered_map<T, Vertex*>::iterator p;
+	for (p = box.begin(); p != box.end(); ++p) {	//for each vertex in graph
+
+		typename std::vector<Edge*>::iterator t;
+		for (t = adjBegin((*p).first); t != adjEnd((*p).first); ++t) {
+
+			int distance = getDistance((*p).first, box) + (*t)->weight;
+			if (getDistance((*p).first, box) != infinity && getDistance((*t)->destination, box) > distance) {
+				std::cout << "Negative weight cycle deteted \n";
+				return;
+			}
+		}
+	}
+	printBox(finish, box);
 }

@@ -129,10 +129,6 @@ Robert Sedgewick and Kevin Wayne<hr>
     <td>Double Stack with Array</td>
     <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/StackQueueDequeue/doubleStackArray.cpp</td>
   </tr>
-   <tr>
-    <td>Binary tree</td>
-    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Tree/binaryTree.cpp</td>
-  </tr>
   <tr>
     <td>Binary search tree</td>
     <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Tree/binarySearchTree.cpp</td>
@@ -175,7 +171,7 @@ Robert Sedgewick and Kevin Wayne<hr>
   </tr>
   <tr>
     <td>Set</td>
-    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Set/mergingTwoSets.cpp</td>
+    <td>https://github.com/Lukas713/dataStructuresAndAlgorithms/blob/master/OOP/Set/mergeTwoSets.cpp</td>
   </tr>
   <tr>
     <td>Graph: topological sort</td>

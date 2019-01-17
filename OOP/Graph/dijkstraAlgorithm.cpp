@@ -1,4 +1,3 @@
-#include "pch.h"
 #include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -37,7 +36,7 @@ public:
 	void dijkstraPQ(const T& data, const T& finish);
 	void print();
 
-	typename typedef std::vector<Edge*>::iterator adjItor;
+	typedef typename std::vector<Edge*>::iterator adjItor;
 
 private:
 	/*utility*/

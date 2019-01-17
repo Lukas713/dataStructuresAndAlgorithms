@@ -5,24 +5,9 @@
 #include <queue>
 
 /*
-A priority queue is an abstract data type for storing a collection of prioritized elements
-that supports arbitrary element insertion but supports removal of elements in
-order of priority, that is, the element with first priority can be removed at any time.
-
-implementation with sorted list (created insert function)
-implementation with unsorted list (vector)
-
 selection sort: O(n2)
-we repeatedly remove an element with smallest key from the priority queue P. The size of P starts
-at n and decreases to 0 with each removeMin. Thus, the first removeMin operation
-takes time O(n), the second one takes time O(n-1), and so on.
 
 insertion sort: O(n) - O(n2)
-Execution of insertion-sort on list L = {1, 9, 2, 8, 3, 7, 5, 6}. In Phase 1,
-we repeatedly remove the first element of L and insert it into P, by scanning the
-list implementing P until we find the correct place for this element. In Phase 2,
-we repeatedly perform removeMin operations on P, each of which returns the first
-element of the list implementing P, and we add the element at the end of L
 */
 
 

@@ -1,4 +1,3 @@
-#include "pch.h"
 #include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -36,7 +35,7 @@ public:
 	void bellmanFord(const T& origin, const T& finish);
 	void print();
 
-	typename typedef std::vector<Edge*>::iterator adjItor;
+	typedef typename std::vector<Edge*>::iterator adjItor;
 	//https://www.programiz.com/dsa/bellman-ford-algorithm
 private:
 	/*utility*/
@@ -81,7 +80,8 @@ int main()
 	A.addEdge(3, 4, 4);
 	A.addEdge(3, 5, 5);
 	A.addEdge(5, 4, -5);
-	//A.addEdge(6, 3, 200);	//uncomment if want cyclic graph 
+	//A.addEdge(6, 3, 200);	//uncomment if want cyclic graph
+
 	A.bellmanFord(1, 2);
 
 	return 0;

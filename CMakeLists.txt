@@ -3,4 +3,4 @@ project(dataStructuresAndAlgorithms)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(dataStructuresAndAlgorithms OOP/Graph/bellmanFordAlgorithm.cpp)
+add_executable(dataStructuresAndAlgorithms OOP/Graph/theFordFulkersonAlgorithm.cpp)

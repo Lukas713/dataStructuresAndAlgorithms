@@ -3,4 +3,4 @@ project(dataStructuresAndAlgorithms)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(dataStructuresAndAlgorithms OOP/Graph/theFordFulkersonAlgorithm.cpp)
+add_executable(dataStructuresAndAlgorithms Euler/problems.cpp)

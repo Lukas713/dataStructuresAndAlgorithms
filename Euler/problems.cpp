@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <map>
 
 /**
  *  problems from https://projecteuler.net/archives
@@ -37,14 +38,26 @@ int differenceBetweenSumedSquares();
  * 7)
  */
 bool isPrime(int x);
-
 int tenTousandAndFirstPrime();
+
+/**
+ * 10)
+ */
+long findSumOfPrimesBellowTwoMil();
+
+/**
+ * 12) What is the value of the first triangle number to have over five hundred divisors?
+ */
+int NumberOfDivisors(int number);
+int triangleProblem();
+
 
 
 int main() {
 
-    int x = tenTousandAndFirstPrime();
-    //std::cout << x ;
+    int x = triangleProblem();
+    std::cout << x;
+
 
 
 
@@ -184,10 +197,54 @@ int tenTousandAndFirstPrime() {
 }
 
 bool isPrime(int x){
-    for(int i=2; i <= x / 2; ++i){
+    for(int i=2; i <= sqrt(x); ++i){
         if(x % i != 0)
             continue;
         return false;
     }
     return true;
+}
+
+/**
+ * 10) Find the sum of all the primes below two million.
+ */
+long findSumOfPrimesBellowTwoMil() {
+    long sum = 0;
+    for(int i=2; i<2000000; ++i){
+        if(!isPrime(i))
+            continue;
+        sum += i;
+    }
+    return sum;
+}
+
+/**
+ * 12) What is the value of the first triangle number to have over five hundred divisors?
+ */
+
+int NumberOfDivisors(int number){
+    int nod = 0;
+
+    for(int i = 1; i<= sqrt(number); i++){
+        if(number % i == 0){
+            nod += 2;
+        }
+    }
+    //Correction if the number is a perfect square
+    if (sqrt(number) * sqrt(number) == number) {
+        nod--;
+    }
+
+    return nod;
+}
+
+int triangleProblem() {
+    int number = 0;
+    int i = 1;
+
+    while(NumberOfDivisors(number) < 500){
+        number += i;
+        i++;
+    }
+    return number;
 }
